@@ -179,12 +179,67 @@
           <span class="ray-label">services.*.build</span>
         </div>
         <div class="row-right">
-          <span class="ray-type-tag">[object Object] | [object Object]</span>
+          <span class="ray-type-tag">object</span>
           
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-5" onclick="focusRayRow(5)" data-path="services.*.container_name">
+      <div class="ray-row " id="ray-row-5" onclick="focusRayRow(5)" data-path="services.*.build.context">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.build.context</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-6" onclick="focusRayRow(6)" data-path="services.*.build.dockerfile">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.build.dockerfile</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-7" onclick="focusRayRow(7)" data-path="services.*.build.args">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.build.args</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">object</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-8" onclick="focusRayRow(8)" data-path="services.*.build.args.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.build.args.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-9" onclick="focusRayRow(9)" data-path="services.*.build.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.build.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-10" onclick="focusRayRow(10)" data-path="services.*.container_name">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.container_name</span>
@@ -195,7 +250,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-6" onclick="focusRayRow(6)" data-path="services.*.ports">
+      <div class="ray-row " id="ray-row-11" onclick="focusRayRow(11)" data-path="services.*.ports">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.ports</span>
@@ -206,7 +261,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-7" onclick="focusRayRow(7)" data-path="services.*.ports.*">
+      <div class="ray-row " id="ray-row-12" onclick="focusRayRow(12)" data-path="services.*.ports.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.ports.*</span>
@@ -217,7 +272,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-8" onclick="focusRayRow(8)" data-path="services.*.volumes">
+      <div class="ray-row " id="ray-row-13" onclick="focusRayRow(13)" data-path="services.*.volumes">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.volumes</span>
@@ -228,7 +283,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-9" onclick="focusRayRow(9)" data-path="services.*.volumes.*">
+      <div class="ray-row " id="ray-row-14" onclick="focusRayRow(14)" data-path="services.*.volumes.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.volumes.*</span>
@@ -239,7 +294,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-10" onclick="focusRayRow(10)" data-path="services.*.networks">
+      <div class="ray-row " id="ray-row-15" onclick="focusRayRow(15)" data-path="services.*.networks">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.networks</span>
@@ -250,7 +305,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-11" onclick="focusRayRow(11)" data-path="services.*.networks.*">
+      <div class="ray-row " id="ray-row-16" onclick="focusRayRow(16)" data-path="services.*.networks.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.networks.*</span>
@@ -261,29 +316,62 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-12" onclick="focusRayRow(12)" data-path="services.*.environment">
+      <div class="ray-row " id="ray-row-17" onclick="focusRayRow(17)" data-path="services.*.environment">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.environment</span>
         </div>
         <div class="row-right">
-          <span class="ray-type-tag">[object Object] | [object Object]</span>
+          <span class="ray-type-tag">object</span>
           
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-13" onclick="focusRayRow(13)" data-path="services.*.command">
+      <div class="ray-row " id="ray-row-18" onclick="focusRayRow(18)" data-path="services.*.environment.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.environment.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-19" onclick="focusRayRow(19)" data-path="services.*.environment.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.environment.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-20" onclick="focusRayRow(20)" data-path="services.*.command">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.command</span>
         </div>
         <div class="row-right">
-          <span class="ray-type-tag">[object Object] | [object Object]</span>
+          <span class="ray-type-tag">array</span>
           
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-14" onclick="focusRayRow(14)" data-path="services.*.restart">
+      <div class="ray-row " id="ray-row-21" onclick="focusRayRow(21)" data-path="services.*.command.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.command.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-22" onclick="focusRayRow(22)" data-path="services.*.restart">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.restart</span>
@@ -294,7 +382,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-15" onclick="focusRayRow(15)" data-path="services.*.depends_on">
+      <div class="ray-row " id="ray-row-23" onclick="focusRayRow(23)" data-path="services.*.depends_on">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.depends_on</span>
@@ -305,7 +393,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-16" onclick="focusRayRow(16)" data-path="services.*.depends_on.*">
+      <div class="ray-row " id="ray-row-24" onclick="focusRayRow(24)" data-path="services.*.depends_on.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.depends_on.*</span>
@@ -316,7 +404,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-17" onclick="focusRayRow(17)" data-path="services.*.healthcheck">
+      <div class="ray-row " id="ray-row-25" onclick="focusRayRow(25)" data-path="services.*.healthcheck">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.healthcheck</span>
@@ -327,18 +415,29 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-18" onclick="focusRayRow(18)" data-path="services.*.healthcheck.test">
+      <div class="ray-row " id="ray-row-26" onclick="focusRayRow(26)" data-path="services.*.healthcheck.test">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.healthcheck.test</span>
         </div>
         <div class="row-right">
-          <span class="ray-type-tag">[object Object] | [object Object]</span>
+          <span class="ray-type-tag">array</span>
           
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-19" onclick="focusRayRow(19)" data-path="services.*.healthcheck.interval">
+      <div class="ray-row " id="ray-row-27" onclick="focusRayRow(27)" data-path="services.*.healthcheck.test.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">services.*.healthcheck.test.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-28" onclick="focusRayRow(28)" data-path="services.*.healthcheck.interval">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.healthcheck.interval</span>
@@ -349,7 +448,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-20" onclick="focusRayRow(20)" data-path="services.*.healthcheck.timeout">
+      <div class="ray-row " id="ray-row-29" onclick="focusRayRow(29)" data-path="services.*.healthcheck.timeout">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.healthcheck.timeout</span>
@@ -360,7 +459,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-21" onclick="focusRayRow(21)" data-path="services.*.healthcheck.retries">
+      <div class="ray-row " id="ray-row-30" onclick="focusRayRow(30)" data-path="services.*.healthcheck.retries">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.healthcheck.retries</span>
@@ -371,7 +470,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-22" onclick="focusRayRow(22)" data-path="services.*.healthcheck.*">
+      <div class="ray-row " id="ray-row-31" onclick="focusRayRow(31)" data-path="services.*.healthcheck.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.healthcheck.*</span>
@@ -382,7 +481,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-23" onclick="focusRayRow(23)" data-path="services.*.*">
+      <div class="ray-row " id="ray-row-32" onclick="focusRayRow(32)" data-path="services.*.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">services.*.*</span>
@@ -393,7 +492,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-24" onclick="focusRayRow(24)" data-path="volumes">
+      <div class="ray-row " id="ray-row-33" onclick="focusRayRow(33)" data-path="volumes">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">volumes</span>
@@ -404,7 +503,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-25" onclick="focusRayRow(25)" data-path="volumes.*">
+      <div class="ray-row " id="ray-row-34" onclick="focusRayRow(34)" data-path="volumes.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">volumes.*</span>
@@ -415,7 +514,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-26" onclick="focusRayRow(26)" data-path="volumes.*.driver">
+      <div class="ray-row " id="ray-row-35" onclick="focusRayRow(35)" data-path="volumes.*.driver">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">volumes.*.driver</span>
@@ -426,7 +525,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-27" onclick="focusRayRow(27)" data-path="volumes.*.external">
+      <div class="ray-row " id="ray-row-36" onclick="focusRayRow(36)" data-path="volumes.*.external">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">volumes.*.external</span>
@@ -437,7 +536,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-28" onclick="focusRayRow(28)" data-path="volumes.*.*">
+      <div class="ray-row " id="ray-row-37" onclick="focusRayRow(37)" data-path="volumes.*.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">volumes.*.*</span>
@@ -448,7 +547,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-29" onclick="focusRayRow(29)" data-path="networks">
+      <div class="ray-row " id="ray-row-38" onclick="focusRayRow(38)" data-path="networks">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">networks</span>
@@ -459,7 +558,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-30" onclick="focusRayRow(30)" data-path="networks.*">
+      <div class="ray-row " id="ray-row-39" onclick="focusRayRow(39)" data-path="networks.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">networks.*</span>
@@ -470,7 +569,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-31" onclick="focusRayRow(31)" data-path="networks.*.driver">
+      <div class="ray-row " id="ray-row-40" onclick="focusRayRow(40)" data-path="networks.*.driver">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">networks.*.driver</span>
@@ -481,7 +580,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-32" onclick="focusRayRow(32)" data-path="networks.*.external">
+      <div class="ray-row " id="ray-row-41" onclick="focusRayRow(41)" data-path="networks.*.external">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">networks.*.external</span>
@@ -492,7 +591,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-33" onclick="focusRayRow(33)" data-path="networks.*.*">
+      <div class="ray-row " id="ray-row-42" onclick="focusRayRow(42)" data-path="networks.*.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">networks.*.*</span>
@@ -503,7 +602,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-34" onclick="focusRayRow(34)" data-path="*">
+      <div class="ray-row " id="ray-row-43" onclick="focusRayRow(43)" data-path="*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">*</span>
@@ -685,11 +784,135 @@
         <div class="sec-meta">
           <div class="meta-item">
             <span class="meta-k">Type</span>
-            <span class="meta-v">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-v">OBJECT</span>
           </div>
           <div class="meta-item">
             <span class="meta-k">Depth</span>
             <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-5" class="ray-inspector-panel ">
+        <h3>services.*.build.context</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-6" class="ray-inspector-panel ">
+        <h3>services.*.build.dockerfile</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "Dockerfile",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-7" class="ray-inspector-panel ">
+        <h3>services.*.build.args</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">OBJECT</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
           </div>
         </div>
 
@@ -718,7 +941,85 @@
         </div>
       </div>
     
-      <div id="inspector-5" class="ray-inspector-panel ">
+      <div id="inspector-8" class="ray-inspector-panel ">
+        <h3>services.*.build.args.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">5 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-9" class="ray-inspector-panel ">
+        <h3>services.*.build.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-10" class="ray-inspector-panel ">
         <h3>services.*.container_name</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -759,7 +1060,7 @@
         </div>
       </div>
     
-      <div id="inspector-6" class="ray-inspector-panel ">
+      <div id="inspector-11" class="ray-inspector-panel ">
         <h3>services.*.ports</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -801,7 +1102,7 @@
         </div>
       </div>
     
-      <div id="inspector-7" class="ray-inspector-panel ">
+      <div id="inspector-12" class="ray-inspector-panel ">
         <h3>services.*.ports.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -841,7 +1142,7 @@
         </div>
       </div>
     
-      <div id="inspector-8" class="ray-inspector-panel ">
+      <div id="inspector-13" class="ray-inspector-panel ">
         <h3>services.*.volumes</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -883,7 +1184,7 @@
         </div>
       </div>
     
-      <div id="inspector-9" class="ray-inspector-panel ">
+      <div id="inspector-14" class="ray-inspector-panel ">
         <h3>services.*.volumes.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -923,7 +1224,7 @@
         </div>
       </div>
     
-      <div id="inspector-10" class="ray-inspector-panel ">
+      <div id="inspector-15" class="ray-inspector-panel ">
         <h3>services.*.networks</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -965,7 +1266,7 @@
         </div>
       </div>
     
-      <div id="inspector-11" class="ray-inspector-panel ">
+      <div id="inspector-16" class="ray-inspector-panel ">
         <h3>services.*.networks.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1005,14 +1306,14 @@
         </div>
       </div>
     
-      <div id="inspector-12" class="ray-inspector-panel ">
+      <div id="inspector-17" class="ray-inspector-panel ">
         <h3>services.*.environment</h3>
         <span class="badge opt">OPTIONAL</span>
         
         <div class="sec-meta">
           <div class="meta-item">
             <span class="meta-k">Type</span>
-            <span class="meta-v">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-v">OBJECT</span>
           </div>
           <div class="meta-item">
             <span class="meta-k">Depth</span>
@@ -1029,7 +1330,9 @@
           <h4>CONSTRAINTS</h4>
           <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
           <pre style="display:none; margin-top:5px;"><code>{
-  "required": false
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
 }</code></pre>
         </div>
 
@@ -1045,14 +1348,92 @@
         </div>
       </div>
     
-      <div id="inspector-13" class="ray-inspector-panel ">
+      <div id="inspector-18" class="ray-inspector-panel ">
+        <h3>services.*.environment.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-19" class="ray-inspector-panel ">
+        <h3>services.*.environment.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-20" class="ray-inspector-panel ">
         <h3>services.*.command</h3>
         <span class="badge opt">OPTIONAL</span>
         
         <div class="sec-meta">
           <div class="meta-item">
             <span class="meta-k">Type</span>
-            <span class="meta-v">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-v">ARRAY</span>
           </div>
           <div class="meta-item">
             <span class="meta-k">Depth</span>
@@ -1069,7 +1450,10 @@
           <h4>CONSTRAINTS</h4>
           <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
           <pre style="display:none; margin-top:5px;"><code>{
-  "required": false
+  "required": false,
+  "minLength": 0,
+  "minItems": 0,
+  "uniqueItems": false
 }</code></pre>
         </div>
 
@@ -1085,7 +1469,47 @@
         </div>
       </div>
     
-      <div id="inspector-14" class="ray-inspector-panel ">
+      <div id="inspector-21" class="ray-inspector-panel ">
+        <h3>services.*.command.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-22" class="ray-inspector-panel ">
         <h3>services.*.restart</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1127,7 +1551,7 @@
         </div>
       </div>
     
-      <div id="inspector-15" class="ray-inspector-panel ">
+      <div id="inspector-23" class="ray-inspector-panel ">
         <h3>services.*.depends_on</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1169,7 +1593,7 @@
         </div>
       </div>
     
-      <div id="inspector-16" class="ray-inspector-panel ">
+      <div id="inspector-24" class="ray-inspector-panel ">
         <h3>services.*.depends_on.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1209,7 +1633,7 @@
         </div>
       </div>
     
-      <div id="inspector-17" class="ray-inspector-panel ">
+      <div id="inspector-25" class="ray-inspector-panel ">
         <h3>services.*.healthcheck</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1249,14 +1673,14 @@
         </div>
       </div>
     
-      <div id="inspector-18" class="ray-inspector-panel ">
+      <div id="inspector-26" class="ray-inspector-panel ">
         <h3>services.*.healthcheck.test</h3>
         <span class="badge opt">OPTIONAL</span>
         
         <div class="sec-meta">
           <div class="meta-item">
             <span class="meta-k">Type</span>
-            <span class="meta-v">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-v">ARRAY</span>
           </div>
           <div class="meta-item">
             <span class="meta-k">Depth</span>
@@ -1273,7 +1697,10 @@
           <h4>CONSTRAINTS</h4>
           <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
           <pre style="display:none; margin-top:5px;"><code>{
-  "required": false
+  "required": false,
+  "minLength": 0,
+  "minItems": 0,
+  "uniqueItems": false
 }</code></pre>
         </div>
 
@@ -1289,7 +1716,47 @@
         </div>
       </div>
     
-      <div id="inspector-19" class="ray-inspector-panel ">
+      <div id="inspector-27" class="ray-inspector-panel ">
+        <h3>services.*.healthcheck.test.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">5 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-28" class="ray-inspector-panel ">
         <h3>services.*.healthcheck.interval</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1331,7 +1798,7 @@
         </div>
       </div>
     
-      <div id="inspector-20" class="ray-inspector-panel ">
+      <div id="inspector-29" class="ray-inspector-panel ">
         <h3>services.*.healthcheck.timeout</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1373,7 +1840,7 @@
         </div>
       </div>
     
-      <div id="inspector-21" class="ray-inspector-panel ">
+      <div id="inspector-30" class="ray-inspector-panel ">
         <h3>services.*.healthcheck.retries</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1415,7 +1882,7 @@
         </div>
       </div>
     
-      <div id="inspector-22" class="ray-inspector-panel ">
+      <div id="inspector-31" class="ray-inspector-panel ">
         <h3>services.*.healthcheck.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1453,7 +1920,7 @@
         </div>
       </div>
     
-      <div id="inspector-23" class="ray-inspector-panel ">
+      <div id="inspector-32" class="ray-inspector-panel ">
         <h3>services.*.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1491,7 +1958,7 @@
         </div>
       </div>
     
-      <div id="inspector-24" class="ray-inspector-panel ">
+      <div id="inspector-33" class="ray-inspector-panel ">
         <h3>volumes</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1531,7 +1998,7 @@
         </div>
       </div>
     
-      <div id="inspector-25" class="ray-inspector-panel ">
+      <div id="inspector-34" class="ray-inspector-panel ">
         <h3>volumes.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1569,7 +2036,7 @@
         </div>
       </div>
     
-      <div id="inspector-26" class="ray-inspector-panel ">
+      <div id="inspector-35" class="ray-inspector-panel ">
         <h3>volumes.*.driver</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1611,7 +2078,7 @@
         </div>
       </div>
     
-      <div id="inspector-27" class="ray-inspector-panel ">
+      <div id="inspector-36" class="ray-inspector-panel ">
         <h3>volumes.*.external</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1656,7 +2123,7 @@
         </div>
       </div>
     
-      <div id="inspector-28" class="ray-inspector-panel ">
+      <div id="inspector-37" class="ray-inspector-panel ">
         <h3>volumes.*.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1694,7 +2161,7 @@
         </div>
       </div>
     
-      <div id="inspector-29" class="ray-inspector-panel ">
+      <div id="inspector-38" class="ray-inspector-panel ">
         <h3>networks</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1734,7 +2201,7 @@
         </div>
       </div>
     
-      <div id="inspector-30" class="ray-inspector-panel ">
+      <div id="inspector-39" class="ray-inspector-panel ">
         <h3>networks.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1772,7 +2239,7 @@
         </div>
       </div>
     
-      <div id="inspector-31" class="ray-inspector-panel ">
+      <div id="inspector-40" class="ray-inspector-panel ">
         <h3>networks.*.driver</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1814,7 +2281,7 @@
         </div>
       </div>
     
-      <div id="inspector-32" class="ray-inspector-panel ">
+      <div id="inspector-41" class="ray-inspector-panel ">
         <h3>networks.*.external</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1859,7 +2326,7 @@
         </div>
       </div>
     
-      <div id="inspector-33" class="ray-inspector-panel ">
+      <div id="inspector-42" class="ray-inspector-panel ">
         <h3>networks.*.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1897,7 +2364,7 @@
         </div>
       </div>
     
-      <div id="inspector-34" class="ray-inspector-panel ">
+      <div id="inspector-43" class="ray-inspector-panel ">
         <h3>*</h3>
         <span class="badge opt">OPTIONAL</span>
         

@@ -181,68 +181,83 @@
         <span class="toc-text">features.*.properties</span>
       </li>
     
-      <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry')">
+      <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-properties-*')">
         <span class="toc-number">9</span>
+        <span class="toc-text">features.*.properties.*</span>
+      </li>
+    
+      <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry')">
+        <span class="toc-number">10</span>
         <span class="toc-text">features.*.geometry</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry-type')">
-        <span class="toc-number">10</span>
+        <span class="toc-number">11</span>
         <span class="toc-text">features.*.geometry.type</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry-coordinates')">
-        <span class="toc-number">11</span>
+        <span class="toc-number">12</span>
         <span class="toc-text">features.*.geometry.coordinates</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry-coordinates-*')">
-        <span class="toc-number">12</span>
+        <span class="toc-number">13</span>
         <span class="toc-text">features.*.geometry.coordinates.*</span>
       </li>
     
+      <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry-coordinates-*-*')">
+        <span class="toc-number">14</span>
+        <span class="toc-text">features.*.geometry.coordinates.*.*</span>
+      </li>
+    
+      <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry-coordinates-*-*-*')">
+        <span class="toc-number">15</span>
+        <span class="toc-text">features.*.geometry.coordinates.*.*.*</span>
+      </li>
+    
       <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-geometry-*')">
-        <span class="toc-number">13</span>
+        <span class="toc-number">16</span>
         <span class="toc-text">features.*.geometry.*</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-features-*-*')">
-        <span class="toc-number">14</span>
+        <span class="toc-number">17</span>
         <span class="toc-text">features.*.*</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-crs')">
-        <span class="toc-number">15</span>
+        <span class="toc-number">18</span>
         <span class="toc-text">crs</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-crs-type')">
-        <span class="toc-number">16</span>
+        <span class="toc-number">19</span>
         <span class="toc-text">crs.type</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-crs-properties')">
-        <span class="toc-number">17</span>
+        <span class="toc-number">20</span>
         <span class="toc-text">crs.properties</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-crs-properties-name')">
-        <span class="toc-number">18</span>
+        <span class="toc-number">21</span>
         <span class="toc-text">crs.properties.name</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-crs-properties-*')">
-        <span class="toc-number">19</span>
+        <span class="toc-number">22</span>
         <span class="toc-text">crs.properties.*</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-crs-*')">
-        <span class="toc-number">20</span>
+        <span class="toc-number">23</span>
         <span class="toc-text">crs.*</span>
       </li>
     
       <li class="toc-level-1" onclick="scrollToWiki('wiki-*')">
-        <span class="toc-number">21</span>
+        <span class="toc-number">24</span>
         <span class="toc-text">*</span>
       </li>
     
@@ -261,7 +276,7 @@
           </tr>
           <tr>
             <td>Property Nodes</td>
-            <td>21</td>
+            <td>24</td>
           </tr>
           <tr>
             <td>Access</td>
@@ -450,7 +465,7 @@
         <table class="wiki-metadata-table">
           <tr>
             <td>Type</td>
-            <td><code>[object Object] | [object Object]</code></td>
+            <td><code>number</code></td>
           </tr>
           <tr>
             <td>Status</td>
@@ -467,7 +482,7 @@
           <sup class="reference-cite"><a href="#ref-6">[7]</a></sup>
         </p>
 
-        <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li></ul>
+        <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li><li><strong>minLength</strong>: <code>0</code></li></ul>
       </div>
     
       <div class="wiki-section" id="wiki-features-*-properties">
@@ -476,7 +491,7 @@
         <table class="wiki-metadata-table">
           <tr>
             <td>Type</td>
-            <td><code>[object Object] | [object Object]</code></td>
+            <td><code>object</code></td>
           </tr>
           <tr>
             <td>Status</td>
@@ -493,7 +508,42 @@
           <sup class="reference-cite"><a href="#ref-7">[8]</a></sup>
         </p>
 
-        <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li></ul>
+        <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li>
+            <li class="nested" style="list-style-type: none; margin-left: -15px; margin-bottom: 5px;">
+              <span class="nested-toggle" style="color: #0645AD; cursor: pointer; font-weight: bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand ' + 'enum' : '▼ collapse ' + 'enum';">▶ expand enum</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F8F9FA; border-left: 2px solid #A2A9B1; padding: 5px; color: #202122; overflow-x: auto;">"enum": [
+  null
+]</pre>
+              </div>
+            </li>
+          </ul>
+      </div>
+    
+      <div class="wiki-section" id="wiki-features-*-properties-*">
+        <h2><span class="mw-headline">features.*.properties.*</span></h2>
+        
+        <table class="wiki-metadata-table">
+          <tr>
+            <td>Type</td>
+            <td><code>string</code></td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>Optional</td>
+          </tr>
+          <tr>
+            <td>Depth</td>
+            <td>Level 4</td>
+          </tr>
+        </table>
+
+        <p class="wiki-paragraph">
+          No supplementary description logged for this parameter.
+          <sup class="reference-cite"><a href="#ref-8">[9]</a></sup>
+        </p>
+
+        <h3>Constraints</h3><ul class="wiki-list"><li><strong>minLength</strong>: <code>0</code></li></ul>
       </div>
     
       <div class="wiki-section" id="wiki-features-*-geometry">
@@ -516,7 +566,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-8">[9]</a></sup>
+          <sup class="reference-cite"><a href="#ref-9">[10]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list">
@@ -552,7 +602,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-9">[10]</a></sup>
+          <sup class="reference-cite"><a href="#ref-10">[11]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li><li><strong>default</strong>: <code>"Point"</code></li><li><strong>minLength</strong>: <code>0</code></li></ul>
@@ -578,7 +628,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-10">[11]</a></sup>
+          <sup class="reference-cite"><a href="#ref-11">[12]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li><li><strong>minItems</strong>: <code>0</code></li><li><strong>uniqueItems</strong>: <code>false</code></li></ul>
@@ -590,7 +640,7 @@
         <table class="wiki-metadata-table">
           <tr>
             <td>Type</td>
-            <td><code>[object Object] | [object Object]</code></td>
+            <td><code>array</code></td>
           </tr>
           <tr>
             <td>Status</td>
@@ -604,7 +654,59 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-11">[12]</a></sup>
+          <sup class="reference-cite"><a href="#ref-12">[13]</a></sup>
+        </p>
+
+        <h3>Constraints</h3><ul class="wiki-list"><li><strong>minItems</strong>: <code>0</code></li><li><strong>uniqueItems</strong>: <code>false</code></li></ul>
+      </div>
+    
+      <div class="wiki-section" id="wiki-features-*-geometry-coordinates-*-*">
+        <h2><span class="mw-headline">features.*.geometry.coordinates.*.*</span></h2>
+        
+        <table class="wiki-metadata-table">
+          <tr>
+            <td>Type</td>
+            <td><code>array</code></td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>Optional</td>
+          </tr>
+          <tr>
+            <td>Depth</td>
+            <td>Level 6</td>
+          </tr>
+        </table>
+
+        <p class="wiki-paragraph">
+          No supplementary description logged for this parameter.
+          <sup class="reference-cite"><a href="#ref-13">[14]</a></sup>
+        </p>
+
+        <h3>Constraints</h3><ul class="wiki-list"><li><strong>minItems</strong>: <code>0</code></li><li><strong>uniqueItems</strong>: <code>false</code></li></ul>
+      </div>
+    
+      <div class="wiki-section" id="wiki-features-*-geometry-coordinates-*-*-*">
+        <h2><span class="mw-headline">features.*.geometry.coordinates.*.*.*</span></h2>
+        
+        <table class="wiki-metadata-table">
+          <tr>
+            <td>Type</td>
+            <td><code>number</code></td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>Optional</td>
+          </tr>
+          <tr>
+            <td>Depth</td>
+            <td>Level 7</td>
+          </tr>
+        </table>
+
+        <p class="wiki-paragraph">
+          No supplementary description logged for this parameter.
+          <sup class="reference-cite"><a href="#ref-14">[15]</a></sup>
         </p>
 
         
@@ -630,7 +732,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-12">[13]</a></sup>
+          <sup class="reference-cite"><a href="#ref-15">[16]</a></sup>
         </p>
 
         
@@ -656,7 +758,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-13">[14]</a></sup>
+          <sup class="reference-cite"><a href="#ref-16">[17]</a></sup>
         </p>
 
         
@@ -682,7 +784,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-14">[15]</a></sup>
+          <sup class="reference-cite"><a href="#ref-17">[18]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list">
@@ -718,7 +820,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-15">[16]</a></sup>
+          <sup class="reference-cite"><a href="#ref-18">[19]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li><li><strong>default</strong>: <code>"name"</code></li><li><strong>minLength</strong>: <code>0</code></li></ul>
@@ -744,7 +846,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-16">[17]</a></sup>
+          <sup class="reference-cite"><a href="#ref-19">[20]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list">
@@ -779,7 +881,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-17">[18]</a></sup>
+          <sup class="reference-cite"><a href="#ref-20">[21]</a></sup>
         </p>
 
         <h3>Constraints</h3><ul class="wiki-list"><li><strong>required</strong>: <code>false</code></li><li><strong>minLength</strong>: <code>0</code></li></ul>
@@ -805,7 +907,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-18">[19]</a></sup>
+          <sup class="reference-cite"><a href="#ref-21">[22]</a></sup>
         </p>
 
         
@@ -831,7 +933,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-19">[20]</a></sup>
+          <sup class="reference-cite"><a href="#ref-22">[23]</a></sup>
         </p>
 
         
@@ -857,7 +959,7 @@
 
         <p class="wiki-paragraph">
           No supplementary description logged for this parameter.
-          <sup class="reference-cite"><a href="#ref-20">[21]</a></sup>
+          <sup class="reference-cite"><a href="#ref-23">[24]</a></sup>
         </p>
 
         
@@ -914,102 +1016,123 @@
       <li id="ref-6" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-id">^</a></span>
         <span class="reference-text">
-          Parameter <code>features.*.id</code> ([object Object] | [object Object]). Constraints: <code>{"required":false}</code>.
+          Parameter <code>features.*.id</code> (number). Constraints: <code>{"required":false,"minLength":0}</code>.
         </span>
       </li>
     
       <li id="ref-7" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-properties">^</a></span>
         <span class="reference-text">
-          Parameter <code>features.*.properties</code> ([object Object] | [object Object]). Constraints: <code>{"required":false}</code>.
+          Parameter <code>features.*.properties</code> (object). Constraints: <code>{"required":false,"enum":[null]}</code>.
         </span>
       </li>
     
       <li id="ref-8" class="reference-item">
+        <span class="mw-cite-backlink"><a href="#wiki-features-*-properties-*">^</a></span>
+        <span class="reference-text">
+          Parameter <code>features.*.properties.*</code> (string). Constraints: <code>{"minLength":0}</code>.
+        </span>
+      </li>
+    
+      <li id="ref-9" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry">^</a></span>
         <span class="reference-text">
           Parameter <code>features.*.geometry</code> (object). Constraints: <code>{"required":["type","coordinates"]}</code>.
         </span>
       </li>
     
-      <li id="ref-9" class="reference-item">
+      <li id="ref-10" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry-type">^</a></span>
         <span class="reference-text">
           Parameter <code>features.*.geometry.type</code> (string). Constraints: <code>{"required":false,"default":"Point","minLength":0}</code>.
         </span>
       </li>
     
-      <li id="ref-10" class="reference-item">
+      <li id="ref-11" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry-coordinates">^</a></span>
         <span class="reference-text">
           Parameter <code>features.*.geometry.coordinates</code> (array). Constraints: <code>{"required":false,"minItems":0,"uniqueItems":false}</code>.
         </span>
       </li>
     
-      <li id="ref-11" class="reference-item">
+      <li id="ref-12" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry-coordinates-*">^</a></span>
         <span class="reference-text">
-          Parameter <code>features.*.geometry.coordinates.*</code> ([object Object] | [object Object]). Constraints: <code>{}</code>.
+          Parameter <code>features.*.geometry.coordinates.*</code> (array). Constraints: <code>{"minItems":0,"uniqueItems":false}</code>.
         </span>
       </li>
     
-      <li id="ref-12" class="reference-item">
+      <li id="ref-13" class="reference-item">
+        <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry-coordinates-*-*">^</a></span>
+        <span class="reference-text">
+          Parameter <code>features.*.geometry.coordinates.*.*</code> (array). Constraints: <code>{"minItems":0,"uniqueItems":false}</code>.
+        </span>
+      </li>
+    
+      <li id="ref-14" class="reference-item">
+        <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry-coordinates-*-*-*">^</a></span>
+        <span class="reference-text">
+          Parameter <code>features.*.geometry.coordinates.*.*.*</code> (number). Constraints: <code>{}</code>.
+        </span>
+      </li>
+    
+      <li id="ref-15" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-geometry-*">^</a></span>
         <span class="reference-text">
           Parameter <code>features.*.geometry.*</code> (any). Constraints: <code>{}</code>.
         </span>
       </li>
     
-      <li id="ref-13" class="reference-item">
+      <li id="ref-16" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-features-*-*">^</a></span>
         <span class="reference-text">
           Parameter <code>features.*.*</code> (any). Constraints: <code>{}</code>.
         </span>
       </li>
     
-      <li id="ref-14" class="reference-item">
+      <li id="ref-17" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-crs">^</a></span>
         <span class="reference-text">
           Parameter <code>crs</code> (object). Constraints: <code>{"required":["type","properties"]}</code>.
         </span>
       </li>
     
-      <li id="ref-15" class="reference-item">
+      <li id="ref-18" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-crs-type">^</a></span>
         <span class="reference-text">
           Parameter <code>crs.type</code> (string). Constraints: <code>{"required":false,"default":"name","minLength":0}</code>.
         </span>
       </li>
     
-      <li id="ref-16" class="reference-item">
+      <li id="ref-19" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-crs-properties">^</a></span>
         <span class="reference-text">
           Parameter <code>crs.properties</code> (object). Constraints: <code>{"required":["name"]}</code>.
         </span>
       </li>
     
-      <li id="ref-17" class="reference-item">
+      <li id="ref-20" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-crs-properties-name">^</a></span>
         <span class="reference-text">
           Parameter <code>crs.properties.name</code> (string). Constraints: <code>{"required":false,"minLength":0}</code>.
         </span>
       </li>
     
-      <li id="ref-18" class="reference-item">
+      <li id="ref-21" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-crs-properties-*">^</a></span>
         <span class="reference-text">
           Parameter <code>crs.properties.*</code> (any). Constraints: <code>{}</code>.
         </span>
       </li>
     
-      <li id="ref-19" class="reference-item">
+      <li id="ref-22" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-crs-*">^</a></span>
         <span class="reference-text">
           Parameter <code>crs.*</code> (any). Constraints: <code>{}</code>.
         </span>
       </li>
     
-      <li id="ref-20" class="reference-item">
+      <li id="ref-23" class="reference-item">
         <span class="mw-cite-backlink"><a href="#wiki-*">^</a></span>
         <span class="reference-text">
           Parameter <code>*</code> (any). Constraints: <code>{}</code>.

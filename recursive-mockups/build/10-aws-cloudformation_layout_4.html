@@ -282,25 +282,30 @@
     
       <div class="cursor-tree-row " id="tree-row-24" onclick="focusCursorElement(24)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">Outputs.*.Export</span>
+        <span class="tree-text">Outputs.*.Value.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-25" onclick="focusCursorElement(25)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">Outputs.*.Export.Name</span>
+        <span class="tree-text">Outputs.*.Export</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-26" onclick="focusCursorElement(26)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">Outputs.*.Export.*</span>
+        <span class="tree-text">Outputs.*.Export.Name</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-27" onclick="focusCursorElement(27)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">Outputs.*.*</span>
+        <span class="tree-text">Outputs.*.Export.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-28" onclick="focusCursorElement(28)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">Outputs.*.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-29" onclick="focusCursorElement(29)">
         <span class="tree-bullet">◇</span>
         <span class="tree-text">*</span>
       </div>
@@ -578,14 +583,25 @@
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: Outputs.*.Value</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"Value"</span>: {</div>
-        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"[object Object] | [object Object]"</span>,</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
         <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
         <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
 </div>
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
       <div id="editor-block-24" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: Outputs.*.Value.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-25" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: Outputs.*.Export</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"Export"</span>: {</div>
@@ -596,7 +612,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-25" class="cursor-code-block ">
+      <div id="editor-block-26" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: Outputs.*.Export.Name</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"Name"</span>: {</div>
@@ -608,7 +624,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-26" class="cursor-code-block ">
+      <div id="editor-block-27" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: Outputs.*.Export.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -618,7 +634,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-27" class="cursor-code-block ">
+      <div id="editor-block-28" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: Outputs.*.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -628,7 +644,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-28" class="cursor-code-block ">
+      <div id="editor-block-29" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: *</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -1008,9 +1024,10 @@
         <p>I audited the property <code>Outputs.*.Value</code>. Here is my analysis of the constraints:</p>
         
         <div class="ai-diff">
-          <div class="diff-line plus">+ "type": "[object Object] | [object Object]"</div>
+          <div class="diff-line plus">+ "type": "object"</div>
           <div class="diff-line plus">+ "required": true</div>
           <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
         </div>
 
         <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
@@ -1018,6 +1035,20 @@
       </div>
     
       <div id="chat-block-24" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>Outputs.*.Value.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-25" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>Outputs.*.Export</code>. Here is my analysis of the constraints:</p>
         
@@ -1038,7 +1069,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-25" class="cursor-chat-bubble ">
+      <div id="chat-block-26" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>Outputs.*.Export.Name</code>. Here is my analysis of the constraints:</p>
         
@@ -1053,7 +1084,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-26" class="cursor-chat-bubble ">
+      <div id="chat-block-27" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>Outputs.*.Export.*</code>. Here is my analysis of the constraints:</p>
         
@@ -1067,7 +1098,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-27" class="cursor-chat-bubble ">
+      <div id="chat-block-28" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>Outputs.*.*</code>. Here is my analysis of the constraints:</p>
         
@@ -1081,7 +1112,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-28" class="cursor-chat-bubble ">
+      <div id="chat-block-29" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>*</code>. Here is my analysis of the constraints:</p>
         

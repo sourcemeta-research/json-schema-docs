@@ -312,25 +312,35 @@
     
       <div class="cursor-tree-row " id="tree-row-30" onclick="focusCursorElement(30)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">contributes.configuration.properties.*.description</span>
+        <span class="tree-text">contributes.configuration.properties.*.default.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-31" onclick="focusCursorElement(31)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">contributes.configuration.properties.*.*</span>
+        <span class="tree-text">contributes.configuration.properties.*.default.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-32" onclick="focusCursorElement(32)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">contributes.configuration.*</span>
+        <span class="tree-text">contributes.configuration.properties.*.description</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-33" onclick="focusCursorElement(33)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">contributes.*</span>
+        <span class="tree-text">contributes.configuration.properties.*.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-34" onclick="focusCursorElement(34)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">contributes.configuration.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-35" onclick="focusCursorElement(35)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">contributes.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-36" onclick="focusCursorElement(36)">
         <span class="tree-bullet">◇</span>
         <span class="tree-text">*</span>
       </div>
@@ -682,14 +692,38 @@
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.configuration.properties.*.default</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"default"</span>: {</div>
-        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]"</span>,</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"number"</span>,</div>
         <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
         <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"enum"</span>: <span class="token val">[false,true]</span>,
+  <span class="token key">"minItems"</span>: <span class="token val">0</span>,
+  <span class="token key">"uniqueItems"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
 </div>
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
       <div id="editor-block-30" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.configuration.properties.*.default.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-31" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.configuration.properties.*.default.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-32" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.configuration.properties.*.description</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"description"</span>: {</div>
@@ -701,7 +735,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-31" class="cursor-code-block ">
+      <div id="editor-block-33" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.configuration.properties.*.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -711,7 +745,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-32" class="cursor-code-block ">
+      <div id="editor-block-34" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.configuration.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -721,7 +755,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-33" class="cursor-code-block ">
+      <div id="editor-block-35" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: contributes.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -731,7 +765,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-34" class="cursor-code-block ">
+      <div id="editor-block-36" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: *</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -1197,9 +1231,21 @@
         <p>I audited the property <code>contributes.configuration.properties.*.default</code>. Here is my analysis of the constraints:</p>
         
         <div class="ai-diff">
-          <div class="diff-line plus">+ "type": "[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]"</div>
+          <div class="diff-line plus">+ "type": "number"</div>
           <div class="diff-line plus">+ "required": false</div>
           <div class="diff-line plus">+ "required": false</div>
+
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "enum": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  false,
+  true
+]</pre>
+                </span>
+              </div>
+<div class="diff-line plus">+ "minItems": 0</div>
+<div class="diff-line plus">+ "uniqueItems": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
         </div>
 
         <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
@@ -1207,6 +1253,34 @@
       </div>
     
       <div id="chat-block-30" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>contributes.configuration.properties.*.default.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-31" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>contributes.configuration.properties.*.default.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-32" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>contributes.configuration.properties.*.description</code>. Here is my analysis of the constraints:</p>
         
@@ -1221,7 +1295,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-31" class="cursor-chat-bubble ">
+      <div id="chat-block-33" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>contributes.configuration.properties.*.*</code>. Here is my analysis of the constraints:</p>
         
@@ -1235,7 +1309,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-32" class="cursor-chat-bubble ">
+      <div id="chat-block-34" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>contributes.configuration.*</code>. Here is my analysis of the constraints:</p>
         
@@ -1249,7 +1323,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-33" class="cursor-chat-bubble ">
+      <div id="chat-block-35" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>contributes.*</code>. Here is my analysis of the constraints:</p>
         
@@ -1263,7 +1337,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-34" class="cursor-chat-bubble ">
+      <div id="chat-block-36" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>*</code>. Here is my analysis of the constraints:</p>
         

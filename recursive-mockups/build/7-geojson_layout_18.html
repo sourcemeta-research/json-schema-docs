@@ -170,77 +170,95 @@
     
       <li class="json-nav-item" id="json-nav-8" onclick="focusJsonDoc(8)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">features.*.geometry</span>
+        <span class="nav-text">features.*.properties.*</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-9" onclick="focusJsonDoc(9)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">features.*.geometry.type</span>
+        <span class="nav-text">features.*.geometry</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-10" onclick="focusJsonDoc(10)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">features.*.geometry.coordinates</span>
+        <span class="nav-text">features.*.geometry.type</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-11" onclick="focusJsonDoc(11)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">features.*.geometry.coordinates.*</span>
+        <span class="nav-text">features.*.geometry.coordinates</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-12" onclick="focusJsonDoc(12)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">features.*.geometry.*</span>
+        <span class="nav-text">features.*.geometry.coordinates.*</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-13" onclick="focusJsonDoc(13)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">features.*.*</span>
+        <span class="nav-text">features.*.geometry.coordinates.*.*</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-14" onclick="focusJsonDoc(14)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">crs</span>
+        <span class="nav-text">features.*.geometry.coordinates.*.*.*</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-15" onclick="focusJsonDoc(15)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">crs.type</span>
+        <span class="nav-text">features.*.geometry.*</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-16" onclick="focusJsonDoc(16)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">crs.properties</span>
+        <span class="nav-text">features.*.*</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-17" onclick="focusJsonDoc(17)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">crs.properties.name</span>
+        <span class="nav-text">crs</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-18" onclick="focusJsonDoc(18)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">crs.properties.*</span>
+        <span class="nav-text">crs.type</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-19" onclick="focusJsonDoc(19)">
         <span class="nav-bracket">{</span>
-        <span class="nav-text">crs.*</span>
+        <span class="nav-text">crs.properties</span>
         <span class="nav-bracket">}</span>
       </li>
     
       <li class="json-nav-item" id="json-nav-20" onclick="focusJsonDoc(20)">
+        <span class="nav-bracket">{</span>
+        <span class="nav-text">crs.properties.name</span>
+        <span class="nav-bracket">}</span>
+      </li>
+    
+      <li class="json-nav-item" id="json-nav-21" onclick="focusJsonDoc(21)">
+        <span class="nav-bracket">{</span>
+        <span class="nav-text">crs.properties.*</span>
+        <span class="nav-bracket">}</span>
+      </li>
+    
+      <li class="json-nav-item" id="json-nav-22" onclick="focusJsonDoc(22)">
+        <span class="nav-bracket">{</span>
+        <span class="nav-text">crs.*</span>
+        <span class="nav-bracket">}</span>
+      </li>
+    
+      <li class="json-nav-item" id="json-nav-23" onclick="focusJsonDoc(23)">
         <span class="nav-bracket">{</span>
         <span class="nav-text">*</span>
         <span class="nav-bracket">}</span>
@@ -349,7 +367,7 @@
     
       <div class="json-doc-card " id="json-card-6">
         <div class="card-meta">
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">number</span>
           <span class="req-badge optional">OPTIONAL</span>
         </div>
         
@@ -357,12 +375,13 @@
         <p class="card-desc">No supplementary comments logged.</p>
         
         <div class="json-spec-block"><h4>Validation Properties</h4><pre><code>  "required": false,
+  "minLength": 0,
 </code></pre></div>
       </div>
     
       <div class="json-doc-card " id="json-card-7">
         <div class="card-meta">
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">object</span>
           <span class="req-badge required">REQUIRED</span>
         </div>
         
@@ -370,10 +389,26 @@
         <p class="card-desc">No supplementary comments logged.</p>
         
         <div class="json-spec-block"><h4>Validation Properties</h4><pre><code>  "required": false,
+  "enum": <span class="nested-toggle" style="color:#2aa198; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span><div class="nested-detail-box" style="display:none; padding-left:15px; border-left: 2px solid #2aa198; margin-top:5px; color:#268bd2;">[
+  null
+]</div>,
 </code></pre></div>
       </div>
     
       <div class="json-doc-card " id="json-card-8">
+        <div class="card-meta">
+          <span class="type-badge">string</span>
+          <span class="req-badge optional">OPTIONAL</span>
+        </div>
+        
+        <h2>features.*.properties.*</h2>
+        <p class="card-desc">No supplementary comments logged.</p>
+        
+        <div class="json-spec-block"><h4>Validation Properties</h4><pre><code>  "minLength": 0,
+</code></pre></div>
+      </div>
+    
+      <div class="json-doc-card " id="json-card-9">
         <div class="card-meta">
           <span class="type-badge">object</span>
           <span class="req-badge required">REQUIRED</span>
@@ -389,7 +424,7 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-9">
+      <div class="json-doc-card " id="json-card-10">
         <div class="card-meta">
           <span class="type-badge">string</span>
           <span class="req-badge required">REQUIRED</span>
@@ -404,7 +439,7 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-10">
+      <div class="json-doc-card " id="json-card-11">
         <div class="card-meta">
           <span class="type-badge">array</span>
           <span class="req-badge required">REQUIRED</span>
@@ -419,19 +454,47 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-11">
+      <div class="json-doc-card " id="json-card-12">
         <div class="card-meta">
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">array</span>
           <span class="req-badge optional">OPTIONAL</span>
         </div>
         
         <h2>features.*.geometry.coordinates.*</h2>
         <p class="card-desc">No supplementary comments logged.</p>
         
+        <div class="json-spec-block"><h4>Validation Properties</h4><pre><code>  "minItems": 0,
+  "uniqueItems": false,
+</code></pre></div>
+      </div>
+    
+      <div class="json-doc-card " id="json-card-13">
+        <div class="card-meta">
+          <span class="type-badge">array</span>
+          <span class="req-badge optional">OPTIONAL</span>
+        </div>
+        
+        <h2>features.*.geometry.coordinates.*.*</h2>
+        <p class="card-desc">No supplementary comments logged.</p>
+        
+        <div class="json-spec-block"><h4>Validation Properties</h4><pre><code>  "minItems": 0,
+  "uniqueItems": false,
+</code></pre></div>
+      </div>
+    
+      <div class="json-doc-card " id="json-card-14">
+        <div class="card-meta">
+          <span class="type-badge">number</span>
+          <span class="req-badge optional">OPTIONAL</span>
+        </div>
+        
+        <h2>features.*.geometry.coordinates.*.*.*</h2>
+        <p class="card-desc">No supplementary comments logged.</p>
+        
         
       </div>
     
-      <div class="json-doc-card " id="json-card-12">
+      <div class="json-doc-card " id="json-card-15">
         <div class="card-meta">
           <span class="type-badge">any</span>
           <span class="req-badge optional">OPTIONAL</span>
@@ -443,7 +506,7 @@
         
       </div>
     
-      <div class="json-doc-card " id="json-card-13">
+      <div class="json-doc-card " id="json-card-16">
         <div class="card-meta">
           <span class="type-badge">any</span>
           <span class="req-badge optional">OPTIONAL</span>
@@ -455,7 +518,7 @@
         
       </div>
     
-      <div class="json-doc-card " id="json-card-14">
+      <div class="json-doc-card " id="json-card-17">
         <div class="card-meta">
           <span class="type-badge">object</span>
           <span class="req-badge optional">OPTIONAL</span>
@@ -471,7 +534,7 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-15">
+      <div class="json-doc-card " id="json-card-18">
         <div class="card-meta">
           <span class="type-badge">string</span>
           <span class="req-badge required">REQUIRED</span>
@@ -486,7 +549,7 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-16">
+      <div class="json-doc-card " id="json-card-19">
         <div class="card-meta">
           <span class="type-badge">object</span>
           <span class="req-badge required">REQUIRED</span>
@@ -501,7 +564,7 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-17">
+      <div class="json-doc-card " id="json-card-20">
         <div class="card-meta">
           <span class="type-badge">string</span>
           <span class="req-badge required">REQUIRED</span>
@@ -515,7 +578,7 @@
 </code></pre></div>
       </div>
     
-      <div class="json-doc-card " id="json-card-18">
+      <div class="json-doc-card " id="json-card-21">
         <div class="card-meta">
           <span class="type-badge">any</span>
           <span class="req-badge optional">OPTIONAL</span>
@@ -527,7 +590,7 @@
         
       </div>
     
-      <div class="json-doc-card " id="json-card-19">
+      <div class="json-doc-card " id="json-card-22">
         <div class="card-meta">
           <span class="type-badge">any</span>
           <span class="req-badge optional">OPTIONAL</span>
@@ -539,7 +602,7 @@
         
       </div>
     
-      <div class="json-doc-card " id="json-card-20">
+      <div class="json-doc-card " id="json-card-23">
         <div class="card-meta">
           <span class="type-badge">any</span>
           <span class="req-badge optional">OPTIONAL</span>

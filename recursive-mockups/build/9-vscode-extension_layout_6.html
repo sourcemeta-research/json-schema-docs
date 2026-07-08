@@ -280,23 +280,31 @@
       </li>
     
       <li class="toc-item" id="toc-item-30">
-        <a href="#prop-30" onclick="scrollToSection('prop-30', event)">// CONTRIBUTES.CONFIGURATION.PROPERTIES.*.DESCRIPTION</a>
+        <a href="#prop-30" onclick="scrollToSection('prop-30', event)">// CONTRIBUTES.CONFIGURATION.PROPERTIES.*.DEFAULT.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-31">
-        <a href="#prop-31" onclick="scrollToSection('prop-31', event)">// CONTRIBUTES.CONFIGURATION.PROPERTIES.*.*</a>
+        <a href="#prop-31" onclick="scrollToSection('prop-31', event)">// CONTRIBUTES.CONFIGURATION.PROPERTIES.*.DEFAULT.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-32">
-        <a href="#prop-32" onclick="scrollToSection('prop-32', event)">// CONTRIBUTES.CONFIGURATION.*</a>
+        <a href="#prop-32" onclick="scrollToSection('prop-32', event)">// CONTRIBUTES.CONFIGURATION.PROPERTIES.*.DESCRIPTION</a>
       </li>
     
       <li class="toc-item" id="toc-item-33">
-        <a href="#prop-33" onclick="scrollToSection('prop-33', event)">// CONTRIBUTES.*</a>
+        <a href="#prop-33" onclick="scrollToSection('prop-33', event)">// CONTRIBUTES.CONFIGURATION.PROPERTIES.*.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-34">
-        <a href="#prop-34" onclick="scrollToSection('prop-34', event)">// *</a>
+        <a href="#prop-34" onclick="scrollToSection('prop-34', event)">// CONTRIBUTES.CONFIGURATION.*</a>
+      </li>
+    
+      <li class="toc-item" id="toc-item-35">
+        <a href="#prop-35" onclick="scrollToSection('prop-35', event)">// CONTRIBUTES.*</a>
+      </li>
+    
+      <li class="toc-item" id="toc-item-36">
+        <a href="#prop-36" onclick="scrollToSection('prop-36', event)">// *</a>
       </li>
     
     </ul>
@@ -829,36 +837,46 @@
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]</strong></span>
+          <span>FORMAT: <strong class="m-val">NUMBER</strong></span>
           <span>REQUIRED: <strong class="m-val">NO</strong></span>
         </div>
 
         <p class="article-desc">
           <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
         </p>
-        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p></blockquote>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p>
+            <p>“The parameter strictly mandates <strong>enum</strong> to match:
+              <span class="nested-toggle" style="color: #FF3366; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show rules' : '▼ hide rules';">▶ show rules</span>
+              <span class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%; font-style: normal; display: block;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #EAE9E4; padding: 5px; border-left: 2px solid #FF3366; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </span>
+            ”</p>
+          <p>“The parameter strictly mandates <strong>minItems</strong> to match <code>0</code>”</p><p>“The parameter strictly mandates <strong>uniqueItems</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
       <section id="prop-30" class="wired-article" data-idx="30">
         <div class="heading-row">
-          <h2>contributes.configuration.properties.*.description</h2>
+          <h2>contributes.configuration.properties.*.default.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-30')">¶</span>
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">STRING</strong></span>
+          <span>FORMAT: <strong class="m-val">ANY</strong></span>
           <span>REQUIRED: <strong class="m-val">NO</strong></span>
         </div>
 
         <p class="article-desc">
           <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
         </p>
-        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
+        
       </section>
     
       <section id="prop-31" class="wired-article" data-idx="31">
         <div class="heading-row">
-          <h2>contributes.configuration.properties.*.*</h2>
+          <h2>contributes.configuration.properties.*.default.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-31')">¶</span>
         </div>
         
@@ -875,24 +893,24 @@
     
       <section id="prop-32" class="wired-article" data-idx="32">
         <div class="heading-row">
-          <h2>contributes.configuration.*</h2>
+          <h2>contributes.configuration.properties.*.description</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-32')">¶</span>
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>FORMAT: <strong class="m-val">STRING</strong></span>
           <span>REQUIRED: <strong class="m-val">NO</strong></span>
         </div>
 
         <p class="article-desc">
           <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
         </p>
-        
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
       <section id="prop-33" class="wired-article" data-idx="33">
         <div class="heading-row">
-          <h2>contributes.*</h2>
+          <h2>contributes.configuration.properties.*.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-33')">¶</span>
         </div>
         
@@ -909,8 +927,42 @@
     
       <section id="prop-34" class="wired-article" data-idx="34">
         <div class="heading-row">
-          <h2>*</h2>
+          <h2>contributes.configuration.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-34')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        
+      </section>
+    
+      <section id="prop-35" class="wired-article" data-idx="35">
+        <div class="heading-row">
+          <h2>contributes.*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-35')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        
+      </section>
+    
+      <section id="prop-36" class="wired-article" data-idx="36">
+        <div class="heading-row">
+          <h2>*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-36')">¶</span>
         </div>
         
         <div class="wired-meta">

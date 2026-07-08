@@ -187,65 +187,80 @@
     
       <div class="google-nav-item" id="google-nav-8" onclick="focusGoogleDoc(8)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">features.*.geometry</span>
+        <span class="nav-text">features.*.properties.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-9" onclick="focusGoogleDoc(9)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">features.*.geometry.type</span>
+        <span class="nav-text">features.*.geometry</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-10" onclick="focusGoogleDoc(10)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">features.*.geometry.coordinates</span>
+        <span class="nav-text">features.*.geometry.type</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-11" onclick="focusGoogleDoc(11)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">features.*.geometry.coordinates.*</span>
+        <span class="nav-text">features.*.geometry.coordinates</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-12" onclick="focusGoogleDoc(12)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">features.*.geometry.*</span>
+        <span class="nav-text">features.*.geometry.coordinates.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-13" onclick="focusGoogleDoc(13)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">features.*.*</span>
+        <span class="nav-text">features.*.geometry.coordinates.*.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-14" onclick="focusGoogleDoc(14)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">crs</span>
+        <span class="nav-text">features.*.geometry.coordinates.*.*.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-15" onclick="focusGoogleDoc(15)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">crs.type</span>
+        <span class="nav-text">features.*.geometry.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-16" onclick="focusGoogleDoc(16)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">crs.properties</span>
+        <span class="nav-text">features.*.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-17" onclick="focusGoogleDoc(17)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">crs.properties.name</span>
+        <span class="nav-text">crs</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-18" onclick="focusGoogleDoc(18)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">crs.properties.*</span>
+        <span class="nav-text">crs.type</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-19" onclick="focusGoogleDoc(19)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">crs.*</span>
+        <span class="nav-text">crs.properties</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-20" onclick="focusGoogleDoc(20)">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">crs.properties.name</span>
+      </div>
+    
+      <div class="google-nav-item" id="google-nav-21" onclick="focusGoogleDoc(21)">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">crs.properties.*</span>
+      </div>
+    
+      <div class="google-nav-item" id="google-nav-22" onclick="focusGoogleDoc(22)">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">crs.*</span>
+      </div>
+    
+      <div class="google-nav-item" id="google-nav-23" onclick="focusGoogleDoc(23)">
         <span class="nav-icon">📁</span>
         <span class="nav-text">*</span>
       </div>
@@ -454,7 +469,7 @@
     
       <div class="google-card " id="google-card-6">
         <div class="card-header">
-          <span class="type-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="type-badge">NUMBER</span>
           <h2>features.*.id</h2>
         </div>
         
@@ -473,12 +488,17 @@
               <span class="c-k">required:</span>
               <span class="c-v">false</span>
             </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
           </div>
       </div>
     
       <div class="google-card " id="google-card-7">
         <div class="card-header">
-          <span class="type-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="type-badge">OBJECT</span>
           <h2>features.*.properties</h2>
         </div>
         
@@ -497,10 +517,44 @@
               <span class="c-k">required:</span>
               <span class="c-v">false</span>
             </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #1A73E8; cursor: pointer; font-weight: 500;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show' : '▼ hide';">▶ show</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F8F9FA; border-left: 3px solid #1A73E8; padding: 5px; color: #3C4043; overflow-x: auto;">[
+  null
+]</pre>
+              </div>
+            </div>
           </div>
       </div>
     
       <div class="google-card " id="google-card-8">
+        <div class="card-header">
+          <span class="type-badge">STRING</span>
+          <h2>features.*.properties.*</h2>
+        </div>
+        
+        <p class="card-desc">No descriptive comments are logged for this field.</p>
+        
+        <div class="metadata-row">
+          <span class="meta-label">Required:</span>
+          <span class="meta-value">No</span>
+          <span class="meta-separator">|</span>
+          <span class="meta-label">Depth:</span>
+          <span class="meta-value">Level 4</span>
+        </div>
+
+        <div class="google-constraints-box">
+            <div class="google-c-row">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div class="google-card " id="google-card-9">
         <div class="card-header">
           <span class="type-badge">OBJECT</span>
           <h2>features.*.geometry</h2>
@@ -530,7 +584,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-9">
+      <div class="google-card " id="google-card-10">
         <div class="card-header">
           <span class="type-badge">STRING</span>
           <h2>features.*.geometry.type</h2>
@@ -564,7 +618,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-10">
+      <div class="google-card " id="google-card-11">
         <div class="card-header">
           <span class="type-badge">ARRAY</span>
           <h2>features.*.geometry.coordinates</h2>
@@ -598,9 +652,9 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-11">
+      <div class="google-card " id="google-card-12">
         <div class="card-header">
-          <span class="type-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="type-badge">ARRAY</span>
           <h2>features.*.geometry.coordinates.*</h2>
         </div>
         
@@ -614,10 +668,68 @@
           <span class="meta-value">Level 5</span>
         </div>
 
+        <div class="google-constraints-box">
+            <div class="google-c-row">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div class="google-card " id="google-card-13">
+        <div class="card-header">
+          <span class="type-badge">ARRAY</span>
+          <h2>features.*.geometry.coordinates.*.*</h2>
+        </div>
+        
+        <p class="card-desc">No descriptive comments are logged for this field.</p>
+        
+        <div class="metadata-row">
+          <span class="meta-label">Required:</span>
+          <span class="meta-value">No</span>
+          <span class="meta-separator">|</span>
+          <span class="meta-label">Depth:</span>
+          <span class="meta-value">Level 6</span>
+        </div>
+
+        <div class="google-constraints-box">
+            <div class="google-c-row">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div class="google-card " id="google-card-14">
+        <div class="card-header">
+          <span class="type-badge">NUMBER</span>
+          <h2>features.*.geometry.coordinates.*.*.*</h2>
+        </div>
+        
+        <p class="card-desc">No descriptive comments are logged for this field.</p>
+        
+        <div class="metadata-row">
+          <span class="meta-label">Required:</span>
+          <span class="meta-value">No</span>
+          <span class="meta-separator">|</span>
+          <span class="meta-label">Depth:</span>
+          <span class="meta-value">Level 7</span>
+        </div>
+
         
       </div>
     
-      <div class="google-card " id="google-card-12">
+      <div class="google-card " id="google-card-15">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>features.*.geometry.*</h2>
@@ -636,7 +748,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-13">
+      <div class="google-card " id="google-card-16">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>features.*.*</h2>
@@ -655,7 +767,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-14">
+      <div class="google-card " id="google-card-17">
         <div class="card-header">
           <span class="type-badge">OBJECT</span>
           <h2>crs</h2>
@@ -685,7 +797,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-15">
+      <div class="google-card " id="google-card-18">
         <div class="card-header">
           <span class="type-badge">STRING</span>
           <h2>crs.type</h2>
@@ -719,7 +831,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-16">
+      <div class="google-card " id="google-card-19">
         <div class="card-header">
           <span class="type-badge">OBJECT</span>
           <h2>crs.properties</h2>
@@ -748,7 +860,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-17">
+      <div class="google-card " id="google-card-20">
         <div class="card-header">
           <span class="type-badge">STRING</span>
           <h2>crs.properties.name</h2>
@@ -777,7 +889,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-18">
+      <div class="google-card " id="google-card-21">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>crs.properties.*</h2>
@@ -796,7 +908,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-19">
+      <div class="google-card " id="google-card-22">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>crs.*</h2>
@@ -815,7 +927,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-20">
+      <div class="google-card " id="google-card-23">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>*</h2>

@@ -297,25 +297,35 @@
     
       <div class="google-nav-item" id="google-nav-30" onclick="focusGoogleDoc(30)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">contributes.configuration.properties.*.description</span>
+        <span class="nav-text">contributes.configuration.properties.*.default.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-31" onclick="focusGoogleDoc(31)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">contributes.configuration.properties.*.*</span>
+        <span class="nav-text">contributes.configuration.properties.*.default.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-32" onclick="focusGoogleDoc(32)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">contributes.configuration.*</span>
+        <span class="nav-text">contributes.configuration.properties.*.description</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-33" onclick="focusGoogleDoc(33)">
         <span class="nav-icon">📁</span>
-        <span class="nav-text">contributes.*</span>
+        <span class="nav-text">contributes.configuration.properties.*.*</span>
       </div>
     
       <div class="google-nav-item" id="google-nav-34" onclick="focusGoogleDoc(34)">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">contributes.configuration.*</span>
+      </div>
+    
+      <div class="google-nav-item" id="google-nav-35" onclick="focusGoogleDoc(35)">
+        <span class="nav-icon">📁</span>
+        <span class="nav-text">contributes.*</span>
+      </div>
+    
+      <div class="google-nav-item" id="google-nav-36" onclick="focusGoogleDoc(36)">
         <span class="nav-icon">📁</span>
         <span class="nav-text">*</span>
       </div>
@@ -1110,7 +1120,7 @@
     
       <div class="google-card " id="google-card-29">
         <div class="card-header">
-          <span class="type-badge">[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="type-badge">NUMBER</span>
           <h2>contributes.configuration.properties.*.default</h2>
         </div>
         
@@ -1129,10 +1139,74 @@
               <span class="c-k">required:</span>
               <span class="c-v">false</span>
             </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #1A73E8; cursor: pointer; font-weight: 500;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show' : '▼ hide';">▶ show</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F8F9FA; border-left: 3px solid #1A73E8; padding: 5px; color: #3C4043; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="google-c-row">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
           </div>
       </div>
     
       <div class="google-card " id="google-card-30">
+        <div class="card-header">
+          <span class="type-badge">ANY</span>
+          <h2>contributes.configuration.properties.*.default.*</h2>
+        </div>
+        
+        <p class="card-desc">No descriptive comments are logged for this field.</p>
+        
+        <div class="metadata-row">
+          <span class="meta-label">Required:</span>
+          <span class="meta-value">No</span>
+          <span class="meta-separator">|</span>
+          <span class="meta-label">Depth:</span>
+          <span class="meta-value">Level 6</span>
+        </div>
+
+        
+      </div>
+    
+      <div class="google-card " id="google-card-31">
+        <div class="card-header">
+          <span class="type-badge">ANY</span>
+          <h2>contributes.configuration.properties.*.default.*</h2>
+        </div>
+        
+        <p class="card-desc">No descriptive comments are logged for this field.</p>
+        
+        <div class="metadata-row">
+          <span class="meta-label">Required:</span>
+          <span class="meta-value">No</span>
+          <span class="meta-separator">|</span>
+          <span class="meta-label">Depth:</span>
+          <span class="meta-value">Level 6</span>
+        </div>
+
+        
+      </div>
+    
+      <div class="google-card " id="google-card-32">
         <div class="card-header">
           <span class="type-badge">STRING</span>
           <h2>contributes.configuration.properties.*.description</h2>
@@ -1161,7 +1235,7 @@
           </div>
       </div>
     
-      <div class="google-card " id="google-card-31">
+      <div class="google-card " id="google-card-33">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>contributes.configuration.properties.*.*</h2>
@@ -1180,7 +1254,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-32">
+      <div class="google-card " id="google-card-34">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>contributes.configuration.*</h2>
@@ -1199,7 +1273,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-33">
+      <div class="google-card " id="google-card-35">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>contributes.*</h2>
@@ -1218,7 +1292,7 @@
         
       </div>
     
-      <div class="google-card " id="google-card-34">
+      <div class="google-card " id="google-card-36">
         <div class="card-header">
           <span class="type-badge">ANY</span>
           <h2>*</h2>

@@ -256,23 +256,27 @@
       </li>
     
       <li class="toc-item" id="toc-item-24">
-        <a href="#prop-24" onclick="scrollToSection('prop-24', event)">// OUTPUTS.*.EXPORT</a>
+        <a href="#prop-24" onclick="scrollToSection('prop-24', event)">// OUTPUTS.*.VALUE.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-25">
-        <a href="#prop-25" onclick="scrollToSection('prop-25', event)">// OUTPUTS.*.EXPORT.NAME</a>
+        <a href="#prop-25" onclick="scrollToSection('prop-25', event)">// OUTPUTS.*.EXPORT</a>
       </li>
     
       <li class="toc-item" id="toc-item-26">
-        <a href="#prop-26" onclick="scrollToSection('prop-26', event)">// OUTPUTS.*.EXPORT.*</a>
+        <a href="#prop-26" onclick="scrollToSection('prop-26', event)">// OUTPUTS.*.EXPORT.NAME</a>
       </li>
     
       <li class="toc-item" id="toc-item-27">
-        <a href="#prop-27" onclick="scrollToSection('prop-27', event)">// OUTPUTS.*.*</a>
+        <a href="#prop-27" onclick="scrollToSection('prop-27', event)">// OUTPUTS.*.EXPORT.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-28">
-        <a href="#prop-28" onclick="scrollToSection('prop-28', event)">// *</a>
+        <a href="#prop-28" onclick="scrollToSection('prop-28', event)">// OUTPUTS.*.*</a>
+      </li>
+    
+      <li class="toc-item" id="toc-item-29">
+        <a href="#prop-29" onclick="scrollToSection('prop-29', event)">// *</a>
       </li>
     
     </ul>
@@ -712,20 +716,37 @@
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">[OBJECT OBJECT] | [OBJECT OBJECT]</strong></span>
+          <span>FORMAT: <strong class="m-val">OBJECT</strong></span>
           <span>REQUIRED: <strong class="m-val">YES</strong></span>
         </div>
 
         <p class="article-desc">
           <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
         </p>
-        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p></blockquote>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
       <section id="prop-24" class="wired-article" data-idx="24">
         <div class="heading-row">
-          <h2>Outputs.*.Export</h2>
+          <h2>Outputs.*.Value.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-24')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        
+      </section>
+    
+      <section id="prop-25" class="wired-article" data-idx="25">
+        <div class="heading-row">
+          <h2>Outputs.*.Export</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-25')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -748,10 +769,10 @@
           </blockquote>
       </section>
     
-      <section id="prop-25" class="wired-article" data-idx="25">
+      <section id="prop-26" class="wired-article" data-idx="26">
         <div class="heading-row">
           <h2>Outputs.*.Export.Name</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-25')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-26')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -765,26 +786,9 @@
         <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
-      <section id="prop-26" class="wired-article" data-idx="26">
-        <div class="heading-row">
-          <h2>Outputs.*.Export.*</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-26')">¶</span>
-        </div>
-        
-        <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">ANY</strong></span>
-          <span>REQUIRED: <strong class="m-val">NO</strong></span>
-        </div>
-
-        <p class="article-desc">
-          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
-        </p>
-        
-      </section>
-    
       <section id="prop-27" class="wired-article" data-idx="27">
         <div class="heading-row">
-          <h2>Outputs.*.*</h2>
+          <h2>Outputs.*.Export.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-27')">¶</span>
         </div>
         
@@ -801,8 +805,25 @@
     
       <section id="prop-28" class="wired-article" data-idx="28">
         <div class="heading-row">
-          <h2>*</h2>
+          <h2>Outputs.*.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-28')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        
+      </section>
+    
+      <section id="prop-29" class="wired-article" data-idx="29">
+        <div class="heading-row">
+          <h2>*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-29')">¶</span>
         </div>
         
         <div class="wired-meta">

@@ -654,7 +654,7 @@
               <p>/settings/spec/default</p>
             </div>
           </div>
-          <span class="event-duration-badge">[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="event-duration-badge">NUMBER</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
@@ -664,6 +664,42 @@
       </div>
     
       <div class="cal-event-card" onclick="openCalEventDrawer(30)" id="event-card-30">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>contributes.configuration.properties.*.default.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L6</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(31)" id="event-card-31">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>contributes.configuration.properties.*.default.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L6</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(32)" id="event-card-32">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -681,7 +717,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(31)" id="event-card-31">
+      <div class="cal-event-card" onclick="openCalEventDrawer(33)" id="event-card-33">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -699,7 +735,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(32)" id="event-card-32">
+      <div class="cal-event-card" onclick="openCalEventDrawer(34)" id="event-card-34">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -717,7 +753,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(33)" id="event-card-33">
+      <div class="cal-event-card" onclick="openCalEventDrawer(35)" id="event-card-35">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -735,7 +771,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(34)" id="event-card-34">
+      <div class="cal-event-card" onclick="openCalEventDrawer(36)" id="event-card-36">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -1916,7 +1952,7 @@
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="NUMBER" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1929,6 +1965,29 @@
             <div class="cal-constraints">
             <div class="c-badge">
               <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge nested" style="width: 100%; margin-bottom: 5px;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #4F46E5; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F3F4F6; border-left: 2px solid #4F46E5; padding: 5px; color: #111827; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
             </div>
           </div>
           </div>
@@ -1948,12 +2007,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="contributes.configuration.properties.*.description" readonly>
+            <input type="text" value="contributes.configuration.properties.*.default.*" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1963,15 +2022,7 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          
-            <div class="c-badge">
-              <span class="c-k">minLength:</span> <span class="c-v">0</span>
-            </div>
-          </div>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -1989,7 +2040,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="contributes.configuration.properties.*.*" readonly>
+            <input type="text" value="contributes.configuration.properties.*.default.*" readonly>
           </div>
           
           <div class="field-group">
@@ -2022,12 +2073,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="contributes.configuration.*" readonly>
+            <input type="text" value="contributes.configuration.properties.*.description" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -2037,7 +2088,15 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -2055,7 +2114,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="contributes.*" readonly>
+            <input type="text" value="contributes.configuration.properties.*.*" readonly>
           </div>
           
           <div class="field-group">
@@ -2088,7 +2147,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="*" readonly>
+            <input type="text" value="contributes.configuration.*" readonly>
           </div>
           
           <div class="field-group">
@@ -2108,6 +2167,72 @@
           
           <div style="margin-top: 2rem;">
             <button class="save-btn" onclick="closeCalEventDrawer(34, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-35" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(35, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="contributes.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(35, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-36" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(36, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(36, event)">Update Event Type</button>
           </div>
         </div>
       </div>

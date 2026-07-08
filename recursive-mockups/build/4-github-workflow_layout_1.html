@@ -159,111 +159,196 @@
       </li>
     
       <li class="nav-item" id="nav-item-2" onclick="scrollToSection('2')">
-        <span>env</span>
+        <span>on.push</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-3" onclick="scrollToSection('3')">
-        <span>env.*</span>
+        <span>on.push.branches</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-4" onclick="scrollToSection('4')">
-        <span>jobs</span>
+        <span>on.push.branches.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-5" onclick="scrollToSection('5')">
-        <span>jobs.*</span>
+        <span>on.push.tags</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-6" onclick="scrollToSection('6')">
-        <span>jobs.*.name</span>
+        <span>on.push.tags.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-7" onclick="scrollToSection('7')">
-        <span>jobs.*.runs-on</span>
-        <span class="req-dot"></span>
+        <span>on.push.*</span>
+        
       </li>
     
       <li class="nav-item" id="nav-item-8" onclick="scrollToSection('8')">
-        <span>jobs.*.needs</span>
+        <span>on.pull_request</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-9" onclick="scrollToSection('9')">
-        <span>jobs.*.env</span>
+        <span>on.pull_request.branches</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-10" onclick="scrollToSection('10')">
-        <span>jobs.*.env.*</span>
+        <span>on.pull_request.branches.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-11" onclick="scrollToSection('11')">
-        <span>jobs.*.steps</span>
-        <span class="req-dot"></span>
+        <span>on.pull_request.*</span>
+        
       </li>
     
       <li class="nav-item" id="nav-item-12" onclick="scrollToSection('12')">
-        <span>jobs.*.steps.*</span>
+        <span>on.schedule</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-13" onclick="scrollToSection('13')">
-        <span>jobs.*.steps.*.name</span>
+        <span>on.schedule.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-14" onclick="scrollToSection('14')">
-        <span>jobs.*.steps.*.uses</span>
+        <span>on.schedule.*.cron</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-15" onclick="scrollToSection('15')">
-        <span>jobs.*.steps.*.with</span>
+        <span>on.schedule.*.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-16" onclick="scrollToSection('16')">
-        <span>jobs.*.steps.*.with.*</span>
+        <span>on.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-17" onclick="scrollToSection('17')">
-        <span>jobs.*.steps.*.run</span>
-        <span class="req-dot"></span>
+        <span>on.*</span>
+        
       </li>
     
       <li class="nav-item" id="nav-item-18" onclick="scrollToSection('18')">
-        <span>jobs.*.steps.*.env</span>
+        <span>env</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-19" onclick="scrollToSection('19')">
-        <span>jobs.*.steps.*.env.*</span>
+        <span>env.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-20" onclick="scrollToSection('20')">
-        <span>jobs.*.steps.*.continue-on-error</span>
+        <span>jobs</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-21" onclick="scrollToSection('21')">
-        <span>jobs.*.steps.*.*</span>
+        <span>jobs.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-22" onclick="scrollToSection('22')">
-        <span>jobs.*.*</span>
+        <span>jobs.*.name</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-23" onclick="scrollToSection('23')">
+        <span>jobs.*.runs-on</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-24" onclick="scrollToSection('24')">
+        <span>jobs.*.needs</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-25" onclick="scrollToSection('25')">
+        <span>jobs.*.needs.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-26" onclick="scrollToSection('26')">
+        <span>jobs.*.env</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-27" onclick="scrollToSection('27')">
+        <span>jobs.*.env.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-28" onclick="scrollToSection('28')">
+        <span>jobs.*.steps</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-29" onclick="scrollToSection('29')">
+        <span>jobs.*.steps.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-30" onclick="scrollToSection('30')">
+        <span>jobs.*.steps.*.name</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-31" onclick="scrollToSection('31')">
+        <span>jobs.*.steps.*.uses</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-32" onclick="scrollToSection('32')">
+        <span>jobs.*.steps.*.with</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-33" onclick="scrollToSection('33')">
+        <span>jobs.*.steps.*.with.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-34" onclick="scrollToSection('34')">
+        <span>jobs.*.steps.*.run</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-35" onclick="scrollToSection('35')">
+        <span>jobs.*.steps.*.env</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-36" onclick="scrollToSection('36')">
+        <span>jobs.*.steps.*.env.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-37" onclick="scrollToSection('37')">
+        <span>jobs.*.steps.*.continue-on-error</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-38" onclick="scrollToSection('38')">
+        <span>jobs.*.steps.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-39" onclick="scrollToSection('39')">
+        <span>jobs.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-40" onclick="scrollToSection('40')">
         <span>*</span>
         
       </li>
@@ -303,7 +388,7 @@
       <section id="sec-1" class="stripe-section" data-idx="1">
         <div class="section-header">
           <h2>on</h2>
-          <span class="type-badge">[object Object] | [object Object] | [object Object]</span>
+          <span class="type-badge">object</span>
           <span class="status-badge optional">OPTIONAL</span>
         </div>
         <p class="section-desc">No descriptive comments are provided for this parameter.</p>
@@ -312,12 +397,27 @@
               <span class="c-key">required</span>
               <span class="c-val">false</span>
             </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
           </div>
       </section>
     
       <section id="sec-2" class="stripe-section" data-idx="2">
         <div class="section-header">
-          <h2>env</h2>
+          <h2>on.push</h2>
           <span class="type-badge">object</span>
           <span class="status-badge optional">OPTIONAL</span>
         </div>
@@ -332,6 +432,261 @@
     
       <section id="sec-3" class="stripe-section" data-idx="3">
         <div class="section-header">
+          <h2>on.push.branches</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-4" class="stripe-section" data-idx="4">
+        <div class="section-header">
+          <h2>on.push.branches.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-5" class="stripe-section" data-idx="5">
+        <div class="section-header">
+          <h2>on.push.tags</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-6" class="stripe-section" data-idx="6">
+        <div class="section-header">
+          <h2>on.push.tags.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-7" class="stripe-section" data-idx="7">
+        <div class="section-header">
+          <h2>on.push.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-8" class="stripe-section" data-idx="8">
+        <div class="section-header">
+          <h2>on.pull_request</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-9" class="stripe-section" data-idx="9">
+        <div class="section-header">
+          <h2>on.pull_request.branches</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-10" class="stripe-section" data-idx="10">
+        <div class="section-header">
+          <h2>on.pull_request.branches.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-11" class="stripe-section" data-idx="11">
+        <div class="section-header">
+          <h2>on.pull_request.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-12" class="stripe-section" data-idx="12">
+        <div class="section-header">
+          <h2>on.schedule</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-13" class="stripe-section" data-idx="13">
+        <div class="section-header">
+          <h2>on.schedule.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-14" class="stripe-section" data-idx="14">
+        <div class="section-header">
+          <h2>on.schedule.*.cron</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-15" class="stripe-section" data-idx="15">
+        <div class="section-header">
+          <h2>on.schedule.*.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-16" class="stripe-section" data-idx="16">
+        <div class="section-header">
+          <h2>on.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-17" class="stripe-section" data-idx="17">
+        <div class="section-header">
+          <h2>on.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-18" class="stripe-section" data-idx="18">
+        <div class="section-header">
+          <h2>env</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-19" class="stripe-section" data-idx="19">
+        <div class="section-header">
           <h2>env.*</h2>
           <span class="type-badge">string</span>
           <span class="status-badge optional">OPTIONAL</span>
@@ -345,7 +700,7 @@
           </div>
       </section>
     
-      <section id="sec-4" class="stripe-section" data-idx="4">
+      <section id="sec-20" class="stripe-section" data-idx="20">
         <div class="section-header">
           <h2>jobs</h2>
           <span class="type-badge">object</span>
@@ -360,7 +715,7 @@
           </div>
       </section>
     
-      <section id="sec-5" class="stripe-section" data-idx="5">
+      <section id="sec-21" class="stripe-section" data-idx="21">
         <div class="section-header">
           <h2>jobs.*</h2>
           <span class="type-badge">object</span>
@@ -381,7 +736,7 @@
           </div>
       </section>
     
-      <section id="sec-6" class="stripe-section" data-idx="6">
+      <section id="sec-22" class="stripe-section" data-idx="22">
         <div class="section-header">
           <h2>jobs.*.name</h2>
           <span class="type-badge">string</span>
@@ -401,7 +756,7 @@
           </div>
       </section>
     
-      <section id="sec-7" class="stripe-section" data-idx="7">
+      <section id="sec-23" class="stripe-section" data-idx="23">
         <div class="section-header">
           <h2>jobs.*.runs-on</h2>
           <span class="type-badge">string</span>
@@ -426,10 +781,10 @@
           </div>
       </section>
     
-      <section id="sec-8" class="stripe-section" data-idx="8">
+      <section id="sec-24" class="stripe-section" data-idx="24">
         <div class="section-header">
           <h2>jobs.*.needs</h2>
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">array</span>
           <span class="status-badge optional">OPTIONAL</span>
         </div>
         <p class="section-desc">No descriptive comments are provided for this parameter.</p>
@@ -438,10 +793,40 @@
               <span class="c-key">required</span>
               <span class="c-val">false</span>
             </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
           </div>
       </section>
     
-      <section id="sec-9" class="stripe-section" data-idx="9">
+      <section id="sec-25" class="stripe-section" data-idx="25">
+        <div class="section-header">
+          <h2>jobs.*.needs.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-26" class="stripe-section" data-idx="26">
         <div class="section-header">
           <h2>jobs.*.env</h2>
           <span class="type-badge">object</span>
@@ -456,7 +841,7 @@
           </div>
       </section>
     
-      <section id="sec-10" class="stripe-section" data-idx="10">
+      <section id="sec-27" class="stripe-section" data-idx="27">
         <div class="section-header">
           <h2>jobs.*.env.*</h2>
           <span class="type-badge">string</span>
@@ -471,7 +856,7 @@
           </div>
       </section>
     
-      <section id="sec-11" class="stripe-section" data-idx="11">
+      <section id="sec-28" class="stripe-section" data-idx="28">
         <div class="section-header">
           <h2>jobs.*.steps</h2>
           <span class="type-badge">array</span>
@@ -496,7 +881,7 @@
           </div>
       </section>
     
-      <section id="sec-12" class="stripe-section" data-idx="12">
+      <section id="sec-29" class="stripe-section" data-idx="29">
         <div class="section-header">
           <h2>jobs.*.steps.*</h2>
           <span class="type-badge">object</span>
@@ -516,7 +901,7 @@
           </div>
       </section>
     
-      <section id="sec-13" class="stripe-section" data-idx="13">
+      <section id="sec-30" class="stripe-section" data-idx="30">
         <div class="section-header">
           <h2>jobs.*.steps.*.name</h2>
           <span class="type-badge">string</span>
@@ -536,7 +921,7 @@
           </div>
       </section>
     
-      <section id="sec-14" class="stripe-section" data-idx="14">
+      <section id="sec-31" class="stripe-section" data-idx="31">
         <div class="section-header">
           <h2>jobs.*.steps.*.uses</h2>
           <span class="type-badge">string</span>
@@ -556,7 +941,7 @@
           </div>
       </section>
     
-      <section id="sec-15" class="stripe-section" data-idx="15">
+      <section id="sec-32" class="stripe-section" data-idx="32">
         <div class="section-header">
           <h2>jobs.*.steps.*.with</h2>
           <span class="type-badge">object</span>
@@ -571,7 +956,7 @@
           </div>
       </section>
     
-      <section id="sec-16" class="stripe-section" data-idx="16">
+      <section id="sec-33" class="stripe-section" data-idx="33">
         <div class="section-header">
           <h2>jobs.*.steps.*.with.*</h2>
           <span class="type-badge">string</span>
@@ -586,7 +971,7 @@
           </div>
       </section>
     
-      <section id="sec-17" class="stripe-section" data-idx="17">
+      <section id="sec-34" class="stripe-section" data-idx="34">
         <div class="section-header">
           <h2>jobs.*.steps.*.run</h2>
           <span class="type-badge">string</span>
@@ -606,7 +991,7 @@
           </div>
       </section>
     
-      <section id="sec-18" class="stripe-section" data-idx="18">
+      <section id="sec-35" class="stripe-section" data-idx="35">
         <div class="section-header">
           <h2>jobs.*.steps.*.env</h2>
           <span class="type-badge">object</span>
@@ -621,7 +1006,7 @@
           </div>
       </section>
     
-      <section id="sec-19" class="stripe-section" data-idx="19">
+      <section id="sec-36" class="stripe-section" data-idx="36">
         <div class="section-header">
           <h2>jobs.*.steps.*.env.*</h2>
           <span class="type-badge">string</span>
@@ -636,7 +1021,7 @@
           </div>
       </section>
     
-      <section id="sec-20" class="stripe-section" data-idx="20">
+      <section id="sec-37" class="stripe-section" data-idx="37">
         <div class="section-header">
           <h2>jobs.*.steps.*.continue-on-error</h2>
           <span class="type-badge">any</span>
@@ -667,7 +1052,7 @@
           </div>
       </section>
     
-      <section id="sec-21" class="stripe-section" data-idx="21">
+      <section id="sec-38" class="stripe-section" data-idx="38">
         <div class="section-header">
           <h2>jobs.*.steps.*.*</h2>
           <span class="type-badge">any</span>
@@ -677,7 +1062,7 @@
         
       </section>
     
-      <section id="sec-22" class="stripe-section" data-idx="22">
+      <section id="sec-39" class="stripe-section" data-idx="39">
         <div class="section-header">
           <h2>jobs.*.*</h2>
           <span class="type-badge">any</span>
@@ -687,7 +1072,7 @@
         
       </section>
     
-      <section id="sec-23" class="stripe-section" data-idx="23">
+      <section id="sec-40" class="stripe-section" data-idx="40">
         <div class="section-header">
           <h2>*</h2>
           <span class="type-badge">any</span>
@@ -714,7 +1099,7 @@
   </div>
 
   <script>
-    const rows = [{"path":"name","name":"name","depth":1,"type":"string","required":true,"description":"","constraints":{"required":true,"minLength":0}},{"path":"on","name":"on","depth":1,"type":"[object Object] | [object Object] | [object Object]","required":false,"description":"","constraints":{"required":false}},{"path":"env","name":"env","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"env.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs","name":"jobs","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["runs-on","steps"]}},{"path":"jobs.*.name","name":"name","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.runs-on","name":"runs-on","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"ubuntu-latest","minLength":0}},{"path":"jobs.*.needs","name":"needs","depth":3,"type":"[object Object] | [object Object]","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.env","name":"env","depth":3,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.env.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.steps","name":"steps","depth":3,"type":"array","required":true,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"jobs.*.steps.*","name":"*","depth":4,"type":"object","required":false,"description":"","constraints":{"required":["run"]}},{"path":"jobs.*.steps.*.name","name":"name","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.steps.*.uses","name":"uses","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.steps.*.with","name":"with","depth":5,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.steps.*.with.*","name":"*","depth":6,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.steps.*.run","name":"run","depth":5,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.steps.*.env","name":"env","depth":5,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.steps.*.env.*","name":"*","depth":6,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.steps.*.continue-on-error","name":"continue-on-error","depth":5,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"jobs.*.steps.*.*","name":"*","depth":5,"type":"any","required":false,"description":"","constraints":{}},{"path":"jobs.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
+    const rows = [{"path":"name","name":"name","depth":1,"type":"string","required":true,"description":"","constraints":{"required":true,"minLength":0}},{"path":"on","name":"on","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false,"minLength":0,"minItems":0,"uniqueItems":false}},{"path":"on.push","name":"push","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"on.push.branches","name":"branches","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"on.push.branches.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"on.push.tags","name":"tags","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"on.push.tags.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"on.push.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"on.pull_request","name":"pull_request","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"on.pull_request.branches","name":"branches","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"on.pull_request.branches.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"on.pull_request.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"on.schedule","name":"schedule","depth":2,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"on.schedule.*","name":"*","depth":3,"type":"object","required":false,"description":"","constraints":{}},{"path":"on.schedule.*.cron","name":"cron","depth":4,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"on.schedule.*.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"on.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"on.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"env","name":"env","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"env.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs","name":"jobs","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["runs-on","steps"]}},{"path":"jobs.*.name","name":"name","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.runs-on","name":"runs-on","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"ubuntu-latest","minLength":0}},{"path":"jobs.*.needs","name":"needs","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minLength":0,"minItems":0,"uniqueItems":false}},{"path":"jobs.*.needs.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.env","name":"env","depth":3,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.env.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.steps","name":"steps","depth":3,"type":"array","required":true,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"jobs.*.steps.*","name":"*","depth":4,"type":"object","required":false,"description":"","constraints":{"required":["run"]}},{"path":"jobs.*.steps.*.name","name":"name","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.steps.*.uses","name":"uses","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.steps.*.with","name":"with","depth":5,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.steps.*.with.*","name":"*","depth":6,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.steps.*.run","name":"run","depth":5,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"jobs.*.steps.*.env","name":"env","depth":5,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"jobs.*.steps.*.env.*","name":"*","depth":6,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"jobs.*.steps.*.continue-on-error","name":"continue-on-error","depth":5,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"jobs.*.steps.*.*","name":"*","depth":5,"type":"any","required":false,"description":"","constraints":{}},{"path":"jobs.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
     let activeIdx = 0;
     let activeLang = 'curl';
 

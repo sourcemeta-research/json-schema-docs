@@ -359,7 +359,7 @@
             <span class="status-dot building"></span>
             <span class="vercel-path">features.*.id</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
+          <div class="col-type"><code>number</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -376,6 +376,11 @@
               <span class="git-branch">● required</span>
               <span class="git-commit">false</span>
             </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
           </div>
             </div>
           </div>
@@ -388,7 +393,7 @@
             <span class="status-dot ready"></span>
             <span class="vercel-path">features.*.properties</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
+          <div class="col-type"><code>object</code></div>
           <div class="col-date">REQUIRED</div>
         </div>
         
@@ -405,6 +410,16 @@
               <span class="git-branch">● required</span>
               <span class="git-commit">false</span>
             </div>
+          
+            <div class="git-meta nested" style="flex-wrap: wrap;">
+              <span class="git-branch">● enum</span>
+              <span class="nested-toggle" style="color: #000; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #000; padding: 5px; color: #000; overflow-x: auto;">[
+  null
+]</pre>
+              </div>
+            </div>
           </div>
             </div>
           </div>
@@ -414,6 +429,35 @@
       <div class="vercel-row" onclick="toggleVercelRow(8)">
         <div class="row-top">
           <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">features.*.properties.*</span>
+          </div>
+          <div class="col-type"><code>string</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-8" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(9)">
+        <div class="row-top">
+          <div class="col-main">
             <span class="status-dot ready"></span>
             <span class="vercel-path">features.*.geometry</span>
           </div>
@@ -421,7 +465,7 @@
           <div class="col-date">REQUIRED</div>
         </div>
         
-        <div id="vercel-detail-8" class="vercel-detail-drawer">
+        <div id="vercel-detail-9" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -446,7 +490,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(9)">
+      <div class="vercel-row" onclick="toggleVercelRow(10)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot ready"></span>
@@ -456,7 +500,7 @@
           <div class="col-date">REQUIRED</div>
         </div>
         
-        <div id="vercel-detail-9" class="vercel-detail-drawer">
+        <div id="vercel-detail-10" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -485,7 +529,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(10)">
+      <div class="vercel-row" onclick="toggleVercelRow(11)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot ready"></span>
@@ -495,7 +539,7 @@
           <div class="col-date">REQUIRED</div>
         </div>
         
-        <div id="vercel-detail-10" class="vercel-detail-drawer">
+        <div id="vercel-detail-11" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -524,37 +568,13 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(11)">
+      <div class="vercel-row" onclick="toggleVercelRow(12)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
             <span class="vercel-path">features.*.geometry.coordinates.*</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
-          <div class="col-date">OPTIONAL</div>
-        </div>
-        
-        <div id="vercel-detail-11" class="vercel-detail-drawer">
-          <div class="detail-grid">
-            <div class="detail-left">
-              <h4>PARAMETER DEFINITION</h4>
-              <p>No descriptive summary provided.</p>
-            </div>
-            <div class="detail-right">
-              <h4>JSON CONSTRAINTS</h4>
-              <span style="color:#666; font-size:0.75rem;">None</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="vercel-row" onclick="toggleVercelRow(12)">
-        <div class="row-top">
-          <div class="col-main">
-            <span class="status-dot building"></span>
-            <span class="vercel-path">features.*.geometry.*</span>
-          </div>
-          <div class="col-type"><code>any</code></div>
+          <div class="col-type"><code>array</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -566,7 +586,17 @@
             </div>
             <div class="detail-right">
               <h4>JSON CONSTRAINTS</h4>
-              <span style="color:#666; font-size:0.75rem;">None</span>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
+          </div>
             </div>
           </div>
         </div>
@@ -576,13 +606,47 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">features.*.*</span>
+            <span class="vercel-path">features.*.geometry.coordinates.*.*</span>
           </div>
-          <div class="col-type"><code>any</code></div>
+          <div class="col-type"><code>array</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
         <div id="vercel-detail-13" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(14)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">features.*.geometry.coordinates.*.*.*</span>
+          </div>
+          <div class="col-type"><code>number</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-14" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -596,7 +660,55 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(14)">
+      <div class="vercel-row" onclick="toggleVercelRow(15)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">features.*.geometry.*</span>
+          </div>
+          <div class="col-type"><code>any</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-15" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <span style="color:#666; font-size:0.75rem;">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(16)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">features.*.*</span>
+          </div>
+          <div class="col-type"><code>any</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-16" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <span style="color:#666; font-size:0.75rem;">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(17)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -606,7 +718,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-14" class="vercel-detail-drawer">
+        <div id="vercel-detail-17" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -631,7 +743,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(15)">
+      <div class="vercel-row" onclick="toggleVercelRow(18)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot ready"></span>
@@ -641,7 +753,7 @@
           <div class="col-date">REQUIRED</div>
         </div>
         
-        <div id="vercel-detail-15" class="vercel-detail-drawer">
+        <div id="vercel-detail-18" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -670,7 +782,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(16)">
+      <div class="vercel-row" onclick="toggleVercelRow(19)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot ready"></span>
@@ -680,7 +792,7 @@
           <div class="col-date">REQUIRED</div>
         </div>
         
-        <div id="vercel-detail-16" class="vercel-detail-drawer">
+        <div id="vercel-detail-19" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -704,7 +816,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(17)">
+      <div class="vercel-row" onclick="toggleVercelRow(20)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot ready"></span>
@@ -714,7 +826,7 @@
           <div class="col-date">REQUIRED</div>
         </div>
         
-        <div id="vercel-detail-17" class="vercel-detail-drawer">
+        <div id="vercel-detail-20" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -738,7 +850,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(18)">
+      <div class="vercel-row" onclick="toggleVercelRow(21)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -748,7 +860,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-18" class="vercel-detail-drawer">
+        <div id="vercel-detail-21" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -762,7 +874,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(19)">
+      <div class="vercel-row" onclick="toggleVercelRow(22)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -772,7 +884,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-19" class="vercel-detail-drawer">
+        <div id="vercel-detail-22" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -786,7 +898,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(20)">
+      <div class="vercel-row" onclick="toggleVercelRow(23)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -796,7 +908,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-20" class="vercel-detail-drawer">
+        <div id="vercel-detail-23" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>

@@ -259,7 +259,7 @@
             <span class="status-dot building"></span>
             <span class="vercel-path">services.*.build</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
+          <div class="col-type"><code>object</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -276,6 +276,11 @@
               <span class="git-branch">● required</span>
               <span class="git-commit">false</span>
             </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
           </div>
             </div>
           </div>
@@ -286,7 +291,7 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.container_name</span>
+            <span class="vercel-path">services.*.build.context</span>
           </div>
           <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
@@ -320,9 +325,9 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.ports</span>
+            <span class="vercel-path">services.*.build.dockerfile</span>
           </div>
-          <div class="col-type"><code>array</code></div>
+          <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -341,13 +346,13 @@
             </div>
           
             <div class="git-meta">
-              <span class="git-branch">● minItems</span>
-              <span class="git-commit">0</span>
+              <span class="git-branch">● default</span>
+              <span class="git-commit">"Dockerfile"</span>
             </div>
           
             <div class="git-meta">
-              <span class="git-branch">● uniqueItems</span>
-              <span class="git-commit">false</span>
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
             </div>
           </div>
             </div>
@@ -359,9 +364,9 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.ports.*</span>
+            <span class="vercel-path">services.*.build.args</span>
           </div>
-          <div class="col-type"><code>string</code></div>
+          <div class="col-type"><code>object</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -375,8 +380,8 @@
               <h4>JSON CONSTRAINTS</h4>
               <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
             <div class="git-meta">
-              <span class="git-branch">● minLength</span>
-              <span class="git-commit">0</span>
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
             </div>
           </div>
             </div>
@@ -388,9 +393,9 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.volumes</span>
+            <span class="vercel-path">services.*.build.args.*</span>
           </div>
-          <div class="col-type"><code>array</code></div>
+          <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -404,18 +409,8 @@
               <h4>JSON CONSTRAINTS</h4>
               <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
             <div class="git-meta">
-              <span class="git-branch">● required</span>
-              <span class="git-commit">false</span>
-            </div>
-          
-            <div class="git-meta">
-              <span class="git-branch">● minItems</span>
+              <span class="git-branch">● minLength</span>
               <span class="git-commit">0</span>
-            </div>
-          
-            <div class="git-meta">
-              <span class="git-branch">● uniqueItems</span>
-              <span class="git-commit">false</span>
             </div>
           </div>
             </div>
@@ -427,9 +422,9 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.volumes.*</span>
+            <span class="vercel-path">services.*.build.*</span>
           </div>
-          <div class="col-type"><code>string</code></div>
+          <div class="col-type"><code>any</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -441,12 +436,7 @@
             </div>
             <div class="detail-right">
               <h4>JSON CONSTRAINTS</h4>
-              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
-            <div class="git-meta">
-              <span class="git-branch">● minLength</span>
-              <span class="git-commit">0</span>
-            </div>
-          </div>
+              <span style="color:#666; font-size:0.75rem;">None</span>
             </div>
           </div>
         </div>
@@ -456,9 +446,9 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.networks</span>
+            <span class="vercel-path">services.*.container_name</span>
           </div>
-          <div class="col-type"><code>array</code></div>
+          <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -477,6 +467,40 @@
             </div>
           
             <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(11)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.ports</span>
+          </div>
+          <div class="col-type"><code>array</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-11" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
+            </div>
+          
+            <div class="git-meta">
               <span class="git-branch">● minItems</span>
               <span class="git-commit">0</span>
             </div>
@@ -491,17 +515,17 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(11)">
+      <div class="vercel-row" onclick="toggleVercelRow(12)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.networks.*</span>
+            <span class="vercel-path">services.*.ports.*</span>
           </div>
           <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-11" class="vercel-detail-drawer">
+        <div id="vercel-detail-12" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -520,42 +544,13 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(12)">
-        <div class="row-top">
-          <div class="col-main">
-            <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.environment</span>
-          </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
-          <div class="col-date">OPTIONAL</div>
-        </div>
-        
-        <div id="vercel-detail-12" class="vercel-detail-drawer">
-          <div class="detail-grid">
-            <div class="detail-left">
-              <h4>PARAMETER DEFINITION</h4>
-              <p>No descriptive summary provided.</p>
-            </div>
-            <div class="detail-right">
-              <h4>JSON CONSTRAINTS</h4>
-              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
-            <div class="git-meta">
-              <span class="git-branch">● required</span>
-              <span class="git-commit">false</span>
-            </div>
-          </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    
       <div class="vercel-row" onclick="toggleVercelRow(13)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.command</span>
+            <span class="vercel-path">services.*.volumes</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
+          <div class="col-type"><code>array</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
@@ -572,6 +567,16 @@
               <span class="git-branch">● required</span>
               <span class="git-commit">false</span>
             </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
           </div>
             </div>
           </div>
@@ -582,7 +587,7 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.restart</span>
+            <span class="vercel-path">services.*.volumes.*</span>
           </div>
           <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
@@ -598,16 +603,6 @@
               <h4>JSON CONSTRAINTS</h4>
               <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
             <div class="git-meta">
-              <span class="git-branch">● required</span>
-              <span class="git-commit">false</span>
-            </div>
-          
-            <div class="git-meta">
-              <span class="git-branch">● default</span>
-              <span class="git-commit">"always"</span>
-            </div>
-          
-            <div class="git-meta">
               <span class="git-branch">● minLength</span>
               <span class="git-commit">0</span>
             </div>
@@ -621,7 +616,7 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.depends_on</span>
+            <span class="vercel-path">services.*.networks</span>
           </div>
           <div class="col-type"><code>array</code></div>
           <div class="col-date">OPTIONAL</div>
@@ -660,7 +655,7 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.depends_on.*</span>
+            <span class="vercel-path">services.*.networks.*</span>
           </div>
           <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
@@ -689,7 +684,7 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.healthcheck</span>
+            <span class="vercel-path">services.*.environment</span>
           </div>
           <div class="col-type"><code>object</code></div>
           <div class="col-date">OPTIONAL</div>
@@ -708,6 +703,16 @@
               <span class="git-branch">● required</span>
               <span class="git-commit">false</span>
             </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
           </div>
             </div>
           </div>
@@ -718,13 +723,246 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">services.*.healthcheck.test</span>
+            <span class="vercel-path">services.*.environment.*</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
+          <div class="col-type"><code>string</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
         <div id="vercel-detail-18" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(19)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.environment.*</span>
+          </div>
+          <div class="col-type"><code>any</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-19" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <span style="color:#666; font-size:0.75rem;">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(20)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.command</span>
+          </div>
+          <div class="col-type"><code>array</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-20" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(21)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.command.*</span>
+          </div>
+          <div class="col-type"><code>string</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-21" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(22)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.restart</span>
+          </div>
+          <div class="col-type"><code>string</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-22" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● default</span>
+              <span class="git-commit">"always"</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(23)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.depends_on</span>
+          </div>
+          <div class="col-type"><code>array</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-23" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(24)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.depends_on.*</span>
+          </div>
+          <div class="col-type"><code>string</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-24" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(25)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.healthcheck</span>
+          </div>
+          <div class="col-type"><code>object</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-25" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -743,7 +981,80 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(19)">
+      <div class="vercel-row" onclick="toggleVercelRow(26)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.healthcheck.test</span>
+          </div>
+          <div class="col-type"><code>array</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-26" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minItems</span>
+              <span class="git-commit">0</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● uniqueItems</span>
+              <span class="git-commit">false</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(27)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">services.*.healthcheck.test.*</span>
+          </div>
+          <div class="col-type"><code>string</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-27" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(28)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -753,7 +1064,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-19" class="vercel-detail-drawer">
+        <div id="vercel-detail-28" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -782,7 +1093,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(20)">
+      <div class="vercel-row" onclick="toggleVercelRow(29)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -792,7 +1103,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-20" class="vercel-detail-drawer">
+        <div id="vercel-detail-29" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -821,7 +1132,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(21)">
+      <div class="vercel-row" onclick="toggleVercelRow(30)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -831,7 +1142,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-21" class="vercel-detail-drawer">
+        <div id="vercel-detail-30" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -860,7 +1171,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(22)">
+      <div class="vercel-row" onclick="toggleVercelRow(31)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -870,7 +1181,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-22" class="vercel-detail-drawer">
+        <div id="vercel-detail-31" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -884,7 +1195,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(23)">
+      <div class="vercel-row" onclick="toggleVercelRow(32)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -894,7 +1205,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-23" class="vercel-detail-drawer">
+        <div id="vercel-detail-32" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -908,7 +1219,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(24)">
+      <div class="vercel-row" onclick="toggleVercelRow(33)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -918,7 +1229,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-24" class="vercel-detail-drawer">
+        <div id="vercel-detail-33" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -937,7 +1248,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(25)">
+      <div class="vercel-row" onclick="toggleVercelRow(34)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -947,7 +1258,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-25" class="vercel-detail-drawer">
+        <div id="vercel-detail-34" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -961,7 +1272,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(26)">
+      <div class="vercel-row" onclick="toggleVercelRow(35)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -971,7 +1282,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-26" class="vercel-detail-drawer">
+        <div id="vercel-detail-35" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1000,7 +1311,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(27)">
+      <div class="vercel-row" onclick="toggleVercelRow(36)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1010,7 +1321,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-27" class="vercel-detail-drawer">
+        <div id="vercel-detail-36" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1045,7 +1356,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(28)">
+      <div class="vercel-row" onclick="toggleVercelRow(37)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1055,7 +1366,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-28" class="vercel-detail-drawer">
+        <div id="vercel-detail-37" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1069,7 +1380,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(29)">
+      <div class="vercel-row" onclick="toggleVercelRow(38)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1079,7 +1390,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-29" class="vercel-detail-drawer">
+        <div id="vercel-detail-38" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1098,7 +1409,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(30)">
+      <div class="vercel-row" onclick="toggleVercelRow(39)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1108,7 +1419,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-30" class="vercel-detail-drawer">
+        <div id="vercel-detail-39" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1122,7 +1433,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(31)">
+      <div class="vercel-row" onclick="toggleVercelRow(40)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1132,7 +1443,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-31" class="vercel-detail-drawer">
+        <div id="vercel-detail-40" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1161,7 +1472,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(32)">
+      <div class="vercel-row" onclick="toggleVercelRow(41)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1171,7 +1482,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-32" class="vercel-detail-drawer">
+        <div id="vercel-detail-41" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1206,7 +1517,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(33)">
+      <div class="vercel-row" onclick="toggleVercelRow(42)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1216,7 +1527,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-33" class="vercel-detail-drawer">
+        <div id="vercel-detail-42" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -1230,7 +1541,7 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(34)">
+      <div class="vercel-row" onclick="toggleVercelRow(43)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
@@ -1240,7 +1551,7 @@
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-34" class="vercel-detail-drawer">
+        <div id="vercel-detail-43" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>

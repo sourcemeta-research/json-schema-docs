@@ -270,33 +270,45 @@
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.31.  contributes.configuration.properties.*.description</span>
+        <span>3.31.  contributes.configuration.properties.*.default.*</span>
         <span class="toc-dots">...................................................</span>
         <span>34</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.32.  contributes.configuration.properties.*.*</span>
+        <span>3.32.  contributes.configuration.properties.*.default.*</span>
         <span class="toc-dots">...................................................</span>
         <span>35</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.33.  contributes.configuration.*</span>
+        <span>3.33.  contributes.configuration.properties.*.description</span>
         <span class="toc-dots">...................................................</span>
         <span>36</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.34.  contributes.*</span>
+        <span>3.34.  contributes.configuration.properties.*.*</span>
         <span class="toc-dots">...................................................</span>
         <span>37</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.35.  *</span>
+        <span>3.35.  contributes.configuration.*</span>
         <span class="toc-dots">...................................................</span>
         <span>38</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.36.  contributes.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>39</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.37.  *</span>
+        <span class="toc-dots">...................................................</span>
+        <span>40</span>
       </div>
     
   </div>
@@ -749,7 +761,7 @@
         <h3>3.30.  The "contributes.configuration.properties.*.default" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]" (Required: NO)
+          Type representation: "NUMBER" (Required: NO)
         </p>
 
         <p class="rfc-text">
@@ -757,14 +769,17 @@
           No descriptive text was supplied in this section.
         </p>
 
-        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - enum: <span class="nested-toggle" style="text-decoration: underline; cursor: pointer; color: blue;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '[expand]' : '[collapse]';">[expand]</span><div class="nested-detail-box" style="display:none; margin-top: 5px; padding-left:10px; border-left: 2px solid #000;">[
+  false,
+  true
+]</div><br>|  - minItems: 0<br>|  - uniqueItems: false<br>|  - minLength: 0<br></div>
       </div>
     
       <div class="rfc-section" id="rfc-sec-30">
-        <h3>3.31.  The "contributes.configuration.properties.*.description" Parameter</h3>
+        <h3>3.31.  The "contributes.configuration.properties.*.default.*" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "STRING" (Required: NO)
+          Type representation: "ANY" (Required: NO)
         </p>
 
         <p class="rfc-text">
@@ -772,11 +787,11 @@
           No descriptive text was supplied in this section.
         </p>
 
-        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+        
       </div>
     
       <div class="rfc-section" id="rfc-sec-31">
-        <h3>3.32.  The "contributes.configuration.properties.*.*" Parameter</h3>
+        <h3>3.32.  The "contributes.configuration.properties.*.default.*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)
@@ -791,10 +806,10 @@
       </div>
     
       <div class="rfc-section" id="rfc-sec-32">
-        <h3>3.33.  The "contributes.configuration.*" Parameter</h3>
+        <h3>3.33.  The "contributes.configuration.properties.*.description" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "ANY" (Required: NO)
+          Type representation: "STRING" (Required: NO)
         </p>
 
         <p class="rfc-text">
@@ -802,11 +817,11 @@
           No descriptive text was supplied in this section.
         </p>
 
-        
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
       </div>
     
       <div class="rfc-section" id="rfc-sec-33">
-        <h3>3.34.  The "contributes.*" Parameter</h3>
+        <h3>3.34.  The "contributes.configuration.properties.*.*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)
@@ -821,7 +836,37 @@
       </div>
     
       <div class="rfc-section" id="rfc-sec-34">
-        <h3>3.35.  The "*" Parameter</h3>
+        <h3>3.35.  The "contributes.configuration.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-35">
+        <h3>3.36.  The "contributes.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-36">
+        <h3>3.37.  The "*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)

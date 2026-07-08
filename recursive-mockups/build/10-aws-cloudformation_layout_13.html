@@ -272,17 +272,17 @@
     
       <div class="tree-item" onclick="focusWarpBlock(24)">
         <span class="tree-icon">📄</span>
-        <span class="tree-name">Export</span>
+        <span class="tree-name">*</span>
       </div>
     
       <div class="tree-item" onclick="focusWarpBlock(25)">
         <span class="tree-icon">📄</span>
-        <span class="tree-name">Name</span>
+        <span class="tree-name">Export</span>
       </div>
     
       <div class="tree-item" onclick="focusWarpBlock(26)">
         <span class="tree-icon">📄</span>
-        <span class="tree-name">*</span>
+        <span class="tree-name">Name</span>
       </div>
     
       <div class="tree-item" onclick="focusWarpBlock(27)">
@@ -291,6 +291,11 @@
       </div>
     
       <div class="tree-item" onclick="focusWarpBlock(28)">
+        <span class="tree-icon">📄</span>
+        <span class="tree-name">*</span>
+      </div>
+    
+      <div class="tree-item" onclick="focusWarpBlock(29)">
         <span class="tree-icon">📄</span>
         <span class="tree-name">*</span>
       </div>
@@ -865,7 +870,7 @@
         <div class="block-output">
           <div class="output-meta-row">
             <span>PARAMETER: <code>Value</code></span>
-            <span>TYPE: <code>[OBJECT OBJECT] | [OBJECT OBJECT]</code></span>
+            <span>TYPE: <code>OBJECT</code></span>
           </div>
           <p class="output-desc-p">No descriptive comments logged in terminal.</p>
           
@@ -873,12 +878,36 @@
             <span class="output-code-header">validation constraints</span>
             <pre><code>{
 <div class="warp-console-specs">  "required": false,
+  "minLength": 0,
 </div></code></pre>
           </div>
         </div>
       </div>
     
       <div class="warp-terminal-block" id="block-24">
+        <div class="block-input-line">
+          <span class="warp-prompt">▲ ~/projects/schema</span>
+          <span class="warp-cmd">warp inspect --path <strong style="color:#FFF;">Outputs.*.Value.*</strong></span>
+          <span class="block-badge stable">OPTIONAL</span>
+        </div>
+        
+        <div class="block-output">
+          <div class="output-meta-row">
+            <span>PARAMETER: <code>*</code></span>
+            <span>TYPE: <code>ANY</code></span>
+          </div>
+          <p class="output-desc-p">No descriptive comments logged in terminal.</p>
+          
+          <div class="output-code-section">
+            <span class="output-code-header">validation constraints</span>
+            <pre><code>{
+  "noConstraints": true
+</code></pre>
+          </div>
+        </div>
+      </div>
+    
+      <div class="warp-terminal-block" id="block-25">
         <div class="block-input-line">
           <span class="warp-prompt">▲ ~/projects/schema</span>
           <span class="warp-cmd">warp inspect --path <strong style="color:#FFF;">Outputs.*.Export</strong></span>
@@ -903,7 +932,7 @@
         </div>
       </div>
     
-      <div class="warp-terminal-block" id="block-25">
+      <div class="warp-terminal-block" id="block-26">
         <div class="block-input-line">
           <span class="warp-prompt">▲ ~/projects/schema</span>
           <span class="warp-cmd">warp inspect --path <strong style="color:#FFF;">Outputs.*.Export.Name</strong></span>
@@ -927,7 +956,7 @@
         </div>
       </div>
     
-      <div class="warp-terminal-block" id="block-26">
+      <div class="warp-terminal-block" id="block-27">
         <div class="block-input-line">
           <span class="warp-prompt">▲ ~/projects/schema</span>
           <span class="warp-cmd">warp inspect --path <strong style="color:#FFF;">Outputs.*.Export.*</strong></span>
@@ -950,7 +979,7 @@
         </div>
       </div>
     
-      <div class="warp-terminal-block" id="block-27">
+      <div class="warp-terminal-block" id="block-28">
         <div class="block-input-line">
           <span class="warp-prompt">▲ ~/projects/schema</span>
           <span class="warp-cmd">warp inspect --path <strong style="color:#FFF;">Outputs.*.*</strong></span>
@@ -973,7 +1002,7 @@
         </div>
       </div>
     
-      <div class="warp-terminal-block" id="block-28">
+      <div class="warp-terminal-block" id="block-29">
         <div class="block-input-line">
           <span class="warp-prompt">▲ ~/projects/schema</span>
           <span class="warp-cmd">warp inspect --path <strong style="color:#FFF;">*</strong></span>

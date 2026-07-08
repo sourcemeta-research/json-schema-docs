@@ -49,6 +49,13 @@ function getFlatRows(schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);

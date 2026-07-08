@@ -148,7 +148,7 @@
       <div class="board-col">
         <div class="col-header">
           <span>Backlog</span>
-          <span class="col-count">6</span>
+          <span class="col-count">7</span>
         </div>
         <div class="cards-list">
       <div class="linear-card" id="card-9" onclick="focusLinearCard(9)" data-status="backlog">
@@ -187,12 +187,12 @@
         </div>
       </div>
     
-      <div class="linear-card" id="card-26" onclick="focusLinearCard(26)" data-status="backlog">
+      <div class="linear-card" id="card-24" onclick="focusLinearCard(24)" data-status="backlog">
         <div class="card-meta-row">
-          <span class="card-id">SCH-127</span>
+          <span class="card-id">SCH-125</span>
           <span class="card-priority">⚪</span>
         </div>
-        <div class="card-title">Outputs.*.Export.*</div>
+        <div class="card-title">Outputs.*.Value.*</div>
         <div class="card-tags-row">
           <span class="tag-badge">any</span>
           <span class="tag-depth">L4</span>
@@ -204,6 +204,18 @@
           <span class="card-id">SCH-128</span>
           <span class="card-priority">⚪</span>
         </div>
+        <div class="card-title">Outputs.*.Export.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L4</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-28" onclick="focusLinearCard(28)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-129</span>
+          <span class="card-priority">⚪</span>
+        </div>
         <div class="card-title">Outputs.*.*</div>
         <div class="card-tags-row">
           <span class="tag-badge">any</span>
@@ -211,9 +223,9 @@
         </div>
       </div>
     
-      <div class="linear-card" id="card-28" onclick="focusLinearCard(28)" data-status="backlog">
+      <div class="linear-card" id="card-29" onclick="focusLinearCard(29)" data-status="backlog">
         <div class="card-meta-row">
-          <span class="card-id">SCH-129</span>
+          <span class="card-id">SCH-130</span>
           <span class="card-priority">⚪</span>
         </div>
         <div class="card-title">*</div>
@@ -443,9 +455,9 @@
         </div>
       </div>
     
-      <div class="linear-card" id="card-24" onclick="focusLinearCard(24)" data-status="inProgress">
+      <div class="linear-card" id="card-25" onclick="focusLinearCard(25)" data-status="inProgress">
         <div class="card-meta-row">
-          <span class="card-id">SCH-125</span>
+          <span class="card-id">SCH-126</span>
           <span class="card-priority">🟡</span>
         </div>
         <div class="card-title">Outputs.*.Export</div>
@@ -506,14 +518,14 @@
         </div>
         <div class="card-title">Outputs.*.Value</div>
         <div class="card-tags-row">
-          <span class="tag-badge">[object Object] | [object Object]</span>
+          <span class="tag-badge">object</span>
           <span class="tag-depth">L3</span>
         </div>
       </div>
     
-      <div class="linear-card" id="card-25" onclick="focusLinearCard(25)" data-status="done">
+      <div class="linear-card" id="card-26" onclick="focusLinearCard(26)" data-status="done">
         <div class="card-meta-row">
-          <span class="card-id">SCH-126</span>
+          <span class="card-id">SCH-127</span>
           <span class="card-priority">🔴</span>
         </div>
         <div class="card-title">Outputs.*.Export.Name</div>
@@ -1442,7 +1454,7 @@
         </div>
         <div class="ins-property-row">
           <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="prop-val active-val">OBJECT</span>
         </div>
         <div class="ins-property-row">
           <span class="prop-lbl">Depth</span>
@@ -1461,6 +1473,11 @@
               <span class="c-k">required:</span>
               <span class="c-v">false</span>
             </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1468,6 +1485,38 @@
       <div id="inspector-24" class="linear-inspector ">
         <div class="ins-header">
           <h3>SCH-125</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>Outputs.*.Value.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">4 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-25" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-126</h3>
           <span class="ins-status-badge">Todo</span>
         </div>
         
@@ -1507,9 +1556,9 @@
         </div>
       </div>
     
-      <div id="inspector-25" class="linear-inspector ">
+      <div id="inspector-26" class="linear-inspector ">
         <div class="ins-header">
-          <h3>SCH-126</h3>
+          <h3>SCH-127</h3>
           <span class="ins-status-badge">Done</span>
         </div>
         
@@ -1549,9 +1598,9 @@
         </div>
       </div>
     
-      <div id="inspector-26" class="linear-inspector ">
+      <div id="inspector-27" class="linear-inspector ">
         <div class="ins-header">
-          <h3>SCH-127</h3>
+          <h3>SCH-128</h3>
           <span class="ins-status-badge">Todo</span>
         </div>
         
@@ -1581,9 +1630,9 @@
         </div>
       </div>
     
-      <div id="inspector-27" class="linear-inspector ">
+      <div id="inspector-28" class="linear-inspector ">
         <div class="ins-header">
-          <h3>SCH-128</h3>
+          <h3>SCH-129</h3>
           <span class="ins-status-badge">Todo</span>
         </div>
         
@@ -1613,9 +1662,9 @@
         </div>
       </div>
     
-      <div id="inspector-28" class="linear-inspector ">
+      <div id="inspector-29" class="linear-inspector ">
         <div class="ins-header">
-          <h3>SCH-129</h3>
+          <h3>SCH-130</h3>
           <span class="ins-status-badge">Todo</span>
         </div>
         

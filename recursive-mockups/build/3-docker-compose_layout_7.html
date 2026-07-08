@@ -252,12 +252,110 @@
         <div class="grok-answer">
           <h3>// SERVICES.*.BUILD</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">OBJECT</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.build.context</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.BUILD.CONTEXT</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.build.dockerfile</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.BUILD.DOCKERFILE</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"default": "Dockerfile"
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.build.args</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.BUILD.ARGS</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">OBJECT</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
 </code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.build.args.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.BUILD.ARGS.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.build.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.BUILD.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">ANY</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          
         </div>
       </div>
     
@@ -411,12 +509,51 @@
         <div class="grok-answer">
           <h3>// SERVICES.*.ENVIRONMENT</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">OBJECT</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
+"minItems": 0
+"uniqueItems": false
 </code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.environment.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.ENVIRONMENT.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.environment.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.ENVIRONMENT.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">ANY</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          
         </div>
       </div>
     
@@ -430,11 +567,33 @@
         <div class="grok-answer">
           <h3>// SERVICES.*.COMMAND</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">ARRAY</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
+"minLength": 0
+"minItems": 0
+"uniqueItems": false
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.command.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.COMMAND.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"minLength": 0
 </code></pre>
         </div>
       </div>
@@ -529,11 +688,33 @@
         <div class="grok-answer">
           <h3>// SERVICES.*.HEALTHCHECK.TEST</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">ARRAY</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
+"minLength": 0
+"minItems": 0
+"uniqueItems": false
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>services.*.healthcheck.test.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// SERVICES.*.HEALTHCHECK.TEST.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"minLength": 0
 </code></pre>
         </div>
       </div>

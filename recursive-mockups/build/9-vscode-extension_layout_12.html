@@ -429,7 +429,7 @@
       <div class="db-grid-container " id="grid-contributes">
         <div class="table-stats-bar">
           <span>Table: <strong>contributes</strong></span>
-          <span>Columns: <strong>25</strong></span>
+          <span>Columns: <strong>27</strong></span>
         </div>
         <table class="db-table">
           <thead>
@@ -750,14 +750,47 @@
       
         <tr class="db-row">
           <td class="cell-name"><code>contributes.configuration.properties.*.default</code></td>
-          <td class="cell-type"><span class="db-type-badge">[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]</span></td>
+          <td class="cell-type"><span class="db-type-badge">number</span></td>
           <td class="cell-req">NULL</td>
           <td class="cell-constraints">
             <span class="nested-toggle" style="color: #3ECF8E; cursor: pointer; font-weight: bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show rules' : '▼ hide rules';">▶ show rules</span>
             <div class="nested-detail-box" style="display:none; margin-top: 5px;">
               <pre style="font-family: monospace; font-size: 0.75rem; background: #141414; border-left: 2px solid #3ECF8E; padding: 5px; color: #3ECF8E; overflow-x: auto;">{
-  "required": false
+  "required": false,
+  "enum": [
+    false,
+    true
+  ],
+  "minItems": 0,
+  "uniqueItems": false,
+  "minLength": 0
 }</pre>
+            </div>
+          </td>
+          <td class="cell-desc">No description comments.</td>
+        </tr>
+      
+        <tr class="db-row">
+          <td class="cell-name"><code>contributes.configuration.properties.*.default.*</code></td>
+          <td class="cell-type"><span class="db-type-badge">any</span></td>
+          <td class="cell-req">NULL</td>
+          <td class="cell-constraints">
+            <span class="nested-toggle" style="color: #3ECF8E; cursor: pointer; font-weight: bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show rules' : '▼ hide rules';">▶ show rules</span>
+            <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+              <pre style="font-family: monospace; font-size: 0.75rem; background: #141414; border-left: 2px solid #3ECF8E; padding: 5px; color: #3ECF8E; overflow-x: auto;">{}</pre>
+            </div>
+          </td>
+          <td class="cell-desc">No description comments.</td>
+        </tr>
+      
+        <tr class="db-row">
+          <td class="cell-name"><code>contributes.configuration.properties.*.default.*</code></td>
+          <td class="cell-type"><span class="db-type-badge">any</span></td>
+          <td class="cell-req">NULL</td>
+          <td class="cell-constraints">
+            <span class="nested-toggle" style="color: #3ECF8E; cursor: pointer; font-weight: bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show rules' : '▼ hide rules';">▶ show rules</span>
+            <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+              <pre style="font-family: monospace; font-size: 0.75rem; background: #141414; border-left: 2px solid #3ECF8E; padding: 5px; color: #3ECF8E; overflow-x: auto;">{}</pre>
             </div>
           </td>
           <td class="cell-desc">No description comments.</td>

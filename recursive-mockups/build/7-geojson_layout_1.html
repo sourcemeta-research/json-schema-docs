@@ -189,66 +189,81 @@
       </li>
     
       <li class="nav-item" id="nav-item-8" onclick="scrollToSection('8')">
+        <span>features.*.properties.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-9" onclick="scrollToSection('9')">
         <span>features.*.geometry</span>
         <span class="req-dot"></span>
       </li>
     
-      <li class="nav-item" id="nav-item-9" onclick="scrollToSection('9')">
+      <li class="nav-item" id="nav-item-10" onclick="scrollToSection('10')">
         <span>features.*.geometry.type</span>
         <span class="req-dot"></span>
       </li>
     
-      <li class="nav-item" id="nav-item-10" onclick="scrollToSection('10')">
+      <li class="nav-item" id="nav-item-11" onclick="scrollToSection('11')">
         <span>features.*.geometry.coordinates</span>
         <span class="req-dot"></span>
       </li>
     
-      <li class="nav-item" id="nav-item-11" onclick="scrollToSection('11')">
+      <li class="nav-item" id="nav-item-12" onclick="scrollToSection('12')">
         <span>features.*.geometry.coordinates.*</span>
         
       </li>
     
-      <li class="nav-item" id="nav-item-12" onclick="scrollToSection('12')">
-        <span>features.*.geometry.*</span>
-        
-      </li>
-    
       <li class="nav-item" id="nav-item-13" onclick="scrollToSection('13')">
-        <span>features.*.*</span>
+        <span>features.*.geometry.coordinates.*.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-14" onclick="scrollToSection('14')">
-        <span>crs</span>
+        <span>features.*.geometry.coordinates.*.*.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-15" onclick="scrollToSection('15')">
+        <span>features.*.geometry.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-16" onclick="scrollToSection('16')">
+        <span>features.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-17" onclick="scrollToSection('17')">
+        <span>crs</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-18" onclick="scrollToSection('18')">
         <span>crs.type</span>
         <span class="req-dot"></span>
       </li>
     
-      <li class="nav-item" id="nav-item-16" onclick="scrollToSection('16')">
+      <li class="nav-item" id="nav-item-19" onclick="scrollToSection('19')">
         <span>crs.properties</span>
         <span class="req-dot"></span>
       </li>
     
-      <li class="nav-item" id="nav-item-17" onclick="scrollToSection('17')">
+      <li class="nav-item" id="nav-item-20" onclick="scrollToSection('20')">
         <span>crs.properties.name</span>
         <span class="req-dot"></span>
       </li>
     
-      <li class="nav-item" id="nav-item-18" onclick="scrollToSection('18')">
+      <li class="nav-item" id="nav-item-21" onclick="scrollToSection('21')">
         <span>crs.properties.*</span>
         
       </li>
     
-      <li class="nav-item" id="nav-item-19" onclick="scrollToSection('19')">
+      <li class="nav-item" id="nav-item-22" onclick="scrollToSection('22')">
         <span>crs.*</span>
         
       </li>
     
-      <li class="nav-item" id="nav-item-20" onclick="scrollToSection('20')">
+      <li class="nav-item" id="nav-item-23" onclick="scrollToSection('23')">
         <span>*</span>
         
       </li>
@@ -405,7 +420,7 @@
       <section id="sec-6" class="stripe-section" data-idx="6">
         <div class="section-header">
           <h2>features.*.id</h2>
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">number</span>
           <span class="status-badge optional">OPTIONAL</span>
         </div>
         <p class="section-desc">No descriptive comments are provided for this parameter.</p>
@@ -414,13 +429,18 @@
               <span class="c-key">required</span>
               <span class="c-val">false</span>
             </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
           </div>
       </section>
     
       <section id="sec-7" class="stripe-section" data-idx="7">
         <div class="section-header">
           <h2>features.*.properties</h2>
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">object</span>
           <span class="status-badge required">REQUIRED</span>
         </div>
         <p class="section-desc">No descriptive comments are provided for this parameter.</p>
@@ -429,10 +449,35 @@
               <span class="c-key">required</span>
               <span class="c-val">false</span>
             </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  null
+]</pre>
+              </div>
+            </div>
           </div>
       </section>
     
       <section id="sec-8" class="stripe-section" data-idx="8">
+        <div class="section-header">
+          <h2>features.*.properties.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-9" class="stripe-section" data-idx="9">
         <div class="section-header">
           <h2>features.*.geometry</h2>
           <span class="type-badge">object</span>
@@ -453,7 +498,7 @@
           </div>
       </section>
     
-      <section id="sec-9" class="stripe-section" data-idx="9">
+      <section id="sec-10" class="stripe-section" data-idx="10">
         <div class="section-header">
           <h2>features.*.geometry.type</h2>
           <span class="type-badge">string</span>
@@ -478,7 +523,7 @@
           </div>
       </section>
     
-      <section id="sec-10" class="stripe-section" data-idx="10">
+      <section id="sec-11" class="stripe-section" data-idx="11">
         <div class="section-header">
           <h2>features.*.geometry.coordinates</h2>
           <span class="type-badge">array</span>
@@ -503,17 +548,57 @@
           </div>
       </section>
     
-      <section id="sec-11" class="stripe-section" data-idx="11">
+      <section id="sec-12" class="stripe-section" data-idx="12">
         <div class="section-header">
           <h2>features.*.geometry.coordinates.*</h2>
-          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-13" class="stripe-section" data-idx="13">
+        <div class="section-header">
+          <h2>features.*.geometry.coordinates.*.*</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-14" class="stripe-section" data-idx="14">
+        <div class="section-header">
+          <h2>features.*.geometry.coordinates.*.*.*</h2>
+          <span class="type-badge">number</span>
           <span class="status-badge optional">OPTIONAL</span>
         </div>
         <p class="section-desc">No descriptive comments are provided for this parameter.</p>
         
       </section>
     
-      <section id="sec-12" class="stripe-section" data-idx="12">
+      <section id="sec-15" class="stripe-section" data-idx="15">
         <div class="section-header">
           <h2>features.*.geometry.*</h2>
           <span class="type-badge">any</span>
@@ -523,7 +608,7 @@
         
       </section>
     
-      <section id="sec-13" class="stripe-section" data-idx="13">
+      <section id="sec-16" class="stripe-section" data-idx="16">
         <div class="section-header">
           <h2>features.*.*</h2>
           <span class="type-badge">any</span>
@@ -533,7 +618,7 @@
         
       </section>
     
-      <section id="sec-14" class="stripe-section" data-idx="14">
+      <section id="sec-17" class="stripe-section" data-idx="17">
         <div class="section-header">
           <h2>crs</h2>
           <span class="type-badge">object</span>
@@ -554,7 +639,7 @@
           </div>
       </section>
     
-      <section id="sec-15" class="stripe-section" data-idx="15">
+      <section id="sec-18" class="stripe-section" data-idx="18">
         <div class="section-header">
           <h2>crs.type</h2>
           <span class="type-badge">string</span>
@@ -579,7 +664,7 @@
           </div>
       </section>
     
-      <section id="sec-16" class="stripe-section" data-idx="16">
+      <section id="sec-19" class="stripe-section" data-idx="19">
         <div class="section-header">
           <h2>crs.properties</h2>
           <span class="type-badge">object</span>
@@ -599,7 +684,7 @@
           </div>
       </section>
     
-      <section id="sec-17" class="stripe-section" data-idx="17">
+      <section id="sec-20" class="stripe-section" data-idx="20">
         <div class="section-header">
           <h2>crs.properties.name</h2>
           <span class="type-badge">string</span>
@@ -619,7 +704,7 @@
           </div>
       </section>
     
-      <section id="sec-18" class="stripe-section" data-idx="18">
+      <section id="sec-21" class="stripe-section" data-idx="21">
         <div class="section-header">
           <h2>crs.properties.*</h2>
           <span class="type-badge">any</span>
@@ -629,7 +714,7 @@
         
       </section>
     
-      <section id="sec-19" class="stripe-section" data-idx="19">
+      <section id="sec-22" class="stripe-section" data-idx="22">
         <div class="section-header">
           <h2>crs.*</h2>
           <span class="type-badge">any</span>
@@ -639,7 +724,7 @@
         
       </section>
     
-      <section id="sec-20" class="stripe-section" data-idx="20">
+      <section id="sec-23" class="stripe-section" data-idx="23">
         <div class="section-header">
           <h2>*</h2>
           <span class="type-badge">any</span>
@@ -666,7 +751,7 @@
   </div>
 
   <script>
-    const rows = [{"path":"type","name":"type","depth":1,"type":"string","required":true,"description":"","constraints":{"required":true,"default":"FeatureCollection","minLength":0}},{"path":"bbox","name":"bbox","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"maxItems":6,"minItems":4,"uniqueItems":false}},{"path":"bbox.*","name":"*","depth":2,"type":"number","required":false,"description":"","constraints":{}},{"path":"features","name":"features","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"features.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["type","geometry","properties"]}},{"path":"features.*.type","name":"type","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"Feature","minLength":0}},{"path":"features.*.id","name":"id","depth":3,"type":"[object Object] | [object Object]","required":false,"description":"","constraints":{"required":false}},{"path":"features.*.properties","name":"properties","depth":3,"type":"[object Object] | [object Object]","required":true,"description":"","constraints":{"required":false}},{"path":"features.*.geometry","name":"geometry","depth":3,"type":"object","required":true,"description":"","constraints":{"required":["type","coordinates"]}},{"path":"features.*.geometry.type","name":"type","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"Point","minLength":0}},{"path":"features.*.geometry.coordinates","name":"coordinates","depth":4,"type":"array","required":true,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"features.*.geometry.coordinates.*","name":"*","depth":5,"type":"[object Object] | [object Object]","required":false,"description":"","constraints":{}},{"path":"features.*.geometry.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"features.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"crs","name":"crs","depth":1,"type":"object","required":false,"description":"","constraints":{"required":["type","properties"]}},{"path":"crs.type","name":"type","depth":2,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"name","minLength":0}},{"path":"crs.properties","name":"properties","depth":2,"type":"object","required":true,"description":"","constraints":{"required":["name"]}},{"path":"crs.properties.name","name":"name","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"crs.properties.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"crs.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
+    const rows = [{"path":"type","name":"type","depth":1,"type":"string","required":true,"description":"","constraints":{"required":true,"default":"FeatureCollection","minLength":0}},{"path":"bbox","name":"bbox","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"maxItems":6,"minItems":4,"uniqueItems":false}},{"path":"bbox.*","name":"*","depth":2,"type":"number","required":false,"description":"","constraints":{}},{"path":"features","name":"features","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"features.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["type","geometry","properties"]}},{"path":"features.*.type","name":"type","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"Feature","minLength":0}},{"path":"features.*.id","name":"id","depth":3,"type":"number","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"features.*.properties","name":"properties","depth":3,"type":"object","required":true,"description":"","constraints":{"required":false,"enum":[null]}},{"path":"features.*.properties.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"features.*.geometry","name":"geometry","depth":3,"type":"object","required":true,"description":"","constraints":{"required":["type","coordinates"]}},{"path":"features.*.geometry.type","name":"type","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"Point","minLength":0}},{"path":"features.*.geometry.coordinates","name":"coordinates","depth":4,"type":"array","required":true,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"features.*.geometry.coordinates.*","name":"*","depth":5,"type":"array","required":false,"description":"","constraints":{"minItems":0,"uniqueItems":false}},{"path":"features.*.geometry.coordinates.*.*","name":"*","depth":6,"type":"array","required":false,"description":"","constraints":{"minItems":0,"uniqueItems":false}},{"path":"features.*.geometry.coordinates.*.*.*","name":"*","depth":7,"type":"number","required":false,"description":"","constraints":{}},{"path":"features.*.geometry.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"features.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"crs","name":"crs","depth":1,"type":"object","required":false,"description":"","constraints":{"required":["type","properties"]}},{"path":"crs.type","name":"type","depth":2,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"name","minLength":0}},{"path":"crs.properties","name":"properties","depth":2,"type":"object","required":true,"description":"","constraints":{"required":["name"]}},{"path":"crs.properties.name","name":"name","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"crs.properties.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"crs.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
     let activeIdx = 0;
     let activeLang = 'curl';
 

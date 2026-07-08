@@ -299,26 +299,36 @@
       </li>
     
       <li class="nav-item" id="nav-item-30" onclick="scrollToSection('30')">
-        <span>contributes.configuration.properties.*.description</span>
+        <span>contributes.configuration.properties.*.default.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-31" onclick="scrollToSection('31')">
-        <span>contributes.configuration.properties.*.*</span>
+        <span>contributes.configuration.properties.*.default.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-32" onclick="scrollToSection('32')">
-        <span>contributes.configuration.*</span>
+        <span>contributes.configuration.properties.*.description</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-33" onclick="scrollToSection('33')">
-        <span>contributes.*</span>
+        <span>contributes.configuration.properties.*.*</span>
         
       </li>
     
       <li class="nav-item" id="nav-item-34" onclick="scrollToSection('34')">
+        <span>contributes.configuration.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-35" onclick="scrollToSection('35')">
+        <span>contributes.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-36" onclick="scrollToSection('36')">
         <span>*</span>
         
       </li>
@@ -854,7 +864,7 @@
       <section id="sec-29" class="stripe-section" data-idx="29">
         <div class="section-header">
           <h2>contributes.configuration.properties.*.default</h2>
-          <span class="type-badge">[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]</span>
+          <span class="type-badge">number</span>
           <span class="status-badge optional">OPTIONAL</span>
         </div>
         <p class="section-desc">No descriptive comments are provided for this parameter.</p>
@@ -863,10 +873,56 @@
               <span class="c-key">required</span>
               <span class="c-val">false</span>
             </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
           </div>
       </section>
     
       <section id="sec-30" class="stripe-section" data-idx="30">
+        <div class="section-header">
+          <h2>contributes.configuration.properties.*.default.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-31" class="stripe-section" data-idx="31">
+        <div class="section-header">
+          <h2>contributes.configuration.properties.*.default.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-32" class="stripe-section" data-idx="32">
         <div class="section-header">
           <h2>contributes.configuration.properties.*.description</h2>
           <span class="type-badge">string</span>
@@ -886,7 +942,7 @@
           </div>
       </section>
     
-      <section id="sec-31" class="stripe-section" data-idx="31">
+      <section id="sec-33" class="stripe-section" data-idx="33">
         <div class="section-header">
           <h2>contributes.configuration.properties.*.*</h2>
           <span class="type-badge">any</span>
@@ -896,7 +952,7 @@
         
       </section>
     
-      <section id="sec-32" class="stripe-section" data-idx="32">
+      <section id="sec-34" class="stripe-section" data-idx="34">
         <div class="section-header">
           <h2>contributes.configuration.*</h2>
           <span class="type-badge">any</span>
@@ -906,7 +962,7 @@
         
       </section>
     
-      <section id="sec-33" class="stripe-section" data-idx="33">
+      <section id="sec-35" class="stripe-section" data-idx="35">
         <div class="section-header">
           <h2>contributes.*</h2>
           <span class="type-badge">any</span>
@@ -916,7 +972,7 @@
         
       </section>
     
-      <section id="sec-34" class="stripe-section" data-idx="34">
+      <section id="sec-36" class="stripe-section" data-idx="36">
         <div class="section-header">
           <h2>*</h2>
           <span class="type-badge">any</span>
@@ -943,7 +999,7 @@
   </div>
 
   <script>
-    const rows = [{"path":"publisher","name":"publisher","depth":1,"type":"string","required":true,"description":"","constraints":{"required":true,"minLength":0}},{"path":"displayName","name":"displayName","depth":1,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"categories","name":"categories","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"categories.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"activationEvents","name":"activationEvents","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"activationEvents.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"engines","name":"engines","depth":1,"type":"object","required":false,"description":"","constraints":{"required":["vscode"]}},{"path":"engines.vscode","name":"vscode","depth":2,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"^1.80.0","minLength":0}},{"path":"engines.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes","name":"contributes","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.commands","name":"commands","depth":2,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"contributes.commands.*","name":"*","depth":3,"type":"object","required":false,"description":"","constraints":{"required":["command","title"]}},{"path":"contributes.commands.*.command","name":"command","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.commands.*.title","name":"title","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.commands.*.category","name":"category","depth":4,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.commands.*.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.menus","name":"menus","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.menus.editor/title","name":"editor/title","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"contributes.menus.editor/title.*","name":"*","depth":4,"type":"object","required":false,"description":"","constraints":{}},{"path":"contributes.menus.editor/title.*.command","name":"command","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.menus.editor/title.*.when","name":"when","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.menus.editor/title.*.group","name":"group","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.menus.editor/title.*.*","name":"*","depth":5,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.menus.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.configuration","name":"configuration","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.configuration.title","name":"title","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.configuration.properties","name":"properties","depth":3,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.configuration.properties.*","name":"*","depth":4,"type":"object","required":false,"description":"","constraints":{}},{"path":"contributes.configuration.properties.*.type","name":"type","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.configuration.properties.*.default","name":"default","depth":5,"type":"[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.configuration.properties.*.description","name":"description","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.configuration.properties.*.*","name":"*","depth":5,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.configuration.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
+    const rows = [{"path":"publisher","name":"publisher","depth":1,"type":"string","required":true,"description":"","constraints":{"required":true,"minLength":0}},{"path":"displayName","name":"displayName","depth":1,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"categories","name":"categories","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"categories.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"activationEvents","name":"activationEvents","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"activationEvents.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"engines","name":"engines","depth":1,"type":"object","required":false,"description":"","constraints":{"required":["vscode"]}},{"path":"engines.vscode","name":"vscode","depth":2,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"^1.80.0","minLength":0}},{"path":"engines.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes","name":"contributes","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.commands","name":"commands","depth":2,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"contributes.commands.*","name":"*","depth":3,"type":"object","required":false,"description":"","constraints":{"required":["command","title"]}},{"path":"contributes.commands.*.command","name":"command","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.commands.*.title","name":"title","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.commands.*.category","name":"category","depth":4,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.commands.*.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.menus","name":"menus","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.menus.editor/title","name":"editor/title","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"contributes.menus.editor/title.*","name":"*","depth":4,"type":"object","required":false,"description":"","constraints":{}},{"path":"contributes.menus.editor/title.*.command","name":"command","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.menus.editor/title.*.when","name":"when","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.menus.editor/title.*.group","name":"group","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.menus.editor/title.*.*","name":"*","depth":5,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.menus.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.configuration","name":"configuration","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.configuration.title","name":"title","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.configuration.properties","name":"properties","depth":3,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"contributes.configuration.properties.*","name":"*","depth":4,"type":"object","required":false,"description":"","constraints":{}},{"path":"contributes.configuration.properties.*.type","name":"type","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.configuration.properties.*.default","name":"default","depth":5,"type":"number","required":false,"description":"","constraints":{"required":false,"enum":[false,true],"minItems":0,"uniqueItems":false,"minLength":0}},{"path":"contributes.configuration.properties.*.default.*","name":"*","depth":6,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.configuration.properties.*.default.*","name":"*","depth":6,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.configuration.properties.*.description","name":"description","depth":5,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"contributes.configuration.properties.*.*","name":"*","depth":5,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.configuration.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"contributes.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
     let activeIdx = 0;
     let activeLang = 'curl';
 

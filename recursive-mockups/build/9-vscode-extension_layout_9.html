@@ -2,1151 +2,1609 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>VS Code Manifest settings - Wise Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>VS Code Manifest settings - Kraken Exchange</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #F4F6F2;
-      color: #1A1D1A;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      padding: 3rem;
+      background-color: #FAF9FC;
+      color: #1A1A1E;
+      font-family: 'Inter', sans-serif;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
     }
-    
-    .wise-widget {
-      width: 100%;
-      max-width: 580px;
-      background-color: #FFFFFF;
-      border: 1px solid #E4E8E1;
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    }
-    
-    .widget-header {
-      margin-bottom: 2rem;
-      border-bottom: 1.5px solid #F4F6F2;
-      padding-bottom: 1.5rem;
-    }
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: #000;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-    .widget-header p { font-size: 0.85rem; color: #555855; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-top: 0.5rem; }
 
-    /* Sender Inputs */
-    .wise-inputs { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .input-box {
-      border: 1px solid #D1D5DB;
-      border-radius: 8px;
+    .kraken-sidebar {
+      width: 290px;
+      background-color: #FFFFFF;
+      border-right: 1px solid #E4E3EB;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #E4E3EB;
+      font-weight: 700;
+      color: #7132f5; /* Kraken Purple */
+      font-size: 1rem;
+    }
+    .assets-list { list-style: none; overflow-y: auto; flex: 1; padding: 0.75rem; }
+    .kraken-asset-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 1.25rem;
-    }
-    .input-left { display: flex; flex-direction: column; }
-    .input-left label { font-size: 0.7rem; color: #666; font-weight: 600; text-transform: uppercase; }
-    .input-left input { border: none; font-size: 1.2rem; font-weight: 700; outline: none; background: none; margin-top: 0.25rem; width: 150px; }
-    
-    .input-right {
-      background-color: #1A1D1A;
-      color: #FFF;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem;
+      cursor: pointer;
       border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+      border: 1px solid transparent;
     }
-    .input-right.lime { background-color: #9FE870; color: #1A1D1A; }
+    .kraken-asset-row:hover { background-color: #F3F1FB; }
+    .kraken-asset-row.active {
+      background-color: rgba(113, 50, 245, 0.08);
+      border-color: rgba(113, 50, 245, 0.2);
+    }
+    
+    .asset-left { display: flex; align-items: center; gap: 0.75rem; overflow: hidden; }
+    .asset-logo { font-size: 1.25rem; color: #7132f5; }
+    .asset-names { display: flex; flex-direction: column; overflow: hidden; }
+    .asset-ticker { font-weight: 700; font-size: 0.85rem; color: #1A1A1E; }
+    .asset-path { font-size: 0.75rem; color: #7C7A84; font-family: 'JetBrains Mono', monospace; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 150px; }
+    
+    .asset-type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #7132f5; background-color: #F3F1FB; padding: 0.15rem 0.35rem; border-radius: 4px; }
 
-    /* Fee list connector */
-    .breakdown-list { display: flex; flex-direction: column; margin-bottom: 2rem; }
-    .calculator-step { display: flex; cursor: pointer; }
-    
-    .step-connector { display: flex; flex-direction: column; align-items: center; margin-right: 1.25rem; width: 20px; }
-    .step-circle { width: 10px; height: 10px; border-radius: 50%; background-color: #9FE870; margin-top: 0.35rem; }
-    .step-circle.critical { background-color: #FF5E00; }
-    .step-circle.stable { background-color: #9FE870; }
-    .step-line { width: 2px; flex: 1; background-color: #E4E8E1; min-height: 40px; }
-    .calculator-step:last-child .step-line { display: none; }
-    
-    .step-main { flex: 1; padding-bottom: 1.5rem; }
-    .step-top-row { display: flex; justify-content: space-between; align-items: center; }
-    .step-path { font-weight: 700; font-size: 0.95rem; color: #000; font-family: 'JetBrains Mono', monospace; }
-    .step-type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #666; background-color: #F4F6F2; padding: 0.15rem 0.4rem; font-weight: 600; }
-    .step-desc-p { font-size: 0.85rem; color: #555855; line-height: 1.4; margin-top: 0.25rem; }
-    
-    .wise-step-drawer {
-      display: none;
-      background-color: #F4F6F2;
-      border: 1px solid #E4E8E1;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 0.75rem;
+    .kraken-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 3rem 4rem;
+      background-color: #FAF9FC;
     }
-    .wise-step-drawer.open { display: block; }
+    .content-header { margin-bottom: 2.5rem; border-bottom: 1px solid #E4E3EB; padding-bottom: 1.5rem; }
+    .content-header h1 { font-size: 1.8rem; font-weight: 700; color: #000; }
     
-    .wise-calc-specs { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
-    .spec-row { display: flex; justify-content: space-between; padding: 0.15rem 0; border-bottom: 1px dashed #E4E8E1; }
-    .spec-row:last-child { border-bottom: none; }
-    .s-k { color: #666; }
-    .s-v { color: #000; font-weight: 700; }
+    .kraken-detail-pane { display: none; }
+    .kraken-detail-pane.active { display: block; max-width: 800px; }
+    
+    .detail-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .detail-header-row h2 { font-size: 1.4rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+    
+    .required-tag { font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .required-tag.req { background-color: #E2FCEF; color: #0A8243; }
+    .required-tag.opt { background-color: #F1F0F5; color: #5B5766; }
+
+    .asset-description { font-size: 0.9rem; color: #5B5766; line-height: 1.5; margin-bottom: 2rem; }
+
+    .kraken-trade-panel { display: flex; gap: 1rem; margin-bottom: 2.5rem; }
+    .trade-box { flex: 1; background: #FFF; border: 1px solid #E4E3EB; padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; }
+    .trade-lbl { font-size: 0.7rem; font-weight: 700; color: #7C7A84; text-transform: uppercase; margin-bottom: 0.25rem; }
+    .trade-box input { border: none; font-size: 1rem; font-weight: 700; color: #1A1A1E; outline: none; background: none; }
+
+    .kraken-order-book { background: #FFF; border: 1px solid #E4E3EB; border-radius: 8px; overflow: hidden; }
+    .kraken-order-book h4 { background-color: #F8F7FA; padding: 0.75rem 1.25rem; font-size: 0.8rem; font-weight: 700; border-bottom: 1px solid #E4E3EB; }
+    
+    .book-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; border-bottom: 1px dashed #E4E3EB; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+    .book-row:last-child { border-bottom: none; }
+    .b-bid { color: #0A8243; font-weight: 600; }
+    .b-ask { color: #D62F2F; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="wise-widget">
-    <div class="widget-header">
-      <h1>Wise Transfer</h1>
-      <p>VS Code Manifest settings // Conversion Calculator</p>
-    </div>
-    
-    <div class="wise-inputs">
-      <div class="input-box">
-        <div class="input-left">
-          <label>You send</label>
-          <input type="text" value="1,000">
-        </div>
-        <div class="input-right">USD</div>
-      </div>
-    </div>
-
-    <div class="breakdown-list">
+  <div class="kraken-sidebar">
+    <div class="sidebar-header">Kraken Assets Portal</div>
+    <div class="assets-list">
       
-      <div class="calculator-step" onclick="toggleWiseCalcRow(0)">
-        <div class="step-connector">
-          <div class="step-circle critical"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">publisher</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-0" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">true</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
-            </div>
+      <div class="kraken-asset-row active" id="asset-row-0" onclick="focusKrakenAsset(0)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">PUBLISHER</span>
+            <span class="asset-path">publisher</span>
           </div>
         </div>
+        <span class="asset-type-badge">string</span>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(1)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">displayName</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-1" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+      <div class="kraken-asset-row " id="asset-row-1" onclick="focusKrakenAsset(1)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">DISPLAYNAME</span>
+            <span class="asset-path">displayName</span>
           </div>
         </div>
+        <span class="asset-type-badge">string</span>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(2)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">categories</span>
-            <span class="step-type-badge">array</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-2" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minItems:</span>
-              <span class="s-v">0</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">uniqueItems:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+      <div class="kraken-asset-row " id="asset-row-2" onclick="focusKrakenAsset(2)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">CATEGORIES</span>
+            <span class="asset-path">categories</span>
           </div>
         </div>
+        <span class="asset-type-badge">array</span>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(3)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">categories.*</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-3" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+      <div class="kraken-asset-row " id="asset-row-3" onclick="focusKrakenAsset(3)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">categories.*</span>
           </div>
         </div>
+        <span class="asset-type-badge">string</span>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(4)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">activationEvents</span>
-            <span class="step-type-badge">array</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-4" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minItems:</span>
-              <span class="s-v">0</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">uniqueItems:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+      <div class="kraken-asset-row " id="asset-row-4" onclick="focusKrakenAsset(4)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">ACTIVATIONEVENTS</span>
+            <span class="asset-path">activationEvents</span>
           </div>
         </div>
+        <span class="asset-type-badge">array</span>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(5)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">activationEvents.*</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-5" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+      <div class="kraken-asset-row " id="asset-row-5" onclick="focusKrakenAsset(5)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">activationEvents.*</span>
           </div>
         </div>
+        <span class="asset-type-badge">string</span>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(6)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
+      <div class="kraken-asset-row " id="asset-row-6" onclick="focusKrakenAsset(6)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">ENGINES</span>
+            <span class="asset-path">engines</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-7" onclick="focusKrakenAsset(7)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">VSCODE</span>
+            <span class="asset-path">engines.vscode</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-8" onclick="focusKrakenAsset(8)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">engines.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-9" onclick="focusKrakenAsset(9)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">CONTRIBUTES</span>
+            <span class="asset-path">contributes</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-10" onclick="focusKrakenAsset(10)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">COMMANDS</span>
+            <span class="asset-path">contributes.commands</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">array</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-11" onclick="focusKrakenAsset(11)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.commands.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-12" onclick="focusKrakenAsset(12)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">COMMAND</span>
+            <span class="asset-path">contributes.commands.*.command</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-13" onclick="focusKrakenAsset(13)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">TITLE</span>
+            <span class="asset-path">contributes.commands.*.title</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-14" onclick="focusKrakenAsset(14)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">CATEGORY</span>
+            <span class="asset-path">contributes.commands.*.category</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-15" onclick="focusKrakenAsset(15)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.commands.*.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-16" onclick="focusKrakenAsset(16)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">MENUS</span>
+            <span class="asset-path">contributes.menus</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-17" onclick="focusKrakenAsset(17)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">EDITOR/TITLE</span>
+            <span class="asset-path">contributes.menus.editor/title</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">array</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-18" onclick="focusKrakenAsset(18)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.menus.editor/title.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-19" onclick="focusKrakenAsset(19)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">COMMAND</span>
+            <span class="asset-path">contributes.menus.editor/title.*.command</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-20" onclick="focusKrakenAsset(20)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">WHEN</span>
+            <span class="asset-path">contributes.menus.editor/title.*.when</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-21" onclick="focusKrakenAsset(21)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">GROUP</span>
+            <span class="asset-path">contributes.menus.editor/title.*.group</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-22" onclick="focusKrakenAsset(22)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.menus.editor/title.*.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-23" onclick="focusKrakenAsset(23)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.menus.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-24" onclick="focusKrakenAsset(24)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">CONFIGURATION</span>
+            <span class="asset-path">contributes.configuration</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-25" onclick="focusKrakenAsset(25)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">TITLE</span>
+            <span class="asset-path">contributes.configuration.title</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-26" onclick="focusKrakenAsset(26)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">PROPERTIES</span>
+            <span class="asset-path">contributes.configuration.properties</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-27" onclick="focusKrakenAsset(27)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.configuration.properties.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">object</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-28" onclick="focusKrakenAsset(28)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">TYPE</span>
+            <span class="asset-path">contributes.configuration.properties.*.type</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-29" onclick="focusKrakenAsset(29)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">DEFAULT</span>
+            <span class="asset-path">contributes.configuration.properties.*.default</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">number</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-30" onclick="focusKrakenAsset(30)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.configuration.properties.*.default.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-31" onclick="focusKrakenAsset(31)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.configuration.properties.*.default.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-32" onclick="focusKrakenAsset(32)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">DESCRIPTION</span>
+            <span class="asset-path">contributes.configuration.properties.*.description</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">string</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-33" onclick="focusKrakenAsset(33)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.configuration.properties.*.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-34" onclick="focusKrakenAsset(34)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.configuration.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-35" onclick="focusKrakenAsset(35)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">contributes.*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+      <div class="kraken-asset-row " id="asset-row-36" onclick="focusKrakenAsset(36)">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">*</span>
+            <span class="asset-path">*</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">any</span>
+      </div>
+    
+    </div>
+  </div>
+
+  <div class="kraken-content">
+    <div class="content-header">
+      <h1>VS Code Manifest settings Specifications</h1>
+      <p style="color:#5B5766; font-size:0.85rem; margin-top:0.25rem;">Integration configurations describing visual components and menu contributions.</p>
+    </div>
+    
+    <div class="details-container">
+      
+      <div id="asset-details-0" class="kraken-detail-pane active">
+        <div class="detail-header-row">
+          <h2>publisher</h2>
+          <span class="required-tag req">REQUIRED</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">engines</span>
-            <span class="step-type-badge">object</span>
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">true</span>
+            </div>
           
-          <div id="calc-drawer-6" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row nested" style="flex-wrap: wrap;">
-              <span class="s-k">required:</span>
-              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-1" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>displayName</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-2" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>categories</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ARRAY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minItems</span>
+              <span class="b-ask">0</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">uniqueItems</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-3" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>categories.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-4" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>activationEvents</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ARRAY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minItems</span>
+              <span class="b-ask">0</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">uniqueItems</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-5" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>activationEvents.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-6" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>engines</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row nested">
+              <span class="b-bid">required</span>
+              <span class="nested-toggle" style="color: #7132f5; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶' : '▼';">▶</span>
               <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">[
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F6; border-left: 2px solid #7132f5; padding: 5px; color: #000; overflow-x: auto;">[
   "vscode"
 ]</pre>
               </div>
             </div>
           </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(7)">
-        <div class="step-connector">
-          <div class="step-circle critical"></div>
-          <div class="step-line"></div>
+      <div id="asset-details-7" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>engines.vscode</h2>
+          <span class="required-tag req">REQUIRED</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">engines.vscode</span>
-            <span class="step-type-badge">string</span>
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-7" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">default:</span>
-              <span class="s-v">"^1.80.0"</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
-            </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
           </div>
         </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">default</span>
+              <span class="b-ask">"^1.80.0"</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(8)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
+      <div id="asset-details-8" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>engines.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">engines.*</span>
-            <span class="step-type-badge">any</span>
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-8" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
           </div>
         </div>
+
+        
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(9)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
+      <div id="asset-details-9" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes</h2>
+          <span class="required-tag opt">OPTIONAL</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes</span>
-            <span class="step-type-badge">object</span>
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-9" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
           </div>
         </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(10)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
+      <div id="asset-details-10" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.commands</h2>
+          <span class="required-tag opt">OPTIONAL</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.commands</span>
-            <span class="step-type-badge">array</span>
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ARRAY" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-10" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minItems:</span>
-              <span class="s-v">0</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">uniqueItems:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
           </div>
         </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minItems</span>
+              <span class="b-ask">0</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">uniqueItems</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(11)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
+      <div id="asset-details-11" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.commands.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.commands.*</span>
-            <span class="step-type-badge">object</span>
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-11" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row nested" style="flex-wrap: wrap;">
-              <span class="s-k">required:</span>
-              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 3" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row nested">
+              <span class="b-bid">required</span>
+              <span class="nested-toggle" style="color: #7132f5; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶' : '▼';">▶</span>
               <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">[
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F6; border-left: 2px solid #7132f5; padding: 5px; color: #000; overflow-x: auto;">[
   "command",
   "title"
 ]</pre>
               </div>
             </div>
           </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
       </div>
     
-      <div class="calculator-step" onclick="toggleWiseCalcRow(12)">
-        <div class="step-connector">
-          <div class="step-circle critical"></div>
-          <div class="step-line"></div>
+      <div id="asset-details-12" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.commands.*.command</h2>
+          <span class="required-tag req">REQUIRED</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.commands.*.command</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-12" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(13)">
-        <div class="step-connector">
-          <div class="step-circle critical"></div>
-          <div class="step-line"></div>
-        </div>
+        <p class="asset-description">No descriptive specifications logged.</p>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.commands.*.title</span>
-            <span class="step-type-badge">string</span>
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
           </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-13" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
-            </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 4" readonly>
           </div>
         </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(14)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.commands.*.category</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-14" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(15)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.commands.*.*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-15" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(16)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus</span>
-            <span class="step-type-badge">object</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-16" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(17)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.editor/title</span>
-            <span class="step-type-badge">array</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-17" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minItems:</span>
-              <span class="s-v">0</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">uniqueItems:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(18)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.editor/title.*</span>
-            <span class="step-type-badge">object</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-18" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(19)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.editor/title.*.command</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-19" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(20)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.editor/title.*.when</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-20" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(21)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.editor/title.*.group</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-21" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(22)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.editor/title.*.*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-22" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(23)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.menus.*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-23" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(24)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration</span>
-            <span class="step-type-badge">object</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-24" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(25)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.title</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-25" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(26)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.properties</span>
-            <span class="step-type-badge">object</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-26" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(27)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.properties.*</span>
-            <span class="step-type-badge">object</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-27" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(28)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.properties.*.type</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-28" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(29)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.properties.*.default</span>
-            <span class="step-type-badge">[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-29" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(30)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.properties.*.description</span>
-            <span class="step-type-badge">string</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-30" class="wise-step-drawer">
-            <div class="wise-calc-specs">
-            <div class="spec-row">
-              <span class="s-k">required:</span>
-              <span class="s-v">false</span>
-            </div>
-          
-            <div class="spec-row">
-              <span class="s-k">minLength:</span>
-              <span class="s-v">0</span>
-            </div>
-          </div>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(31)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.properties.*.*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-31" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(32)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.configuration.*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-32" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(33)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">contributes.*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-33" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="calculator-step" onclick="toggleWiseCalcRow(34)">
-        <div class="step-connector">
-          <div class="step-circle stable"></div>
-          <div class="step-line"></div>
-        </div>
-        
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">*</span>
-            <span class="step-type-badge">any</span>
-          </div>
-          <p class="step-desc-p">No transfer description available.</p>
-          
-          <div id="calc-drawer-34" class="wise-step-drawer">
-            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>OPTIONAL LAYER</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-    </div>
 
-    <div class="wise-inputs">
-      <div class="input-box">
-        <div class="input-left">
-          <label>Recipient Gets</label>
-          <input type="text" value="984.50" readonly>
-        </div>
-        <div class="input-right lime">EUR</div>
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
       </div>
+    
+      <div id="asset-details-13" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.commands.*.title</h2>
+          <span class="required-tag req">REQUIRED</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 4" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-14" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.commands.*.category</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 4" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-15" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.commands.*.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 4" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-16" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-17" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.editor/title</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ARRAY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 3" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minItems</span>
+              <span class="b-ask">0</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">uniqueItems</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-18" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.editor/title.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 4" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-19" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.editor/title.*.command</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-20" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.editor/title.*.when</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-21" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.editor/title.*.group</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-22" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.editor/title.*.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-23" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.menus.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 3" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-24" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-25" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.title</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 3" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-26" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 3" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-27" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="OBJECT" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 4" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-28" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*.type</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-29" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*.default</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="NUMBER" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row nested">
+              <span class="b-bid">enum</span>
+              <span class="nested-toggle" style="color: #7132f5; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶' : '▼';">▶</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F6; border-left: 2px solid #7132f5; padding: 5px; color: #000; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minItems</span>
+              <span class="b-ask">0</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">uniqueItems</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-30" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*.default.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 6" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-31" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*.default.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 6" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-32" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*.description</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="STRING" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        <div class="kraken-order-book"><h4>Validation Order Book</h4>
+            <div class="book-row">
+              <span class="b-bid">required</span>
+              <span class="b-ask">false</span>
+            </div>
+          
+            <div class="book-row">
+              <span class="b-bid">minLength</span>
+              <span class="b-ask">0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div id="asset-details-33" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.properties.*.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 5" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-34" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.configuration.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 3" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-35" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>contributes.*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 2" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
+      <div id="asset-details-36" class="kraken-detail-pane ">
+        <div class="detail-header-row">
+          <h2>*</h2>
+          <span class="required-tag opt">OPTIONAL</span>
+        </div>
+        
+        <p class="asset-description">No descriptive specifications logged.</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="ANY" readonly>
+          </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL 1" readonly>
+          </div>
+        </div>
+
+        
+      </div>
+    
     </div>
   </div>
 
   <script>
-    function toggleWiseCalcRow(idx) {
-      const drawer = document.getElementById('calc-drawer-' + idx);
-      drawer.classList.toggle('open');
+    function focusKrakenAsset(idx) {
+      document.querySelectorAll('.kraken-asset-row').forEach(r => r.classList.remove('active'));
+      document.querySelectorAll('.kraken-detail-pane').forEach(p => p.classList.remove('active'));
+
+      document.getElementById('asset-row-' + idx).classList.add('active');
+      document.getElementById('asset-details-' + idx).classList.add('active');
     }
   </script>
 </body>

@@ -243,25 +243,30 @@
     
       <li class="nav-item-apple" id="apple-nav-24" onclick="showAppleDoc(24)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">Outputs.*.Export</span>
+        <span class="nav-name">Outputs.*.Value.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-25" onclick="showAppleDoc(25)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">Outputs.*.Export.Name</span>
+        <span class="nav-name">Outputs.*.Export</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-26" onclick="showAppleDoc(26)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">Outputs.*.Export.*</span>
+        <span class="nav-name">Outputs.*.Export.Name</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-27" onclick="showAppleDoc(27)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">Outputs.*.*</span>
+        <span class="nav-name">Outputs.*.Export.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-28" onclick="showAppleDoc(28)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">Outputs.*.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-29" onclick="showAppleDoc(29)">
         <span class="icon-cube">■</span>
         <span class="nav-name">*</span>
       </li>
@@ -1227,7 +1232,7 @@
         
         <div class="declaration-block">
           <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">Value</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= required</span></code></pre>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">Value</span>: <span class="decl-type">object</span> <span class="decl-val">= required</span></code></pre>
         </div>
 
         <div class="doc-section">
@@ -1241,6 +1246,11 @@
             <div class="constraint-row">
               <span class="c-key">required:</span>
               <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
             </div>
           </div>
         </div>
@@ -1261,6 +1271,40 @@
       </div>
     
       <div id="apple-doc-24" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">Outputs.*.Value.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 4</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-25" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">Outputs.*.Export</h1>
         
@@ -1304,7 +1348,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-25" class="apple-doc-content ">
+      <div id="apple-doc-26" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">Outputs.*.Export.Name</h1>
         
@@ -1348,7 +1392,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-26" class="apple-doc-content ">
+      <div id="apple-doc-27" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">Outputs.*.Export.*</h1>
         
@@ -1382,7 +1426,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-27" class="apple-doc-content ">
+      <div id="apple-doc-28" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">Outputs.*.*</h1>
         
@@ -1416,7 +1460,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-28" class="apple-doc-content ">
+      <div id="apple-doc-29" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">*</h1>
         

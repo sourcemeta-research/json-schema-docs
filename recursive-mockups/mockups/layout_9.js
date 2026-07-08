@@ -1,11 +1,10 @@
 module.exports = function render(title, desc, schema) {
-
+  // Reconstruct rows by traversing the canonical schema directly
   const rows = [];
   const visited = new Set();
 
   function walk(node, parentPath = [], isRequired = false) {
     if (!node || typeof node !== 'object') return;
-    
     if (visited.has(node)) {
       rows.push({
         path: parentPath.join('.'),
@@ -32,21 +31,25 @@ module.exports = function render(title, desc, schema) {
       if (!n || typeof n !== 'object') return;
       type = n.type || type;
       description = n.description || description || '';
-      
       for (const [key, val] of Object.entries(n)) {
         if (!['type', 'description', 'properties', 'patternProperties', 'additionalProperties', 'items', 'extends'].includes(key)) {
           constraints[key] = val;
         }
       }
-      
       if (n.properties) Object.assign(properties, n.properties);
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);
-
     if (node.extends && Array.isArray(node.extends)) {
       node.extends.forEach(ext => extract(ext));
     }
@@ -65,20 +68,16 @@ module.exports = function render(title, desc, schema) {
     }
 
     const requiredList = node.required || [];
-
     for (const [name, childNode] of Object.entries(properties)) {
       const childRequired = childNode.required === true || (Array.isArray(requiredList) && requiredList.includes(name));
       walk(childNode, [...parentPath, name], childRequired);
     }
-
     for (const [pattern, childNode] of Object.entries(patternProperties)) {
       walk(childNode, [...parentPath, `/${pattern}/`], false);
     }
-
     if (additionalProperties && typeof additionalProperties === 'object') {
       walk(additionalProperties, [...parentPath, '*'], false);
     }
-
     if (items && typeof items === 'object') {
       if (Array.isArray(items)) {
         items.forEach((itemNode, idx) => {
@@ -88,35 +87,48 @@ module.exports = function render(title, desc, schema) {
         walk(items, [...parentPath, '*'], false);
       }
     }
-
     visited.delete(node);
   }
-
   walk(schema);
 
-  let feeBreakdownHtml = '';
-  
+  // Render HTML
+  let assetRowsHtml = '';
+  let detailsHtml = '';
+
   rows.forEach((r, idx) => {
+    assetRowsHtml += `
+      <div class="kraken-asset-row ${idx === 0 ? 'active' : ''}" id="asset-row-${idx}" onclick="focusKrakenAsset(${idx})">
+        <div class="asset-left">
+          <span class="asset-logo">⟠</span>
+          <div class="asset-names">
+            <span class="asset-ticker">${r.name.toUpperCase()}</span>
+            <span class="asset-path">${r.path}</span>
+          </div>
+        </div>
+        <span class="asset-type-badge">${r.type}</span>
+      </div>
+    `;
+
     let constraintsHtml = '';
     const constraintEntries = Object.entries(r.constraints);
     if (constraintEntries.length > 0) {
-      constraintsHtml = '<div class="wise-calc-specs">';
+      constraintsHtml = '<div class="kraken-order-book"><h4>Validation Order Book</h4>';
       constraintEntries.forEach(([key, val]) => {
         if (typeof val === 'object' && val !== null) {
           constraintsHtml += `
-            <div class="spec-row nested" style="flex-wrap: wrap;">
-              <span class="s-k">${key}:</span>
-              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+            <div class="book-row nested">
+              <span class="b-bid">${key}</span>
+              <span class="nested-toggle" style="color: #7132f5; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶' : '▼';">▶</span>
               <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">${JSON.stringify(val, null, 2)}</pre>
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F6; border-left: 2px solid #7132f5; padding: 5px; color: #000; overflow-x: auto;">${JSON.stringify(val, null, 2)}</pre>
               </div>
             </div>
           `;
         } else {
           constraintsHtml += `
-            <div class="spec-row">
-              <span class="s-k">${key}:</span>
-              <span class="s-v">${JSON.stringify(val)}</span>
+            <div class="book-row">
+              <span class="b-bid">${key}</span>
+              <span class="b-ask">${JSON.stringify(val)}</span>
             </div>
           `;
         }
@@ -124,27 +136,27 @@ module.exports = function render(title, desc, schema) {
       constraintsHtml += '</div>';
     }
 
-    feeBreakdownHtml += `
-      <div class="calculator-step" onclick="toggleWiseCalcRow(${idx})">
-        <div class="step-connector">
-          <div class="step-circle ${r.required ? 'critical' : 'stable'}"></div>
-          <div class="step-line"></div>
+    detailsHtml += `
+      <div id="asset-details-${idx}" class="kraken-detail-pane ${idx === 0 ? 'active' : ''}">
+        <div class="detail-header-row">
+          <h2>${r.path}</h2>
+          <span class="required-tag ${r.required ? 'req' : 'opt'}">${r.required ? 'REQUIRED' : 'OPTIONAL'}</span>
         </div>
         
-        <div class="step-main">
-          <div class="step-top-row">
-            <span class="step-path">${r.path}</span>
-            <span class="step-type-badge">${r.type}</span>
+        <p class="asset-description">${r.description || 'No descriptive specifications logged.'}</p>
+        
+        <div class="kraken-trade-panel">
+          <div class="trade-box">
+            <span class="trade-lbl">Limit Price</span>
+            <input type="text" value="${r.type.toUpperCase()}" readonly>
           </div>
-          <p class="step-desc-p">${r.description || 'No transfer description available.'}</p>
-          
-          <div id="calc-drawer-${idx}" class="wise-step-drawer">
-            ${constraintsHtml || '<span style="color:#666; font-style:italic;">No transfer boundary rules.</span>'}
-            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
-              Status: <strong>${r.required ? 'REQUIRED TRANSACTION LAYER' : 'OPTIONAL LAYER'}</strong>
-            </div>
+          <div class="trade-box">
+            <span class="trade-lbl">Depth Level</span>
+            <input type="text" value="LEVEL ${r.depth}" readonly>
           </div>
         </div>
+
+        ${constraintsHtml}
       </div>
     `;
   });
@@ -153,140 +165,121 @@ module.exports = function render(title, desc, schema) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>${title} - Wise Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>${title} - Kraken Exchange</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #F4F6F2;
-      color: #1A1D1A;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      padding: 3rem;
+      background-color: #FAF9FC;
+      color: #1A1A1E;
+      font-family: 'Inter', sans-serif;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
     }
-    
-    .wise-widget {
-      width: 100%;
-      max-width: 580px;
-      background-color: #FFFFFF;
-      border: 1px solid #E4E8E1;
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    }
-    
-    .widget-header {
-      margin-bottom: 2rem;
-      border-bottom: 1.5px solid #F4F6F2;
-      padding-bottom: 1.5rem;
-    }
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: #000;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-    .widget-header p { font-size: 0.85rem; color: #555855; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-top: 0.5rem; }
 
-    /* Sender Inputs */
-    .wise-inputs { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
-    .input-box {
-      border: 1px solid #D1D5DB;
-      border-radius: 8px;
+    .kraken-sidebar {
+      width: 290px;
+      background-color: #FFFFFF;
+      border-right: 1px solid #E4E3EB;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #E4E3EB;
+      font-weight: 700;
+      color: #7132f5; /* Kraken Purple */
+      font-size: 1rem;
+    }
+    .assets-list { list-style: none; overflow-y: auto; flex: 1; padding: 0.75rem; }
+    .kraken-asset-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 1.25rem;
-    }
-    .input-left { display: flex; flex-direction: column; }
-    .input-left label { font-size: 0.7rem; color: #666; font-weight: 600; text-transform: uppercase; }
-    .input-left input { border: none; font-size: 1.2rem; font-weight: 700; outline: none; background: none; margin-top: 0.25rem; width: 150px; }
-    
-    .input-right {
-      background-color: #1A1D1A;
-      color: #FFF;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem;
+      cursor: pointer;
       border-radius: 8px;
-      font-weight: 700;
-      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+      border: 1px solid transparent;
     }
-    .input-right.lime { background-color: #9FE870; color: #1A1D1A; }
+    .kraken-asset-row:hover { background-color: #F3F1FB; }
+    .kraken-asset-row.active {
+      background-color: rgba(113, 50, 245, 0.08);
+      border-color: rgba(113, 50, 245, 0.2);
+    }
+    
+    .asset-left { display: flex; align-items: center; gap: 0.75rem; overflow: hidden; }
+    .asset-logo { font-size: 1.25rem; color: #7132f5; }
+    .asset-names { display: flex; flex-direction: column; overflow: hidden; }
+    .asset-ticker { font-weight: 700; font-size: 0.85rem; color: #1A1A1E; }
+    .asset-path { font-size: 0.75rem; color: #7C7A84; font-family: 'JetBrains Mono', monospace; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 150px; }
+    
+    .asset-type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #7132f5; background-color: #F3F1FB; padding: 0.15rem 0.35rem; border-radius: 4px; }
 
-    /* Fee list connector */
-    .breakdown-list { display: flex; flex-direction: column; margin-bottom: 2rem; }
-    .calculator-step { display: flex; cursor: pointer; }
-    
-    .step-connector { display: flex; flex-direction: column; align-items: center; margin-right: 1.25rem; width: 20px; }
-    .step-circle { width: 10px; height: 10px; border-radius: 50%; background-color: #9FE870; margin-top: 0.35rem; }
-    .step-circle.critical { background-color: #FF5E00; }
-    .step-circle.stable { background-color: #9FE870; }
-    .step-line { width: 2px; flex: 1; background-color: #E4E8E1; min-height: 40px; }
-    .calculator-step:last-child .step-line { display: none; }
-    
-    .step-main { flex: 1; padding-bottom: 1.5rem; }
-    .step-top-row { display: flex; justify-content: space-between; align-items: center; }
-    .step-path { font-weight: 700; font-size: 0.95rem; color: #000; font-family: 'JetBrains Mono', monospace; }
-    .step-type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #666; background-color: #F4F6F2; padding: 0.15rem 0.4rem; font-weight: 600; }
-    .step-desc-p { font-size: 0.85rem; color: #555855; line-height: 1.4; margin-top: 0.25rem; }
-    
-    .wise-step-drawer {
-      display: none;
-      background-color: #F4F6F2;
-      border: 1px solid #E4E8E1;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 0.75rem;
+    .kraken-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 3rem 4rem;
+      background-color: #FAF9FC;
     }
-    .wise-step-drawer.open { display: block; }
+    .content-header { margin-bottom: 2.5rem; border-bottom: 1px solid #E4E3EB; padding-bottom: 1.5rem; }
+    .content-header h1 { font-size: 1.8rem; font-weight: 700; color: #000; }
     
-    .wise-calc-specs { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
-    .spec-row { display: flex; justify-content: space-between; padding: 0.15rem 0; border-bottom: 1px dashed #E4E8E1; }
-    .spec-row:last-child { border-bottom: none; }
-    .s-k { color: #666; }
-    .s-v { color: #000; font-weight: 700; }
+    .kraken-detail-pane { display: none; }
+    .kraken-detail-pane.active { display: block; max-width: 800px; }
+    
+    .detail-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .detail-header-row h2 { font-size: 1.4rem; font-weight: 700; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+    
+    .required-tag { font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .required-tag.req { background-color: #E2FCEF; color: #0A8243; }
+    .required-tag.opt { background-color: #F1F0F5; color: #5B5766; }
+
+    .asset-description { font-size: 0.9rem; color: #5B5766; line-height: 1.5; margin-bottom: 2rem; }
+
+    .kraken-trade-panel { display: flex; gap: 1rem; margin-bottom: 2.5rem; }
+    .trade-box { flex: 1; background: #FFF; border: 1px solid #E4E3EB; padding: 0.75rem 1rem; border-radius: 6px; display: flex; flex-direction: column; }
+    .trade-lbl { font-size: 0.7rem; font-weight: 700; color: #7C7A84; text-transform: uppercase; margin-bottom: 0.25rem; }
+    .trade-box input { border: none; font-size: 1rem; font-weight: 700; color: #1A1A1E; outline: none; background: none; }
+
+    .kraken-order-book { background: #FFF; border: 1px solid #E4E3EB; border-radius: 8px; overflow: hidden; }
+    .kraken-order-book h4 { background-color: #F8F7FA; padding: 0.75rem 1.25rem; font-size: 0.8rem; font-weight: 700; border-bottom: 1px solid #E4E3EB; }
+    
+    .book-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.25rem; border-bottom: 1px dashed #E4E3EB; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+    .book-row:last-child { border-bottom: none; }
+    .b-bid { color: #0A8243; font-weight: 600; }
+    .b-ask { color: #D62F2F; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="wise-widget">
-    <div class="widget-header">
-      <h1>Wise Transfer</h1>
-      <p>${title} // Conversion Calculator</p>
+  <div class="kraken-sidebar">
+    <div class="sidebar-header">Kraken Assets Portal</div>
+    <div class="assets-list">
+      ${assetRowsHtml}
+    </div>
+  </div>
+
+  <div class="kraken-content">
+    <div class="content-header">
+      <h1>${title} Specifications</h1>
+      <p style="color:#5B5766; font-size:0.85rem; margin-top:0.25rem;">${desc}</p>
     </div>
     
-    <div class="wise-inputs">
-      <div class="input-box">
-        <div class="input-left">
-          <label>You send</label>
-          <input type="text" value="1,000">
-        </div>
-        <div class="input-right">USD</div>
-      </div>
-    </div>
-
-    <div class="breakdown-list">
-      ${feeBreakdownHtml}
-    </div>
-
-    <div class="wise-inputs">
-      <div class="input-box">
-        <div class="input-left">
-          <label>Recipient Gets</label>
-          <input type="text" value="984.50" readonly>
-        </div>
-        <div class="input-right lime">EUR</div>
-      </div>
+    <div class="details-container">
+      ${detailsHtml}
     </div>
   </div>
 
   <script>
-    function toggleWiseCalcRow(idx) {
-      const drawer = document.getElementById('calc-drawer-' + idx);
-      drawer.classList.toggle('open');
+    function focusKrakenAsset(idx) {
+      document.querySelectorAll('.kraken-asset-row').forEach(r => r.classList.remove('active'));
+      document.querySelectorAll('.kraken-detail-pane').forEach(p => p.classList.remove('active'));
+
+      document.getElementById('asset-row-' + idx).classList.add('active');
+      document.getElementById('asset-details-' + idx).classList.add('active');
     }
   </script>
 </body>

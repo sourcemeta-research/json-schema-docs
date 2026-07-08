@@ -388,12 +388,23 @@
           <span class="ray-label">Outputs.*.Value</span>
         </div>
         <div class="row-right">
-          <span class="ray-type-tag">[object Object] | [object Object]</span>
+          <span class="ray-type-tag">object</span>
           <span class="ray-req-dot"></span>
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-24" onclick="focusRayRow(24)" data-path="Outputs.*.Export">
+      <div class="ray-row " id="ray-row-24" onclick="focusRayRow(24)" data-path="Outputs.*.Value.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">Outputs.*.Value.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-25" onclick="focusRayRow(25)" data-path="Outputs.*.Export">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">Outputs.*.Export</span>
@@ -404,7 +415,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-25" onclick="focusRayRow(25)" data-path="Outputs.*.Export.Name">
+      <div class="ray-row " id="ray-row-26" onclick="focusRayRow(26)" data-path="Outputs.*.Export.Name">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">Outputs.*.Export.Name</span>
@@ -415,7 +426,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-26" onclick="focusRayRow(26)" data-path="Outputs.*.Export.*">
+      <div class="ray-row " id="ray-row-27" onclick="focusRayRow(27)" data-path="Outputs.*.Export.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">Outputs.*.Export.*</span>
@@ -426,7 +437,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-27" onclick="focusRayRow(27)" data-path="Outputs.*.*">
+      <div class="ray-row " id="ray-row-28" onclick="focusRayRow(28)" data-path="Outputs.*.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">Outputs.*.*</span>
@@ -437,7 +448,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-28" onclick="focusRayRow(28)" data-path="*">
+      <div class="ray-row " id="ray-row-29" onclick="focusRayRow(29)" data-path="*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">*</span>
@@ -1387,7 +1398,7 @@
         <div class="sec-meta">
           <div class="meta-item">
             <span class="meta-k">Type</span>
-            <span class="meta-v">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-v">OBJECT</span>
           </div>
           <div class="meta-item">
             <span class="meta-k">Depth</span>
@@ -1404,7 +1415,8 @@
           <h4>CONSTRAINTS</h4>
           <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
           <pre style="display:none; margin-top:5px;"><code>{
-  "required": false
+  "required": false,
+  "minLength": 0
 }</code></pre>
         </div>
 
@@ -1421,6 +1433,44 @@
       </div>
     
       <div id="inspector-24" class="ray-inspector-panel ">
+        <h3>Outputs.*.Value.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-25" class="ray-inspector-panel ">
         <h3>Outputs.*.Export</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1462,7 +1512,7 @@
         </div>
       </div>
     
-      <div id="inspector-25" class="ray-inspector-panel ">
+      <div id="inspector-26" class="ray-inspector-panel ">
         <h3>Outputs.*.Export.Name</h3>
         <span class="badge req">REQUIRED</span>
         
@@ -1503,7 +1553,7 @@
         </div>
       </div>
     
-      <div id="inspector-26" class="ray-inspector-panel ">
+      <div id="inspector-27" class="ray-inspector-panel ">
         <h3>Outputs.*.Export.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1541,7 +1591,7 @@
         </div>
       </div>
     
-      <div id="inspector-27" class="ray-inspector-panel ">
+      <div id="inspector-28" class="ray-inspector-panel ">
         <h3>Outputs.*.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1579,7 +1629,7 @@
         </div>
       </div>
     
-      <div id="inspector-28" class="ray-inspector-panel ">
+      <div id="inspector-29" class="ray-inspector-panel ">
         <h3>*</h3>
         <span class="badge opt">OPTIONAL</span>
         

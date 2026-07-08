@@ -851,74 +851,11 @@
             <span class="status-dot ready"></span>
             <span class="vercel-path">Outputs.*.Value</span>
           </div>
-          <div class="col-type"><code>[object Object] | [object Object]</code></div>
+          <div class="col-type"><code>object</code></div>
           <div class="col-date">REQUIRED</div>
         </div>
         
         <div id="vercel-detail-23" class="vercel-detail-drawer">
-          <div class="detail-grid">
-            <div class="detail-left">
-              <h4>PARAMETER DEFINITION</h4>
-              <p>No descriptive summary provided.</p>
-            </div>
-            <div class="detail-right">
-              <h4>JSON CONSTRAINTS</h4>
-              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
-            <div class="git-meta">
-              <span class="git-branch">● required</span>
-              <span class="git-commit">false</span>
-            </div>
-          </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="vercel-row" onclick="toggleVercelRow(24)">
-        <div class="row-top">
-          <div class="col-main">
-            <span class="status-dot building"></span>
-            <span class="vercel-path">Outputs.*.Export</span>
-          </div>
-          <div class="col-type"><code>object</code></div>
-          <div class="col-date">OPTIONAL</div>
-        </div>
-        
-        <div id="vercel-detail-24" class="vercel-detail-drawer">
-          <div class="detail-grid">
-            <div class="detail-left">
-              <h4>PARAMETER DEFINITION</h4>
-              <p>No descriptive summary provided.</p>
-            </div>
-            <div class="detail-right">
-              <h4>JSON CONSTRAINTS</h4>
-              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
-            <div class="git-meta nested" style="flex-wrap: wrap;">
-              <span class="git-branch">● required</span>
-              <span class="nested-toggle" style="color: #000; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #000; padding: 5px; color: #000; overflow-x: auto;">[
-  "Name"
-]</pre>
-              </div>
-            </div>
-          </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="vercel-row" onclick="toggleVercelRow(25)">
-        <div class="row-top">
-          <div class="col-main">
-            <span class="status-dot ready"></span>
-            <span class="vercel-path">Outputs.*.Export.Name</span>
-          </div>
-          <div class="col-type"><code>string</code></div>
-          <div class="col-date">REQUIRED</div>
-        </div>
-        
-        <div id="vercel-detail-25" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -942,17 +879,17 @@
         </div>
       </div>
     
-      <div class="vercel-row" onclick="toggleVercelRow(26)">
+      <div class="vercel-row" onclick="toggleVercelRow(24)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">Outputs.*.Export.*</span>
+            <span class="vercel-path">Outputs.*.Value.*</span>
           </div>
           <div class="col-type"><code>any</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
-        <div id="vercel-detail-26" class="vercel-detail-drawer">
+        <div id="vercel-detail-24" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>
@@ -966,11 +903,79 @@
         </div>
       </div>
     
+      <div class="vercel-row" onclick="toggleVercelRow(25)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">Outputs.*.Export</span>
+          </div>
+          <div class="col-type"><code>object</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-25" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta nested" style="flex-wrap: wrap;">
+              <span class="git-branch">● required</span>
+              <span class="nested-toggle" style="color: #000; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #000; padding: 5px; color: #000; overflow-x: auto;">[
+  "Name"
+]</pre>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(26)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot ready"></span>
+            <span class="vercel-path">Outputs.*.Export.Name</span>
+          </div>
+          <div class="col-type"><code>string</code></div>
+          <div class="col-date">REQUIRED</div>
+        </div>
+        
+        <div id="vercel-detail-26" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <div class="vercel-git-info"><h4>VALIDATION SPECS</h4>
+            <div class="git-meta">
+              <span class="git-branch">● required</span>
+              <span class="git-commit">false</span>
+            </div>
+          
+            <div class="git-meta">
+              <span class="git-branch">● minLength</span>
+              <span class="git-commit">0</span>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
       <div class="vercel-row" onclick="toggleVercelRow(27)">
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">Outputs.*.*</span>
+            <span class="vercel-path">Outputs.*.Export.*</span>
           </div>
           <div class="col-type"><code>any</code></div>
           <div class="col-date">OPTIONAL</div>
@@ -994,13 +999,37 @@
         <div class="row-top">
           <div class="col-main">
             <span class="status-dot building"></span>
-            <span class="vercel-path">*</span>
+            <span class="vercel-path">Outputs.*.*</span>
           </div>
           <div class="col-type"><code>any</code></div>
           <div class="col-date">OPTIONAL</div>
         </div>
         
         <div id="vercel-detail-28" class="vercel-detail-drawer">
+          <div class="detail-grid">
+            <div class="detail-left">
+              <h4>PARAMETER DEFINITION</h4>
+              <p>No descriptive summary provided.</p>
+            </div>
+            <div class="detail-right">
+              <h4>JSON CONSTRAINTS</h4>
+              <span style="color:#666; font-size:0.75rem;">None</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="vercel-row" onclick="toggleVercelRow(29)">
+        <div class="row-top">
+          <div class="col-main">
+            <span class="status-dot building"></span>
+            <span class="vercel-path">*</span>
+          </div>
+          <div class="col-type"><code>any</code></div>
+          <div class="col-date">OPTIONAL</div>
+        </div>
+        
+        <div id="vercel-detail-29" class="vercel-detail-drawer">
           <div class="detail-grid">
             <div class="detail-left">
               <h4>PARAMETER DEFINITION</h4>

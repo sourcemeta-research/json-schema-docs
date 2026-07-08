@@ -150,7 +150,7 @@
               <p>/settings/spec/on</p>
             </div>
           </div>
-          <span class="event-duration-badge">[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="event-duration-badge">OBJECT</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
@@ -164,8 +164,8 @@
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
-              <h4>env</h4>
-              <p>/settings/spec/env</p>
+              <h4>on.push</h4>
+              <p>/settings/spec/push</p>
             </div>
           </div>
           <span class="event-duration-badge">OBJECT</span>
@@ -173,7 +173,7 @@
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
           <span class="event-badge opt">Optional</span>
-          <span>Depth: L1</span>
+          <span>Depth: L2</span>
         </div>
       </div>
     
@@ -182,65 +182,11 @@
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
-              <h4>env.*</h4>
-              <p>/settings/spec/*</p>
+              <h4>on.push.branches</h4>
+              <p>/settings/spec/branches</p>
             </div>
           </div>
-          <span class="event-duration-badge">STRING</span>
-        </div>
-        <p class="event-desc-preview">No scheduling description comments logged.</p>
-        <div class="event-card-footer">
-          <span class="event-badge opt">Optional</span>
-          <span>Depth: L2</span>
-        </div>
-      </div>
-    
-      <div class="cal-event-card" onclick="openCalEventDrawer(4)" id="event-card-4">
-        <div class="event-card-top">
-          <div class="card-left">
-            <span class="event-icon">📅</span>
-            <div class="event-details">
-              <h4>jobs</h4>
-              <p>/settings/spec/jobs</p>
-            </div>
-          </div>
-          <span class="event-duration-badge">OBJECT</span>
-        </div>
-        <p class="event-desc-preview">No scheduling description comments logged.</p>
-        <div class="event-card-footer">
-          <span class="event-badge opt">Optional</span>
-          <span>Depth: L1</span>
-        </div>
-      </div>
-    
-      <div class="cal-event-card" onclick="openCalEventDrawer(5)" id="event-card-5">
-        <div class="event-card-top">
-          <div class="card-left">
-            <span class="event-icon">📅</span>
-            <div class="event-details">
-              <h4>jobs.*</h4>
-              <p>/settings/spec/*</p>
-            </div>
-          </div>
-          <span class="event-duration-badge">OBJECT</span>
-        </div>
-        <p class="event-desc-preview">No scheduling description comments logged.</p>
-        <div class="event-card-footer">
-          <span class="event-badge opt">Optional</span>
-          <span>Depth: L2</span>
-        </div>
-      </div>
-    
-      <div class="cal-event-card" onclick="openCalEventDrawer(6)" id="event-card-6">
-        <div class="event-card-top">
-          <div class="card-left">
-            <span class="event-icon">📅</span>
-            <div class="event-details">
-              <h4>jobs.*.name</h4>
-              <p>/settings/spec/name</p>
-            </div>
-          </div>
-          <span class="event-duration-badge">STRING</span>
+          <span class="event-duration-badge">ARRAY</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
@@ -249,20 +195,74 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(7)" id="event-card-7">
+      <div class="cal-event-card" onclick="openCalEventDrawer(4)" id="event-card-4">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
-              <h4>jobs.*.runs-on</h4>
-              <p>/settings/spec/runs-on</p>
+              <h4>on.push.branches.*</h4>
+              <p>/settings/spec/*</p>
             </div>
           </div>
           <span class="event-duration-badge">STRING</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
-          <span class="event-badge req">★ Mandatory</span>
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(5)" id="event-card-5">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.push.tags</h4>
+              <p>/settings/spec/tags</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ARRAY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(6)" id="event-card-6">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.push.tags.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(7)" id="event-card-7">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.push.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
           <span>Depth: L3</span>
         </div>
       </div>
@@ -272,16 +272,16 @@
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
-              <h4>jobs.*.needs</h4>
-              <p>/settings/spec/needs</p>
+              <h4>on.pull_request</h4>
+              <p>/settings/spec/pull_request</p>
             </div>
           </div>
-          <span class="event-duration-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="event-duration-badge">OBJECT</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
           <span class="event-badge opt">Optional</span>
-          <span>Depth: L3</span>
+          <span>Depth: L2</span>
         </div>
       </div>
     
@@ -290,11 +290,11 @@
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
-              <h4>jobs.*.env</h4>
-              <p>/settings/spec/env</p>
+              <h4>on.pull_request.branches</h4>
+              <p>/settings/spec/branches</p>
             </div>
           </div>
-          <span class="event-duration-badge">OBJECT</span>
+          <span class="event-duration-badge">ARRAY</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
@@ -308,7 +308,7 @@
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
-              <h4>jobs.*.env.*</h4>
+              <h4>on.pull_request.branches.*</h4>
               <p>/settings/spec/*</p>
             </div>
           </div>
@@ -326,6 +326,312 @@
           <div class="card-left">
             <span class="event-icon">📅</span>
             <div class="event-details">
+              <h4>on.pull_request.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(12)" id="event-card-12">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.schedule</h4>
+              <p>/settings/spec/schedule</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ARRAY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L2</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(13)" id="event-card-13">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.schedule.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">OBJECT</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(14)" id="event-card-14">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.schedule.*.cron</h4>
+              <p>/settings/spec/cron</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(15)" id="event-card-15">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.schedule.*.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(16)" id="event-card-16">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L2</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(17)" id="event-card-17">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>on.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L2</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(18)" id="event-card-18">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>env</h4>
+              <p>/settings/spec/env</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">OBJECT</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L1</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(19)" id="event-card-19">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>env.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L2</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(20)" id="event-card-20">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs</h4>
+              <p>/settings/spec/jobs</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">OBJECT</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L1</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(21)" id="event-card-21">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">OBJECT</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L2</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(22)" id="event-card-22">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*.name</h4>
+              <p>/settings/spec/name</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(23)" id="event-card-23">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*.runs-on</h4>
+              <p>/settings/spec/runs-on</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge req">★ Mandatory</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(24)" id="event-card-24">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*.needs</h4>
+              <p>/settings/spec/needs</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ARRAY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(25)" id="event-card-25">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*.needs.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(26)" id="event-card-26">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*.env</h4>
+              <p>/settings/spec/env</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">OBJECT</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L3</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(27)" id="event-card-27">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>jobs.*.env.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">STRING</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(28)" id="event-card-28">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
               <h4>jobs.*.steps</h4>
               <p>/settings/spec/steps</p>
             </div>
@@ -339,7 +645,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(12)" id="event-card-12">
+      <div class="cal-event-card" onclick="openCalEventDrawer(29)" id="event-card-29">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -357,7 +663,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(13)" id="event-card-13">
+      <div class="cal-event-card" onclick="openCalEventDrawer(30)" id="event-card-30">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -375,7 +681,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(14)" id="event-card-14">
+      <div class="cal-event-card" onclick="openCalEventDrawer(31)" id="event-card-31">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -393,7 +699,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(15)" id="event-card-15">
+      <div class="cal-event-card" onclick="openCalEventDrawer(32)" id="event-card-32">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -411,7 +717,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(16)" id="event-card-16">
+      <div class="cal-event-card" onclick="openCalEventDrawer(33)" id="event-card-33">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -429,7 +735,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(17)" id="event-card-17">
+      <div class="cal-event-card" onclick="openCalEventDrawer(34)" id="event-card-34">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -447,7 +753,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(18)" id="event-card-18">
+      <div class="cal-event-card" onclick="openCalEventDrawer(35)" id="event-card-35">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -465,7 +771,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(19)" id="event-card-19">
+      <div class="cal-event-card" onclick="openCalEventDrawer(36)" id="event-card-36">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -483,7 +789,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(20)" id="event-card-20">
+      <div class="cal-event-card" onclick="openCalEventDrawer(37)" id="event-card-37">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -501,7 +807,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(21)" id="event-card-21">
+      <div class="cal-event-card" onclick="openCalEventDrawer(38)" id="event-card-38">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -519,7 +825,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(22)" id="event-card-22">
+      <div class="cal-event-card" onclick="openCalEventDrawer(39)" id="event-card-39">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -537,7 +843,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(23)" id="event-card-23">
+      <div class="cal-event-card" onclick="openCalEventDrawer(40)" id="event-card-40">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -617,7 +923,7 @@
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -630,6 +936,18 @@
             <div class="cal-constraints">
             <div class="c-badge">
               <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
             </div>
           </div>
           </div>
@@ -649,7 +967,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="env" readonly>
+            <input type="text" value="on.push" readonly>
           </div>
           
           <div class="field-group">
@@ -686,7 +1004,52 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="env.*" readonly>
+            <input type="text" value="on.push.branches" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ARRAY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(3, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-4" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(4, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="on.push.branches.*" readonly>
           </div>
           
           <div class="field-group">
@@ -709,43 +1072,6 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(3, event)">Update Event Type</button>
-          </div>
-        </div>
-      </div>
-    
-      <div id="drawer-4" class="cal-drawer-panel">
-        <div class="drawer-header">
-          <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(4, event)">×</button>
-        </div>
-        
-        <div class="drawer-body">
-          <div class="field-group">
-            <label>EVENT PATH</label>
-            <input type="text" value="jobs" readonly>
-          </div>
-          
-          <div class="field-group">
-            <label>PARAMETER TYPE</label>
-            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
-          </div>
-
-          <div class="field-group">
-            <label>DESCRIPTION STORY</label>
-            <textarea readonly>No descriptive comments available.</textarea>
-          </div>
-
-          <div class="field-group">
-            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          </div>
-          </div>
-          
-          <div style="margin-top: 2rem;">
             <button class="save-btn" onclick="closeCalEventDrawer(4, event)">Update Event Type</button>
           </div>
         </div>
@@ -760,12 +1086,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*" readonly>
+            <input type="text" value="on.push.tags" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ARRAY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -776,15 +1102,16 @@
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
             <div class="cal-constraints">
-            <div class="c-badge nested" style="width: 100%; margin-bottom: 5px;">
-              <span class="c-k">required:</span>
-              <span class="nested-toggle" style="color: #4F46E5; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F3F4F6; border-left: 2px solid #4F46E5; padding: 5px; color: #111827; overflow-x: auto;">[
-  "runs-on",
-  "steps"
-]</pre>
-              </div>
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
             </div>
           </div>
           </div>
@@ -804,7 +1131,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.name" readonly>
+            <input type="text" value="on.push.tags.*" readonly>
           </div>
           
           <div class="field-group">
@@ -820,10 +1147,6 @@
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
             <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          
             <div class="c-badge">
               <span class="c-k">minLength:</span> <span class="c-v">0</span>
             </div>
@@ -845,12 +1168,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.runs-on" readonly>
+            <input type="text" value="on.push.*" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -860,19 +1183,7 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          
-            <div class="c-badge">
-              <span class="c-k">default:</span> <span class="c-v">"ubuntu-latest"</span>
-            </div>
-          
-            <div class="c-badge">
-              <span class="c-k">minLength:</span> <span class="c-v">0</span>
-            </div>
-          </div>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -890,12 +1201,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.needs" readonly>
+            <input type="text" value="on.pull_request" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="[OBJECT OBJECT] | [OBJECT OBJECT]" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -927,12 +1238,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.env" readonly>
+            <input type="text" value="on.pull_request.branches" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ARRAY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -945,6 +1256,14 @@
             <div class="cal-constraints">
             <div class="c-badge">
               <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
             </div>
           </div>
           </div>
@@ -964,7 +1283,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.env.*" readonly>
+            <input type="text" value="on.pull_request.branches.*" readonly>
           </div>
           
           <div class="field-group">
@@ -1001,7 +1320,40 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps" readonly>
+            <input type="text" value="on.pull_request.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(11, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-12" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(12, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="on.schedule" readonly>
           </div>
           
           <div class="field-group">
@@ -1032,49 +1384,6 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(11, event)">Update Event Type</button>
-          </div>
-        </div>
-      </div>
-    
-      <div id="drawer-12" class="cal-drawer-panel">
-        <div class="drawer-header">
-          <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(12, event)">×</button>
-        </div>
-        
-        <div class="drawer-body">
-          <div class="field-group">
-            <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*" readonly>
-          </div>
-          
-          <div class="field-group">
-            <label>PARAMETER TYPE</label>
-            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
-          </div>
-
-          <div class="field-group">
-            <label>DESCRIPTION STORY</label>
-            <textarea readonly>No descriptive comments available.</textarea>
-          </div>
-
-          <div class="field-group">
-            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge nested" style="width: 100%; margin-bottom: 5px;">
-              <span class="c-k">required:</span>
-              <span class="nested-toggle" style="color: #4F46E5; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F3F4F6; border-left: 2px solid #4F46E5; padding: 5px; color: #111827; overflow-x: auto;">[
-  "run"
-]</pre>
-              </div>
-            </div>
-          </div>
-          </div>
-          
-          <div style="margin-top: 2rem;">
             <button class="save-btn" onclick="closeCalEventDrawer(12, event)">Update Event Type</button>
           </div>
         </div>
@@ -1089,12 +1398,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.name" readonly>
+            <input type="text" value="on.schedule.*" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1104,15 +1413,7 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          
-            <div class="c-badge">
-              <span class="c-k">minLength:</span> <span class="c-v">0</span>
-            </div>
-          </div>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -1130,7 +1431,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.uses" readonly>
+            <input type="text" value="on.schedule.*.cron" readonly>
           </div>
           
           <div class="field-group">
@@ -1171,12 +1472,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.with" readonly>
+            <input type="text" value="on.schedule.*.*" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1186,11 +1487,7 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          </div>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -1208,12 +1505,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.with.*" readonly>
+            <input type="text" value="on.*" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1223,11 +1520,7 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">minLength:</span> <span class="c-v">0</span>
-            </div>
-          </div>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -1245,12 +1538,12 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.run" readonly>
+            <input type="text" value="on.*" readonly>
           </div>
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1260,15 +1553,7 @@
 
           <div class="field-group">
             <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <div class="cal-constraints">
-            <div class="c-badge">
-              <span class="c-k">required:</span> <span class="c-v">false</span>
-            </div>
-          
-            <div class="c-badge">
-              <span class="c-k">minLength:</span> <span class="c-v">0</span>
-            </div>
-          </div>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
           </div>
           
           <div style="margin-top: 2rem;">
@@ -1286,7 +1571,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.env" readonly>
+            <input type="text" value="env" readonly>
           </div>
           
           <div class="field-group">
@@ -1323,7 +1608,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="jobs.*.steps.*.env.*" readonly>
+            <input type="text" value="env.*" readonly>
           </div>
           
           <div class="field-group">
@@ -1355,6 +1640,692 @@
         <div class="drawer-header">
           <h3>Edit Booking Type</h3>
           <button class="close-drawer-btn" onclick="closeCalEventDrawer(20, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(20, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-21" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(21, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge nested" style="width: 100%; margin-bottom: 5px;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #4F46E5; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F3F4F6; border-left: 2px solid #4F46E5; padding: 5px; color: #111827; overflow-x: auto;">[
+  "runs-on",
+  "steps"
+]</pre>
+              </div>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(21, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-22" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(22, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.name" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(22, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-23" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(23, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.runs-on" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">default:</span> <span class="c-v">"ubuntu-latest"</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(23, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-24" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(24, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.needs" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ARRAY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(24, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-25" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(25, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.needs.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(25, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-26" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(26, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.env" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(26, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-27" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(27, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.env.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(27, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-28" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(28, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ARRAY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minItems:</span> <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">uniqueItems:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(28, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-29" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(29, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge nested" style="width: 100%; margin-bottom: 5px;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #4F46E5; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F3F4F6; border-left: 2px solid #4F46E5; padding: 5px; color: #111827; overflow-x: auto;">[
+  "run"
+]</pre>
+              </div>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(29, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-30" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(30, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.name" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(30, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-31" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(31, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.uses" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(31, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-32" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(32, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.with" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(32, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-33" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(33, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.with.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(33, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-34" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(34, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.run" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(34, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-35" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(35, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.env" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(35, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-36" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(36, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="jobs.*.steps.*.env.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="STRING" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <div class="cal-constraints">
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
+            </div>
+          </div>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(36, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-37" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(37, event)">×</button>
         </div>
         
         <div class="drawer-body">
@@ -1398,15 +2369,15 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(20, event)">Update Event Type</button>
+            <button class="save-btn" onclick="closeCalEventDrawer(37, event)">Update Event Type</button>
           </div>
         </div>
       </div>
     
-      <div id="drawer-21" class="cal-drawer-panel">
+      <div id="drawer-38" class="cal-drawer-panel">
         <div class="drawer-header">
           <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(21, event)">×</button>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(38, event)">×</button>
         </div>
         
         <div class="drawer-body">
@@ -1431,15 +2402,15 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(21, event)">Update Event Type</button>
+            <button class="save-btn" onclick="closeCalEventDrawer(38, event)">Update Event Type</button>
           </div>
         </div>
       </div>
     
-      <div id="drawer-22" class="cal-drawer-panel">
+      <div id="drawer-39" class="cal-drawer-panel">
         <div class="drawer-header">
           <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(22, event)">×</button>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(39, event)">×</button>
         </div>
         
         <div class="drawer-body">
@@ -1464,15 +2435,15 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(22, event)">Update Event Type</button>
+            <button class="save-btn" onclick="closeCalEventDrawer(39, event)">Update Event Type</button>
           </div>
         </div>
       </div>
     
-      <div id="drawer-23" class="cal-drawer-panel">
+      <div id="drawer-40" class="cal-drawer-panel">
         <div class="drawer-header">
           <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(23, event)">×</button>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(40, event)">×</button>
         </div>
         
         <div class="drawer-body">
@@ -1497,7 +2468,7 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(23, event)">Update Event Type</button>
+            <button class="save-btn" onclick="closeCalEventDrawer(40, event)">Update Event Type</button>
           </div>
         </div>
       </div>

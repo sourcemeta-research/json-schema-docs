@@ -546,7 +546,7 @@
               <p>/settings/spec/value</p>
             </div>
           </div>
-          <span class="event-duration-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="event-duration-badge">OBJECT</span>
         </div>
         <p class="event-desc-preview">No scheduling description comments logged.</p>
         <div class="event-card-footer">
@@ -556,6 +556,24 @@
       </div>
     
       <div class="cal-event-card" onclick="openCalEventDrawer(24)" id="event-card-24">
+        <div class="event-card-top">
+          <div class="card-left">
+            <span class="event-icon">📅</span>
+            <div class="event-details">
+              <h4>Outputs.*.Value.*</h4>
+              <p>/settings/spec/*</p>
+            </div>
+          </div>
+          <span class="event-duration-badge">ANY</span>
+        </div>
+        <p class="event-desc-preview">No scheduling description comments logged.</p>
+        <div class="event-card-footer">
+          <span class="event-badge opt">Optional</span>
+          <span>Depth: L4</span>
+        </div>
+      </div>
+    
+      <div class="cal-event-card" onclick="openCalEventDrawer(25)" id="event-card-25">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -573,7 +591,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(25)" id="event-card-25">
+      <div class="cal-event-card" onclick="openCalEventDrawer(26)" id="event-card-26">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -591,7 +609,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(26)" id="event-card-26">
+      <div class="cal-event-card" onclick="openCalEventDrawer(27)" id="event-card-27">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -609,7 +627,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(27)" id="event-card-27">
+      <div class="cal-event-card" onclick="openCalEventDrawer(28)" id="event-card-28">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -627,7 +645,7 @@
         </div>
       </div>
     
-      <div class="cal-event-card" onclick="openCalEventDrawer(28)" id="event-card-28">
+      <div class="cal-event-card" onclick="openCalEventDrawer(29)" id="event-card-29">
         <div class="event-card-top">
           <div class="card-left">
             <span class="event-icon">📅</span>
@@ -1560,7 +1578,7 @@
           
           <div class="field-group">
             <label>PARAMETER TYPE</label>
-            <input type="text" value="[OBJECT OBJECT] | [OBJECT OBJECT]" readonly style="font-family: monospace; color: #4F46E5;">
+            <input type="text" value="OBJECT" readonly style="font-family: monospace; color: #4F46E5;">
           </div>
 
           <div class="field-group">
@@ -1573,6 +1591,10 @@
             <div class="cal-constraints">
             <div class="c-badge">
               <span class="c-k">required:</span> <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-badge">
+              <span class="c-k">minLength:</span> <span class="c-v">0</span>
             </div>
           </div>
           </div>
@@ -1587,6 +1609,39 @@
         <div class="drawer-header">
           <h3>Edit Booking Type</h3>
           <button class="close-drawer-btn" onclick="closeCalEventDrawer(24, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="Outputs.*.Value.*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(24, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-25" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(25, event)">×</button>
         </div>
         
         <div class="drawer-body">
@@ -1621,15 +1676,15 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(24, event)">Update Event Type</button>
+            <button class="save-btn" onclick="closeCalEventDrawer(25, event)">Update Event Type</button>
           </div>
         </div>
       </div>
     
-      <div id="drawer-25" class="cal-drawer-panel">
+      <div id="drawer-26" class="cal-drawer-panel">
         <div class="drawer-header">
           <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(25, event)">×</button>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(26, event)">×</button>
         </div>
         
         <div class="drawer-body">
@@ -1662,39 +1717,6 @@
           </div>
           
           <div style="margin-top: 2rem;">
-            <button class="save-btn" onclick="closeCalEventDrawer(25, event)">Update Event Type</button>
-          </div>
-        </div>
-      </div>
-    
-      <div id="drawer-26" class="cal-drawer-panel">
-        <div class="drawer-header">
-          <h3>Edit Booking Type</h3>
-          <button class="close-drawer-btn" onclick="closeCalEventDrawer(26, event)">×</button>
-        </div>
-        
-        <div class="drawer-body">
-          <div class="field-group">
-            <label>EVENT PATH</label>
-            <input type="text" value="Outputs.*.Export.*" readonly>
-          </div>
-          
-          <div class="field-group">
-            <label>PARAMETER TYPE</label>
-            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
-          </div>
-
-          <div class="field-group">
-            <label>DESCRIPTION STORY</label>
-            <textarea readonly>No descriptive comments available.</textarea>
-          </div>
-
-          <div class="field-group">
-            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
-            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
-          </div>
-          
-          <div style="margin-top: 2rem;">
             <button class="save-btn" onclick="closeCalEventDrawer(26, event)">Update Event Type</button>
           </div>
         </div>
@@ -1709,7 +1731,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="Outputs.*.*" readonly>
+            <input type="text" value="Outputs.*.Export.*" readonly>
           </div>
           
           <div class="field-group">
@@ -1742,7 +1764,7 @@
         <div class="drawer-body">
           <div class="field-group">
             <label>EVENT PATH</label>
-            <input type="text" value="*" readonly>
+            <input type="text" value="Outputs.*.*" readonly>
           </div>
           
           <div class="field-group">
@@ -1762,6 +1784,39 @@
           
           <div style="margin-top: 2rem;">
             <button class="save-btn" onclick="closeCalEventDrawer(28, event)">Update Event Type</button>
+          </div>
+        </div>
+      </div>
+    
+      <div id="drawer-29" class="cal-drawer-panel">
+        <div class="drawer-header">
+          <h3>Edit Booking Type</h3>
+          <button class="close-drawer-btn" onclick="closeCalEventDrawer(29, event)">×</button>
+        </div>
+        
+        <div class="drawer-body">
+          <div class="field-group">
+            <label>EVENT PATH</label>
+            <input type="text" value="*" readonly>
+          </div>
+          
+          <div class="field-group">
+            <label>PARAMETER TYPE</label>
+            <input type="text" value="ANY" readonly style="font-family: monospace; color: #4F46E5;">
+          </div>
+
+          <div class="field-group">
+            <label>DESCRIPTION STORY</label>
+            <textarea readonly>No descriptive comments available.</textarea>
+          </div>
+
+          <div class="field-group">
+            <label>SCHEDULING CONSTRAINTS (VALIDATION)</label>
+            <span style="color:#6B7280; font-size:0.8rem; font-style:italic;">No restrictions</span>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <button class="save-btn" onclick="closeCalEventDrawer(29, event)">Update Event Type</button>
           </div>
         </div>
       </div>

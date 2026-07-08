@@ -199,9 +199,9 @@
               <p class="issue-message">No detailed stack trace description has been logged.</p>
               <div class="sentry-tags-row">
                 
-      <span class="sentry-tag">type:[object Object] | [object Object] | [object Object]</span>
+      <span class="sentry-tag">type:object</span>
       <span class="sentry-tag sentry-req-tag opt">required:false</span>
-    <span class="sentry-tag">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minLength:0</span><span class="sentry-tag">minItems:0</span><span class="sentry-tag">uniqueItems:false</span>
               </div>
             </div>
           </div>
@@ -223,7 +223,57 @@
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on",</span></div>
             <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "on",</span></div>
-            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "[object Object] | [object Object] | [object Object]",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "object",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false,
+  "minLength": 0,
+  "minItems": 0,
+  "uniqueItems": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.push">
+        <div class="issue-main" onclick="toggleSentryStackTrace(2)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.push</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:object</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-2" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.push",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "push",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "object",</span></div>
             <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
             <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
               <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
@@ -237,8 +287,710 @@
         </div>
       </div>
     
+      <div class="sentry-issue" data-path="on.push.branches">
+        <div class="issue-main" onclick="toggleSentryStackTrace(3)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.push.branches</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:array</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minItems:0</span><span class="sentry-tag">uniqueItems:false</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-3" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.push.branches",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "branches",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "array",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.push.branches.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(4)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.push.branches.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:string</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">minLength:0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-4" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.push.branches.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "string",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "minLength": 0
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.push.tags">
+        <div class="issue-main" onclick="toggleSentryStackTrace(5)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.push.tags</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:array</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minItems:0</span><span class="sentry-tag">uniqueItems:false</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-5" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.push.tags",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "tags",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "array",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.push.tags.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(6)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.push.tags.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:string</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">minLength:0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-6" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.push.tags.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "string",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "minLength": 0
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.push.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(7)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.push.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:any</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-7" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.push.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "any",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.pull_request">
+        <div class="issue-main" onclick="toggleSentryStackTrace(8)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.pull_request</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:object</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-8" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.pull_request",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "pull_request",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "object",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.pull_request.branches">
+        <div class="issue-main" onclick="toggleSentryStackTrace(9)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.pull_request.branches</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:array</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minItems:0</span><span class="sentry-tag">uniqueItems:false</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-9" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.pull_request.branches",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "branches",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "array",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.pull_request.branches.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(10)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.pull_request.branches.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:string</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">minLength:0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-10" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.pull_request.branches.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "string",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "minLength": 0
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.pull_request.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(11)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.pull_request.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:any</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-11" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.pull_request.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "any",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.schedule">
+        <div class="issue-main" onclick="toggleSentryStackTrace(12)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.schedule</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:array</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minItems:0</span><span class="sentry-tag">uniqueItems:false</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-12" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.schedule",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "schedule",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "array",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.schedule.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(13)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.schedule.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:object</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-13" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.schedule.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "object",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.schedule.*.cron">
+        <div class="issue-main" onclick="toggleSentryStackTrace(14)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.schedule.*.cron</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:string</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minLength:0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-14" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.schedule.*.cron",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "cron",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "string",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "required": false,
+  "minLength": 0
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.schedule.*.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(15)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.schedule.*.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:any</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-15" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.schedule.*.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "any",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(16)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:any</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-16" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "any",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="on.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(17)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">on.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:any</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-17" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "on.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "any",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
       <div class="sentry-issue" data-path="env">
-        <div class="issue-main" onclick="toggleSentryStackTrace(2)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(18)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -265,7 +1017,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-2" class="sentry-stack-trace">
+        <div id="stack-trace-18" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "env",</span></div>
@@ -285,7 +1037,7 @@
       </div>
     
       <div class="sentry-issue" data-path="env.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(3)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(19)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -312,7 +1064,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-3" class="sentry-stack-trace">
+        <div id="stack-trace-19" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "env.*",</span></div>
@@ -332,7 +1084,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs">
-        <div class="issue-main" onclick="toggleSentryStackTrace(4)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(20)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -359,7 +1111,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-4" class="sentry-stack-trace">
+        <div id="stack-trace-20" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs",</span></div>
@@ -379,7 +1131,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(5)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(21)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -406,7 +1158,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-5" class="sentry-stack-trace">
+        <div id="stack-trace-21" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*",</span></div>
@@ -429,7 +1181,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.name">
-        <div class="issue-main" onclick="toggleSentryStackTrace(6)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(22)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -456,7 +1208,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-6" class="sentry-stack-trace">
+        <div id="stack-trace-22" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.name",</span></div>
@@ -477,7 +1229,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.runs-on">
-        <div class="issue-main" onclick="toggleSentryStackTrace(7)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(23)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -504,7 +1256,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-7" class="sentry-stack-trace">
+        <div id="stack-trace-23" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.runs-on",</span></div>
@@ -526,7 +1278,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.needs">
-        <div class="issue-main" onclick="toggleSentryStackTrace(8)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(24)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -534,9 +1286,9 @@
               <p class="issue-message">No detailed stack trace description has been logged.</p>
               <div class="sentry-tags-row">
                 
-      <span class="sentry-tag">type:[object Object] | [object Object]</span>
+      <span class="sentry-tag">type:array</span>
       <span class="sentry-tag sentry-req-tag opt">required:false</span>
-    <span class="sentry-tag">required:false</span>
+    <span class="sentry-tag">required:false</span><span class="sentry-tag">minLength:0</span><span class="sentry-tag">minItems:0</span><span class="sentry-tag">uniqueItems:false</span>
               </div>
             </div>
           </div>
@@ -553,18 +1305,68 @@
           </div>
         </div>
         
-        <div id="stack-trace-8" class="sentry-stack-trace">
+        <div id="stack-trace-24" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.needs",</span></div>
             <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "needs",</span></div>
-            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "[object Object] | [object Object]",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "array",</span></div>
             <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
             <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
               <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
               <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
                 <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
-  "required": false
+  "required": false,
+  "minLength": 0,
+  "minItems": 0,
+  "uniqueItems": false
+}</pre>
+              </div>
+            </span></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="sentry-issue" data-path="jobs.*.needs.*">
+        <div class="issue-main" onclick="toggleSentryStackTrace(25)">
+          <div class="issue-left">
+            <span class="sentry-checkbox"></span>
+            <div class="issue-details">
+              <h3 class="issue-title">jobs.*.needs.*</h3>
+              <p class="issue-message">No detailed stack trace description has been logged.</p>
+              <div class="sentry-tags-row">
+                
+      <span class="sentry-tag">type:string</span>
+      <span class="sentry-tag sentry-req-tag opt">required:false</span>
+    <span class="sentry-tag">minLength:0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="issue-right">
+            <div class="mock-sparkline">
+              <div class="spark-bar" style="height: 12px;"></div>
+              <div class="spark-bar" style="height: 18px;"></div>
+              <div class="spark-bar" style="height: 8px;"></div>
+              <div class="spark-bar" style="height: 22px;"></div>
+              <div class="spark-bar" style="height: 15px;"></div>
+            </div>
+            <span class="arrow-indicator">▼</span>
+          </div>
+        </div>
+        
+        <div id="stack-trace-25" class="sentry-stack-trace">
+          <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
+          <div class="trace-frame">
+            <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.needs.*",</span></div>
+            <div class="trace-line"><span class="line-num">2</span> <span class="line-code">"name": "*",</span></div>
+            <div class="trace-line"><span class="line-num">3</span> <span class="line-code">"type": "string",</span></div>
+            <div class="trace-line"><span class="line-num">4</span> <span class="line-code">"required": false,</span></div>
+            <div class="trace-line"><span class="line-num">5</span> <span class="line-code">"constraints":
+              <span class="nested-toggle" style="color: #E1567C; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #0E0E10; border-left: 2px solid #E1567C; padding: 5px; color: #FFF; overflow-x: auto;">{
+  "minLength": 0
 }</pre>
               </div>
             </span></div>
@@ -573,7 +1375,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.env">
-        <div class="issue-main" onclick="toggleSentryStackTrace(9)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(26)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -600,7 +1402,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-9" class="sentry-stack-trace">
+        <div id="stack-trace-26" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.env",</span></div>
@@ -620,7 +1422,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.env.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(10)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(27)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -647,7 +1449,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-10" class="sentry-stack-trace">
+        <div id="stack-trace-27" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.env.*",</span></div>
@@ -667,7 +1469,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps">
-        <div class="issue-main" onclick="toggleSentryStackTrace(11)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(28)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -694,7 +1496,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-11" class="sentry-stack-trace">
+        <div id="stack-trace-28" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps",</span></div>
@@ -716,7 +1518,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(12)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(29)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -743,7 +1545,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-12" class="sentry-stack-trace">
+        <div id="stack-trace-29" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*",</span></div>
@@ -765,7 +1567,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.name">
-        <div class="issue-main" onclick="toggleSentryStackTrace(13)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(30)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -792,7 +1594,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-13" class="sentry-stack-trace">
+        <div id="stack-trace-30" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.name",</span></div>
@@ -813,7 +1615,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.uses">
-        <div class="issue-main" onclick="toggleSentryStackTrace(14)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(31)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -840,7 +1642,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-14" class="sentry-stack-trace">
+        <div id="stack-trace-31" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.uses",</span></div>
@@ -861,7 +1663,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.with">
-        <div class="issue-main" onclick="toggleSentryStackTrace(15)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(32)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -888,7 +1690,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-15" class="sentry-stack-trace">
+        <div id="stack-trace-32" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.with",</span></div>
@@ -908,7 +1710,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.with.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(16)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(33)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -935,7 +1737,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-16" class="sentry-stack-trace">
+        <div id="stack-trace-33" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.with.*",</span></div>
@@ -955,7 +1757,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.run">
-        <div class="issue-main" onclick="toggleSentryStackTrace(17)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(34)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -982,7 +1784,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-17" class="sentry-stack-trace">
+        <div id="stack-trace-34" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.run",</span></div>
@@ -1003,7 +1805,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.env">
-        <div class="issue-main" onclick="toggleSentryStackTrace(18)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(35)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -1030,7 +1832,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-18" class="sentry-stack-trace">
+        <div id="stack-trace-35" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.env",</span></div>
@@ -1050,7 +1852,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.env.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(19)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(36)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -1077,7 +1879,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-19" class="sentry-stack-trace">
+        <div id="stack-trace-36" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.env.*",</span></div>
@@ -1097,7 +1899,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.continue-on-error">
-        <div class="issue-main" onclick="toggleSentryStackTrace(20)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(37)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -1124,7 +1926,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-20" class="sentry-stack-trace">
+        <div id="stack-trace-37" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.continue-on-error",</span></div>
@@ -1149,7 +1951,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.steps.*.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(21)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(38)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -1176,7 +1978,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-21" class="sentry-stack-trace">
+        <div id="stack-trace-38" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.steps.*.*",</span></div>
@@ -1194,7 +1996,7 @@
       </div>
     
       <div class="sentry-issue" data-path="jobs.*.*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(22)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(39)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -1221,7 +2023,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-22" class="sentry-stack-trace">
+        <div id="stack-trace-39" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "jobs.*.*",</span></div>
@@ -1239,7 +2041,7 @@
       </div>
     
       <div class="sentry-issue" data-path="*">
-        <div class="issue-main" onclick="toggleSentryStackTrace(23)">
+        <div class="issue-main" onclick="toggleSentryStackTrace(40)">
           <div class="issue-left">
             <span class="sentry-checkbox"></span>
             <div class="issue-details">
@@ -1266,7 +2068,7 @@
           </div>
         </div>
         
-        <div id="stack-trace-23" class="sentry-stack-trace">
+        <div id="stack-trace-40" class="sentry-stack-trace">
           <div class="trace-header">PROPERTY METADATA & SCHEMA DECLARATION</div>
           <div class="trace-frame">
             <div class="trace-line"><span class="line-num">1</span> <span class="line-code">"path": "*",</span></div>

@@ -298,12 +298,73 @@
         <div class="grok-answer">
           <h3>// BUGS</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">OBJECT</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
+"minLength": 0
 </code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>bugs.url</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// BUGS.URL</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"format": "uri"
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>bugs.email</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// BUGS.EMAIL</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"format": "email"
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>bugs.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// BUGS.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">ANY</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          
         </div>
       </div>
     
@@ -338,12 +399,93 @@
         <div class="grok-answer">
           <h3>// AUTHOR</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">OBJECT</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
+"minLength": 0
 </code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>author.name</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// AUTHOR.NAME</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge critical">CRITICAL</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": true
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>author.email</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// AUTHOR.EMAIL</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"format": "email"
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>author.url</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// AUTHOR.URL</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"required": false
+"format": "uri"
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>author.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// AUTHOR.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">ANY</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          
         </div>
       </div>
     
@@ -455,11 +597,31 @@
         <div class="grok-answer">
           <h3>// BIN</h3>
           <div class="grok-meta">
-            <span class="meta-badge">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-badge">OBJECT</span>
             <span class="meta-badge stable">STABLE</span>
           </div>
           <p class="grok-desc">No descriptive comments logged in transmission.</p>
           <pre class="grok-code"><code>"required": false
+"minLength": 0
+</code></pre>
+        </div>
+      </div>
+    
+      <div class="chat-bubble user">
+        <span class="bubble-lbl">User</span>
+        <p>Explain configuration path: <strong>bin.*</strong></p>
+      </div>
+      
+      <div class="chat-bubble grok">
+        <span class="bubble-lbl glow-text">Grok</span>
+        <div class="grok-answer">
+          <h3>// BIN.*</h3>
+          <div class="grok-meta">
+            <span class="meta-badge">STRING</span>
+            <span class="meta-badge stable">STABLE</span>
+          </div>
+          <p class="grok-desc">No descriptive comments logged in transmission.</p>
+          <pre class="grok-code"><code>"minLength": 0
 </code></pre>
         </div>
       </div>

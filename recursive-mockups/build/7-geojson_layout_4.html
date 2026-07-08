@@ -202,65 +202,80 @@
     
       <div class="cursor-tree-row " id="tree-row-8" onclick="focusCursorElement(8)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">features.*.geometry</span>
+        <span class="tree-text">features.*.properties.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-9" onclick="focusCursorElement(9)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">features.*.geometry.type</span>
+        <span class="tree-text">features.*.geometry</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-10" onclick="focusCursorElement(10)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">features.*.geometry.coordinates</span>
+        <span class="tree-text">features.*.geometry.type</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-11" onclick="focusCursorElement(11)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">features.*.geometry.coordinates.*</span>
+        <span class="tree-text">features.*.geometry.coordinates</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-12" onclick="focusCursorElement(12)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">features.*.geometry.*</span>
+        <span class="tree-text">features.*.geometry.coordinates.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-13" onclick="focusCursorElement(13)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">features.*.*</span>
+        <span class="tree-text">features.*.geometry.coordinates.*.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-14" onclick="focusCursorElement(14)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">crs</span>
+        <span class="tree-text">features.*.geometry.coordinates.*.*.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-15" onclick="focusCursorElement(15)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">crs.type</span>
+        <span class="tree-text">features.*.geometry.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-16" onclick="focusCursorElement(16)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">crs.properties</span>
+        <span class="tree-text">features.*.*</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-17" onclick="focusCursorElement(17)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">crs.properties.name</span>
+        <span class="tree-text">crs</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-18" onclick="focusCursorElement(18)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">crs.properties.*</span>
+        <span class="tree-text">crs.type</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-19" onclick="focusCursorElement(19)">
         <span class="tree-bullet">◇</span>
-        <span class="tree-text">crs.*</span>
+        <span class="tree-text">crs.properties</span>
       </div>
     
       <div class="cursor-tree-row " id="tree-row-20" onclick="focusCursorElement(20)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">crs.properties.name</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-21" onclick="focusCursorElement(21)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">crs.properties.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-22" onclick="focusCursorElement(22)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">crs.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-23" onclick="focusCursorElement(23)">
         <span class="tree-bullet">◇</span>
         <span class="tree-text">*</span>
       </div>
@@ -353,9 +368,10 @@
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.id</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"id"</span>: {</div>
-        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"[object Object] | [object Object]"</span>,</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"number"</span>,</div>
         <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
         <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
 </div>
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
@@ -364,14 +380,26 @@
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.properties</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"properties"</span>: {</div>
-        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"[object Object] | [object Object]"</span>,</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
         <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
         <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"enum"</span>: <span class="token val">[null]</span>,
 </div>
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
       <div id="editor-block-8" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.properties.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-9" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"geometry"</span>: {</div>
@@ -382,7 +410,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-9" class="cursor-code-block ">
+      <div id="editor-block-10" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry.type</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"type"</span>: {</div>
@@ -395,7 +423,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-10" class="cursor-code-block ">
+      <div id="editor-block-11" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry.coordinates</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"coordinates"</span>: {</div>
@@ -408,17 +436,41 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-11" class="cursor-code-block ">
+      <div id="editor-block-12" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry.coordinates.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
-        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"[object Object] | [object Object]"</span>,</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"array"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"minItems"</span>: <span class="token val">0</span>,
+  <span class="token key">"uniqueItems"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-13" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry.coordinates.*.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"array"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"minItems"</span>: <span class="token val">0</span>,
+  <span class="token key">"uniqueItems"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-14" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry.coordinates.*.*.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"number"</span>,</div>
         <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
         
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-12" class="cursor-code-block ">
+      <div id="editor-block-15" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.geometry.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -428,7 +480,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-13" class="cursor-code-block ">
+      <div id="editor-block-16" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: features.*.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -438,7 +490,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-14" class="cursor-code-block ">
+      <div id="editor-block-17" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: crs</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"crs"</span>: {</div>
@@ -449,7 +501,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-15" class="cursor-code-block ">
+      <div id="editor-block-18" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: crs.type</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"type"</span>: {</div>
@@ -462,7 +514,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-16" class="cursor-code-block ">
+      <div id="editor-block-19" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: crs.properties</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"properties"</span>: {</div>
@@ -473,7 +525,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-17" class="cursor-code-block ">
+      <div id="editor-block-20" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: crs.properties.name</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"name"</span>: {</div>
@@ -485,7 +537,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-18" class="cursor-code-block ">
+      <div id="editor-block-21" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: crs.properties.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -495,7 +547,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-19" class="cursor-code-block ">
+      <div id="editor-block-22" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: crs.*</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -505,7 +557,7 @@
         <div class="line"><span class="l-num">7</span> }</div>
       </div>
     
-      <div id="editor-block-20" class="cursor-code-block ">
+      <div id="editor-block-23" class="cursor-code-block ">
         <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: *</span></div>
         <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
         <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
@@ -632,9 +684,10 @@
         <p>I audited the property <code>features.*.id</code>. Here is my analysis of the constraints:</p>
         
         <div class="ai-diff">
-          <div class="diff-line plus">+ "type": "[object Object] | [object Object]"</div>
+          <div class="diff-line plus">+ "type": "number"</div>
           <div class="diff-line plus">+ "required": false</div>
           <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
         </div>
 
         <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
@@ -646,9 +699,17 @@
         <p>I audited the property <code>features.*.properties</code>. Here is my analysis of the constraints:</p>
         
         <div class="ai-diff">
-          <div class="diff-line plus">+ "type": "[object Object] | [object Object]"</div>
+          <div class="diff-line plus">+ "type": "object"</div>
           <div class="diff-line plus">+ "required": true</div>
           <div class="diff-line plus">+ "required": false</div>
+
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "enum": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  null
+]</pre>
+                </span>
+              </div>
         </div>
 
         <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
@@ -656,6 +717,20 @@
       </div>
     
       <div id="chat-block-8" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>features.*.properties.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-9" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>features.*.geometry</code>. Here is my analysis of the constraints:</p>
         
@@ -677,7 +752,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-9" class="cursor-chat-bubble ">
+      <div id="chat-block-10" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>features.*.geometry.type</code>. Here is my analysis of the constraints:</p>
         
@@ -693,7 +768,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-10" class="cursor-chat-bubble ">
+      <div id="chat-block-11" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>features.*.geometry.coordinates</code>. Here is my analysis of the constraints:</p>
         
@@ -709,12 +784,42 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-11" class="cursor-chat-bubble ">
+      <div id="chat-block-12" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>features.*.geometry.coordinates.*</code>. Here is my analysis of the constraints:</p>
         
         <div class="ai-diff">
-          <div class="diff-line plus">+ "type": "[object Object] | [object Object]"</div>
+          <div class="diff-line plus">+ "type": "array"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "minItems": 0</div>
+<div class="diff-line plus">+ "uniqueItems": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-13" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>features.*.geometry.coordinates.*.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "array"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "minItems": 0</div>
+<div class="diff-line plus">+ "uniqueItems": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-14" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>features.*.geometry.coordinates.*.*.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "number"</div>
           <div class="diff-line plus">+ "required": false</div>
           
         </div>
@@ -723,7 +828,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-12" class="cursor-chat-bubble ">
+      <div id="chat-block-15" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>features.*.geometry.*</code>. Here is my analysis of the constraints:</p>
         
@@ -737,7 +842,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-13" class="cursor-chat-bubble ">
+      <div id="chat-block-16" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>features.*.*</code>. Here is my analysis of the constraints:</p>
         
@@ -751,7 +856,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-14" class="cursor-chat-bubble ">
+      <div id="chat-block-17" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>crs</code>. Here is my analysis of the constraints:</p>
         
@@ -773,7 +878,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-15" class="cursor-chat-bubble ">
+      <div id="chat-block-18" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>crs.type</code>. Here is my analysis of the constraints:</p>
         
@@ -789,7 +894,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-16" class="cursor-chat-bubble ">
+      <div id="chat-block-19" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>crs.properties</code>. Here is my analysis of the constraints:</p>
         
@@ -810,7 +915,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-17" class="cursor-chat-bubble ">
+      <div id="chat-block-20" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>crs.properties.name</code>. Here is my analysis of the constraints:</p>
         
@@ -825,7 +930,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-18" class="cursor-chat-bubble ">
+      <div id="chat-block-21" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>crs.properties.*</code>. Here is my analysis of the constraints:</p>
         
@@ -839,7 +944,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-19" class="cursor-chat-bubble ">
+      <div id="chat-block-22" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>crs.*</code>. Here is my analysis of the constraints:</p>
         
@@ -853,7 +958,7 @@
         <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
       </div>
     
-      <div id="chat-block-20" class="cursor-chat-bubble ">
+      <div id="chat-block-23" class="cursor-chat-bubble ">
         <div class="chat-agent">Cursor AI</div>
         <p>I audited the property <code>*</code>. Here is my analysis of the constraints:</p>
         

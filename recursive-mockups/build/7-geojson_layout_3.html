@@ -163,65 +163,80 @@
     
       <li class="nav-item-apple" id="apple-nav-8" onclick="showAppleDoc(8)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">features.*.geometry</span>
+        <span class="nav-name">features.*.properties.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-9" onclick="showAppleDoc(9)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">features.*.geometry.type</span>
+        <span class="nav-name">features.*.geometry</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-10" onclick="showAppleDoc(10)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">features.*.geometry.coordinates</span>
+        <span class="nav-name">features.*.geometry.type</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-11" onclick="showAppleDoc(11)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">features.*.geometry.coordinates.*</span>
+        <span class="nav-name">features.*.geometry.coordinates</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-12" onclick="showAppleDoc(12)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">features.*.geometry.*</span>
+        <span class="nav-name">features.*.geometry.coordinates.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-13" onclick="showAppleDoc(13)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">features.*.*</span>
+        <span class="nav-name">features.*.geometry.coordinates.*.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-14" onclick="showAppleDoc(14)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">crs</span>
+        <span class="nav-name">features.*.geometry.coordinates.*.*.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-15" onclick="showAppleDoc(15)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">crs.type</span>
+        <span class="nav-name">features.*.geometry.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-16" onclick="showAppleDoc(16)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">crs.properties</span>
+        <span class="nav-name">features.*.*</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-17" onclick="showAppleDoc(17)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">crs.properties.name</span>
+        <span class="nav-name">crs</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-18" onclick="showAppleDoc(18)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">crs.properties.*</span>
+        <span class="nav-name">crs.type</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-19" onclick="showAppleDoc(19)">
         <span class="icon-cube">■</span>
-        <span class="nav-name">crs.*</span>
+        <span class="nav-name">crs.properties</span>
       </li>
     
       <li class="nav-item-apple" id="apple-nav-20" onclick="showAppleDoc(20)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">crs.properties.name</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-21" onclick="showAppleDoc(21)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">crs.properties.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-22" onclick="showAppleDoc(22)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">crs.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-23" onclick="showAppleDoc(23)">
         <span class="icon-cube">■</span>
         <span class="nav-name">*</span>
       </li>
@@ -525,7 +540,7 @@
         
         <div class="declaration-block">
           <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">id</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= optional</span></code></pre>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">id</span>: <span class="decl-type">number</span> <span class="decl-val">= optional</span></code></pre>
         </div>
 
         <div class="doc-section">
@@ -539,6 +554,11 @@
             <div class="constraint-row">
               <span class="c-key">required:</span>
               <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
             </div>
           </div>
         </div>
@@ -564,7 +584,7 @@
         
         <div class="declaration-block">
           <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">properties</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= required</span></code></pre>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">properties</span>: <span class="decl-type">object</span> <span class="decl-val">= required</span></code></pre>
         </div>
 
         <div class="doc-section">
@@ -578,6 +598,16 @@
             <div class="constraint-row">
               <span class="c-key">required:</span>
               <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum:</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F5F5F7; border-left: 2px solid var(--accent); padding: 5px; color: #1D1D1F; overflow-x: auto;">[
+  null
+]</pre>
+              </div>
             </div>
           </div>
         </div>
@@ -598,6 +628,45 @@
       </div>
     
       <div id="apple-doc-8" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">features.*.properties.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 4</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-9" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">features.*.geometry</h1>
         
@@ -642,7 +711,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-9" class="apple-doc-content ">
+      <div id="apple-doc-10" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">features.*.geometry.type</h1>
         
@@ -691,7 +760,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-10" class="apple-doc-content ">
+      <div id="apple-doc-11" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">features.*.geometry.coordinates</h1>
         
@@ -740,13 +809,101 @@
         </div>
       </div>
     
-      <div id="apple-doc-11" class="apple-doc-content ">
+      <div id="apple-doc-12" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">features.*.geometry.coordinates.*</h1>
         
         <div class="declaration-block">
           <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= optional</span></code></pre>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minItems:</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 5</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-13" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">features.*.geometry.coordinates.*.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minItems:</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 6</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-14" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">features.*.geometry.coordinates.*.*.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">number</span> <span class="decl-val">= optional</span></code></pre>
         </div>
 
         <div class="doc-section">
@@ -768,13 +925,13 @@
             </tr>
             <tr>
               <td>Depth Index</td>
-              <td><code>Level 5</code></td>
+              <td><code>Level 7</code></td>
             </tr>
           </table>
         </div>
       </div>
     
-      <div id="apple-doc-12" class="apple-doc-content ">
+      <div id="apple-doc-15" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">features.*.geometry.*</h1>
         
@@ -808,7 +965,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-13" class="apple-doc-content ">
+      <div id="apple-doc-16" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">features.*.*</h1>
         
@@ -842,7 +999,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-14" class="apple-doc-content ">
+      <div id="apple-doc-17" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">crs</h1>
         
@@ -887,7 +1044,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-15" class="apple-doc-content ">
+      <div id="apple-doc-18" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">crs.type</h1>
         
@@ -936,7 +1093,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-16" class="apple-doc-content ">
+      <div id="apple-doc-19" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">crs.properties</h1>
         
@@ -980,7 +1137,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-17" class="apple-doc-content ">
+      <div id="apple-doc-20" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">crs.properties.name</h1>
         
@@ -1024,7 +1181,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-18" class="apple-doc-content ">
+      <div id="apple-doc-21" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">crs.properties.*</h1>
         
@@ -1058,7 +1215,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-19" class="apple-doc-content ">
+      <div id="apple-doc-22" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">crs.*</h1>
         
@@ -1092,7 +1249,7 @@
         </div>
       </div>
     
-      <div id="apple-doc-20" class="apple-doc-content ">
+      <div id="apple-doc-23" class="apple-doc-content ">
         <span class="meta-label">PROPERTY</span>
         <h1 class="doc-title">*</h1>
         

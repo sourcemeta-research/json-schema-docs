@@ -234,33 +234,39 @@
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.25.  Outputs.*.Export</span>
+        <span>3.25.  Outputs.*.Value.*</span>
         <span class="toc-dots">...................................................</span>
         <span>28</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.26.  Outputs.*.Export.Name</span>
+        <span>3.26.  Outputs.*.Export</span>
         <span class="toc-dots">...................................................</span>
         <span>29</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.27.  Outputs.*.Export.*</span>
+        <span>3.27.  Outputs.*.Export.Name</span>
         <span class="toc-dots">...................................................</span>
         <span>30</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.28.  Outputs.*.*</span>
+        <span>3.28.  Outputs.*.Export.*</span>
         <span class="toc-dots">...................................................</span>
         <span>31</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.29.  *</span>
+        <span>3.29.  Outputs.*.*</span>
         <span class="toc-dots">...................................................</span>
         <span>32</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.30.  *</span>
+        <span class="toc-dots">...................................................</span>
+        <span>33</span>
       </div>
     
   </div>
@@ -625,7 +631,7 @@
         <h3>3.24.  The "Outputs.*.Value" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "[OBJECT OBJECT] | [OBJECT OBJECT]" (Required: YES)
+          Type representation: "OBJECT" (Required: YES)
         </p>
 
         <p class="rfc-text">
@@ -633,11 +639,26 @@
           No descriptive text was supplied in this section.
         </p>
 
-        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
       </div>
     
       <div class="rfc-section" id="rfc-sec-24">
-        <h3>3.25.  The "Outputs.*.Export" Parameter</h3>
+        <h3>3.25.  The "Outputs.*.Value.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-25">
+        <h3>3.26.  The "Outputs.*.Export" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "OBJECT" (Required: NO)
@@ -653,8 +674,8 @@
 ]</div><br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-25">
-        <h3>3.26.  The "Outputs.*.Export.Name" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-26">
+        <h3>3.27.  The "Outputs.*.Export.Name" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "STRING" (Required: YES)
@@ -668,23 +689,8 @@
         <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-26">
-        <h3>3.27.  The "Outputs.*.Export.*" Parameter</h3>
-        
-        <p class="rfc-text">
-          Type representation: "ANY" (Required: NO)
-        </p>
-
-        <p class="rfc-text">
-          DESCRIPTION:
-          No descriptive text was supplied in this section.
-        </p>
-
-        
-      </div>
-    
       <div class="rfc-section" id="rfc-sec-27">
-        <h3>3.28.  The "Outputs.*.*" Parameter</h3>
+        <h3>3.28.  The "Outputs.*.Export.*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)
@@ -699,7 +705,22 @@
       </div>
     
       <div class="rfc-section" id="rfc-sec-28">
-        <h3>3.29.  The "*" Parameter</h3>
+        <h3>3.29.  The "Outputs.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-29">
+        <h3>3.30.  The "*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)

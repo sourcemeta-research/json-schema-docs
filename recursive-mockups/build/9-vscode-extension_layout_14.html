@@ -454,12 +454,34 @@
           <span class="ray-label">contributes.configuration.properties.*.default</span>
         </div>
         <div class="row-right">
-          <span class="ray-type-tag">[object Object] | [object Object] | [object Object] | [object Object] | [object Object] | [object Object]</span>
+          <span class="ray-type-tag">number</span>
           
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-30" onclick="focusRayRow(30)" data-path="contributes.configuration.properties.*.description">
+      <div class="ray-row " id="ray-row-30" onclick="focusRayRow(30)" data-path="contributes.configuration.properties.*.default.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">contributes.configuration.properties.*.default.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-31" onclick="focusRayRow(31)" data-path="contributes.configuration.properties.*.default.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">contributes.configuration.properties.*.default.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-32" onclick="focusRayRow(32)" data-path="contributes.configuration.properties.*.description">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">contributes.configuration.properties.*.description</span>
@@ -470,7 +492,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-31" onclick="focusRayRow(31)" data-path="contributes.configuration.properties.*.*">
+      <div class="ray-row " id="ray-row-33" onclick="focusRayRow(33)" data-path="contributes.configuration.properties.*.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">contributes.configuration.properties.*.*</span>
@@ -481,7 +503,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-32" onclick="focusRayRow(32)" data-path="contributes.configuration.*">
+      <div class="ray-row " id="ray-row-34" onclick="focusRayRow(34)" data-path="contributes.configuration.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">contributes.configuration.*</span>
@@ -492,7 +514,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-33" onclick="focusRayRow(33)" data-path="contributes.*">
+      <div class="ray-row " id="ray-row-35" onclick="focusRayRow(35)" data-path="contributes.*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">contributes.*</span>
@@ -503,7 +525,7 @@
         </div>
       </div>
     
-      <div class="ray-row " id="ray-row-34" onclick="focusRayRow(34)" data-path="*">
+      <div class="ray-row " id="ray-row-36" onclick="focusRayRow(36)" data-path="*">
         <div class="row-left">
           <span class="ray-icon">⌘</span>
           <span class="ray-label">*</span>
@@ -1698,7 +1720,7 @@
         <div class="sec-meta">
           <div class="meta-item">
             <span class="meta-k">Type</span>
-            <span class="meta-v">[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]</span>
+            <span class="meta-v">NUMBER</span>
           </div>
           <div class="meta-item">
             <span class="meta-k">Depth</span>
@@ -1715,7 +1737,14 @@
           <h4>CONSTRAINTS</h4>
           <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
           <pre style="display:none; margin-top:5px;"><code>{
-  "required": false
+  "required": false,
+  "enum": [
+    false,
+    true
+  ],
+  "minItems": 0,
+  "uniqueItems": false,
+  "minLength": 0
 }</code></pre>
         </div>
 
@@ -1732,6 +1761,82 @@
       </div>
     
       <div id="inspector-30" class="ray-inspector-panel ">
+        <h3>contributes.configuration.properties.*.default.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">6 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-31" class="ray-inspector-panel ">
+        <h3>contributes.configuration.properties.*.default.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">6 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-32" class="ray-inspector-panel ">
         <h3>contributes.configuration.properties.*.description</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1772,7 +1877,7 @@
         </div>
       </div>
     
-      <div id="inspector-31" class="ray-inspector-panel ">
+      <div id="inspector-33" class="ray-inspector-panel ">
         <h3>contributes.configuration.properties.*.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1810,7 +1915,7 @@
         </div>
       </div>
     
-      <div id="inspector-32" class="ray-inspector-panel ">
+      <div id="inspector-34" class="ray-inspector-panel ">
         <h3>contributes.configuration.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1848,7 +1953,7 @@
         </div>
       </div>
     
-      <div id="inspector-33" class="ray-inspector-panel ">
+      <div id="inspector-35" class="ray-inspector-panel ">
         <h3>contributes.*</h3>
         <span class="badge opt">OPTIONAL</span>
         
@@ -1886,7 +1991,7 @@
         </div>
       </div>
     
-      <div id="inspector-34" class="ray-inspector-panel ">
+      <div id="inspector-36" class="ray-inspector-panel ">
         <h3>*</h3>
         <span class="badge opt">OPTIONAL</span>
         

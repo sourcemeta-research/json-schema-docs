@@ -248,7 +248,7 @@
       <div class="excali-card" style="transform: rotate(-1deg);" onclick="focusExcaliCard(6)" id="excali-card-6">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
-          <span class="excali-type">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="excali-type">NUMBER</span>
         </div>
         
         <h3 class="excali-title">features.*.id</h3>
@@ -258,13 +258,17 @@
             <div class="excali-c-item">
               <strong>required:</strong> <span>false</span>
             </div>
+          
+            <div class="excali-c-item">
+              <strong>minLength:</strong> <span>0</span>
+            </div>
           </div>
       </div>
     
       <div class="excali-card" style="transform: rotate(1.5deg);" onclick="focusExcaliCard(7)" id="excali-card-7">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
-          <span class="excali-type">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="excali-type">OBJECT</span>
         </div>
         
         <h3 class="excali-title">features.*.properties</h3>
@@ -274,10 +278,36 @@
             <div class="excali-c-item">
               <strong>required:</strong> <span>false</span>
             </div>
+          
+            <div class="excali-c-item nested" style="width: 100%; margin-bottom: 5px;">
+              <strong>enum:</strong>
+              <span class="nested-toggle" style="color: #9C40FF; cursor: pointer; text-decoration: underline;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show' : '▼ hide';">▶ show</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px; font-family: monospace;">
+                <pre style="font-family: inherit; font-size: 0.75rem; background: #FFF; border: 1px solid #000; padding: 5px; color: #000; overflow-x: auto;">[
+  null
+]</pre>
+              </div>
+            </div>
           </div>
       </div>
     
       <div class="excali-card" style="transform: rotate(-2deg);" onclick="focusExcaliCard(8)" id="excali-card-8">
+        <div class="excali-card-header">
+          <span class="excali-badge stable">OPTIONAL</span>
+          <span class="excali-type">STRING</span>
+        </div>
+        
+        <h3 class="excali-title">features.*.properties.*</h3>
+        <p class="excali-desc">No descriptive comments sketched.</p>
+        
+        <div class="excali-constraints">
+            <div class="excali-c-item">
+              <strong>minLength:</strong> <span>0</span>
+            </div>
+          </div>
+      </div>
+    
+      <div class="excali-card" style="transform: rotate(1deg);" onclick="focusExcaliCard(9)" id="excali-card-9">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
           <span class="excali-type">OBJECT</span>
@@ -300,7 +330,7 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(1deg);" onclick="focusExcaliCard(9)" id="excali-card-9">
+      <div class="excali-card" style="transform: rotate(-1.5deg);" onclick="focusExcaliCard(10)" id="excali-card-10">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
           <span class="excali-type">STRING</span>
@@ -324,7 +354,7 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(-1.5deg);" onclick="focusExcaliCard(10)" id="excali-card-10">
+      <div class="excali-card" style="transform: rotate(2deg);" onclick="focusExcaliCard(11)" id="excali-card-11">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
           <span class="excali-type">ARRAY</span>
@@ -348,19 +378,59 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(2deg);" onclick="focusExcaliCard(11)" id="excali-card-11">
+      <div class="excali-card" style="transform: rotate(-1deg);" onclick="focusExcaliCard(12)" id="excali-card-12">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
-          <span class="excali-type">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+          <span class="excali-type">ARRAY</span>
         </div>
         
         <h3 class="excali-title">features.*.geometry.coordinates.*</h3>
         <p class="excali-desc">No descriptive comments sketched.</p>
         
+        <div class="excali-constraints">
+            <div class="excali-c-item">
+              <strong>minItems:</strong> <span>0</span>
+            </div>
+          
+            <div class="excali-c-item">
+              <strong>uniqueItems:</strong> <span>false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div class="excali-card" style="transform: rotate(1.5deg);" onclick="focusExcaliCard(13)" id="excali-card-13">
+        <div class="excali-card-header">
+          <span class="excali-badge stable">OPTIONAL</span>
+          <span class="excali-type">ARRAY</span>
+        </div>
+        
+        <h3 class="excali-title">features.*.geometry.coordinates.*.*</h3>
+        <p class="excali-desc">No descriptive comments sketched.</p>
+        
+        <div class="excali-constraints">
+            <div class="excali-c-item">
+              <strong>minItems:</strong> <span>0</span>
+            </div>
+          
+            <div class="excali-c-item">
+              <strong>uniqueItems:</strong> <span>false</span>
+            </div>
+          </div>
+      </div>
+    
+      <div class="excali-card" style="transform: rotate(-2deg);" onclick="focusExcaliCard(14)" id="excali-card-14">
+        <div class="excali-card-header">
+          <span class="excali-badge stable">OPTIONAL</span>
+          <span class="excali-type">NUMBER</span>
+        </div>
+        
+        <h3 class="excali-title">features.*.geometry.coordinates.*.*.*</h3>
+        <p class="excali-desc">No descriptive comments sketched.</p>
+        
         
       </div>
     
-      <div class="excali-card" style="transform: rotate(-1deg);" onclick="focusExcaliCard(12)" id="excali-card-12">
+      <div class="excali-card" style="transform: rotate(1deg);" onclick="focusExcaliCard(15)" id="excali-card-15">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
           <span class="excali-type">ANY</span>
@@ -372,7 +442,7 @@
         
       </div>
     
-      <div class="excali-card" style="transform: rotate(1.5deg);" onclick="focusExcaliCard(13)" id="excali-card-13">
+      <div class="excali-card" style="transform: rotate(-1.5deg);" onclick="focusExcaliCard(16)" id="excali-card-16">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
           <span class="excali-type">ANY</span>
@@ -384,7 +454,7 @@
         
       </div>
     
-      <div class="excali-card" style="transform: rotate(-2deg);" onclick="focusExcaliCard(14)" id="excali-card-14">
+      <div class="excali-card" style="transform: rotate(2deg);" onclick="focusExcaliCard(17)" id="excali-card-17">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
           <span class="excali-type">OBJECT</span>
@@ -407,7 +477,7 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(1deg);" onclick="focusExcaliCard(15)" id="excali-card-15">
+      <div class="excali-card" style="transform: rotate(-1deg);" onclick="focusExcaliCard(18)" id="excali-card-18">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
           <span class="excali-type">STRING</span>
@@ -431,7 +501,7 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(-1.5deg);" onclick="focusExcaliCard(16)" id="excali-card-16">
+      <div class="excali-card" style="transform: rotate(1.5deg);" onclick="focusExcaliCard(19)" id="excali-card-19">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
           <span class="excali-type">OBJECT</span>
@@ -453,7 +523,7 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(2deg);" onclick="focusExcaliCard(17)" id="excali-card-17">
+      <div class="excali-card" style="transform: rotate(-2deg);" onclick="focusExcaliCard(20)" id="excali-card-20">
         <div class="excali-card-header">
           <span class="excali-badge critical">REQUIRED</span>
           <span class="excali-type">STRING</span>
@@ -473,7 +543,7 @@
           </div>
       </div>
     
-      <div class="excali-card" style="transform: rotate(-1deg);" onclick="focusExcaliCard(18)" id="excali-card-18">
+      <div class="excali-card" style="transform: rotate(1deg);" onclick="focusExcaliCard(21)" id="excali-card-21">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
           <span class="excali-type">ANY</span>
@@ -485,7 +555,7 @@
         
       </div>
     
-      <div class="excali-card" style="transform: rotate(1.5deg);" onclick="focusExcaliCard(19)" id="excali-card-19">
+      <div class="excali-card" style="transform: rotate(-1.5deg);" onclick="focusExcaliCard(22)" id="excali-card-22">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
           <span class="excali-type">ANY</span>
@@ -497,7 +567,7 @@
         
       </div>
     
-      <div class="excali-card" style="transform: rotate(-2deg);" onclick="focusExcaliCard(20)" id="excali-card-20">
+      <div class="excali-card" style="transform: rotate(2deg);" onclick="focusExcaliCard(23)" id="excali-card-23">
         <div class="excali-card-header">
           <span class="excali-badge stable">OPTIONAL</span>
           <span class="excali-type">ANY</span>

@@ -138,81 +138,99 @@
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.9.  features.*.geometry</span>
+        <span>3.9.  features.*.properties.*</span>
         <span class="toc-dots">...................................................</span>
         <span>12</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.10.  features.*.geometry.type</span>
+        <span>3.10.  features.*.geometry</span>
         <span class="toc-dots">...................................................</span>
         <span>13</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.11.  features.*.geometry.coordinates</span>
+        <span>3.11.  features.*.geometry.type</span>
         <span class="toc-dots">...................................................</span>
         <span>14</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.12.  features.*.geometry.coordinates.*</span>
+        <span>3.12.  features.*.geometry.coordinates</span>
         <span class="toc-dots">...................................................</span>
         <span>15</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.13.  features.*.geometry.*</span>
+        <span>3.13.  features.*.geometry.coordinates.*</span>
         <span class="toc-dots">...................................................</span>
         <span>16</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.14.  features.*.*</span>
+        <span>3.14.  features.*.geometry.coordinates.*.*</span>
         <span class="toc-dots">...................................................</span>
         <span>17</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.15.  crs</span>
+        <span>3.15.  features.*.geometry.coordinates.*.*.*</span>
         <span class="toc-dots">...................................................</span>
         <span>18</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.16.  crs.type</span>
+        <span>3.16.  features.*.geometry.*</span>
         <span class="toc-dots">...................................................</span>
         <span>19</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.17.  crs.properties</span>
+        <span>3.17.  features.*.*</span>
         <span class="toc-dots">...................................................</span>
         <span>20</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.18.  crs.properties.name</span>
+        <span>3.18.  crs</span>
         <span class="toc-dots">...................................................</span>
         <span>21</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.19.  crs.properties.*</span>
+        <span>3.19.  crs.type</span>
         <span class="toc-dots">...................................................</span>
         <span>22</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.20.  crs.*</span>
+        <span>3.20.  crs.properties</span>
         <span class="toc-dots">...................................................</span>
         <span>23</span>
       </div>
     
       <div class="rfc-toc-row">
-        <span>3.21.  *</span>
+        <span>3.21.  crs.properties.name</span>
         <span class="toc-dots">...................................................</span>
         <span>24</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.22.  crs.properties.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>25</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.23.  crs.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>26</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.24.  *</span>
+        <span class="toc-dots">...................................................</span>
+        <span>27</span>
       </div>
     
   </div>
@@ -319,7 +337,7 @@
         <h3>3.7.  The "features.*.id" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "[OBJECT OBJECT] | [OBJECT OBJECT]" (Required: NO)
+          Type representation: "NUMBER" (Required: NO)
         </p>
 
         <p class="rfc-text">
@@ -327,14 +345,14 @@
           No descriptive text was supplied in this section.
         </p>
 
-        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
       </div>
     
       <div class="rfc-section" id="rfc-sec-7">
         <h3>3.8.  The "features.*.properties" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "[OBJECT OBJECT] | [OBJECT OBJECT]" (Required: YES)
+          Type representation: "OBJECT" (Required: YES)
         </p>
 
         <p class="rfc-text">
@@ -342,11 +360,28 @@
           No descriptive text was supplied in this section.
         </p>
 
-        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - enum: <span class="nested-toggle" style="text-decoration: underline; cursor: pointer; color: blue;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '[expand]' : '[collapse]';">[expand]</span><div class="nested-detail-box" style="display:none; margin-top: 5px; padding-left:10px; border-left: 2px solid #000;">[
+  null
+]</div><br></div>
       </div>
     
       <div class="rfc-section" id="rfc-sec-8">
-        <h3>3.9.  The "features.*.geometry" Parameter</h3>
+        <h3>3.9.  The "features.*.properties.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-9">
+        <h3>3.10.  The "features.*.geometry" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "OBJECT" (Required: YES)
@@ -363,8 +398,8 @@
 ]</div><br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-9">
-        <h3>3.10.  The "features.*.geometry.type" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-10">
+        <h3>3.11.  The "features.*.geometry.type" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "STRING" (Required: YES)
@@ -378,8 +413,8 @@
         <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - default: "Point"<br>|  - minLength: 0<br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-10">
-        <h3>3.11.  The "features.*.geometry.coordinates" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-11">
+        <h3>3.12.  The "features.*.geometry.coordinates" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ARRAY" (Required: YES)
@@ -393,26 +428,11 @@
         <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-11">
-        <h3>3.12.  The "features.*.geometry.coordinates.*" Parameter</h3>
-        
-        <p class="rfc-text">
-          Type representation: "[OBJECT OBJECT] | [OBJECT OBJECT]" (Required: NO)
-        </p>
-
-        <p class="rfc-text">
-          DESCRIPTION:
-          No descriptive text was supplied in this section.
-        </p>
-
-        
-      </div>
-    
       <div class="rfc-section" id="rfc-sec-12">
-        <h3>3.13.  The "features.*.geometry.*" Parameter</h3>
+        <h3>3.13.  The "features.*.geometry.coordinates.*" Parameter</h3>
         
         <p class="rfc-text">
-          Type representation: "ANY" (Required: NO)
+          Type representation: "ARRAY" (Required: NO)
         </p>
 
         <p class="rfc-text">
@@ -420,11 +440,41 @@
           No descriptive text was supplied in this section.
         </p>
 
-        
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
       </div>
     
       <div class="rfc-section" id="rfc-sec-13">
-        <h3>3.14.  The "features.*.*" Parameter</h3>
+        <h3>3.14.  The "features.*.geometry.coordinates.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ARRAY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-14">
+        <h3>3.15.  The "features.*.geometry.coordinates.*.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "NUMBER" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-15">
+        <h3>3.16.  The "features.*.geometry.*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)
@@ -438,8 +488,23 @@
         
       </div>
     
-      <div class="rfc-section" id="rfc-sec-14">
-        <h3>3.15.  The "crs" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-16">
+        <h3>3.17.  The "features.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-17">
+        <h3>3.18.  The "crs" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "OBJECT" (Required: NO)
@@ -456,8 +521,8 @@
 ]</div><br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-15">
-        <h3>3.16.  The "crs.type" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-18">
+        <h3>3.19.  The "crs.type" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "STRING" (Required: YES)
@@ -471,8 +536,8 @@
         <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - default: "name"<br>|  - minLength: 0<br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-16">
-        <h3>3.17.  The "crs.properties" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-19">
+        <h3>3.20.  The "crs.properties" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "OBJECT" (Required: YES)
@@ -488,8 +553,8 @@
 ]</div><br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-17">
-        <h3>3.18.  The "crs.properties.name" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-20">
+        <h3>3.21.  The "crs.properties.name" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "STRING" (Required: YES)
@@ -503,8 +568,8 @@
         <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
       </div>
     
-      <div class="rfc-section" id="rfc-sec-18">
-        <h3>3.19.  The "crs.properties.*" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-21">
+        <h3>3.22.  The "crs.properties.*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)
@@ -518,8 +583,8 @@
         
       </div>
     
-      <div class="rfc-section" id="rfc-sec-19">
-        <h3>3.20.  The "crs.*" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-22">
+        <h3>3.23.  The "crs.*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)
@@ -533,8 +598,8 @@
         
       </div>
     
-      <div class="rfc-section" id="rfc-sec-20">
-        <h3>3.21.  The "*" Parameter</h3>
+      <div class="rfc-section" id="rfc-sec-23">
+        <h3>3.24.  The "*" Parameter</h3>
         
         <p class="rfc-text">
           Type representation: "ANY" (Required: NO)

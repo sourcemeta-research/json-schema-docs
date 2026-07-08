@@ -192,55 +192,67 @@
       </li>
     
       <li class="toc-item" id="toc-item-8">
-        <a href="#prop-8" onclick="scrollToSection('prop-8', event)">// FEATURES.*.GEOMETRY</a>
+        <a href="#prop-8" onclick="scrollToSection('prop-8', event)">// FEATURES.*.PROPERTIES.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-9">
-        <a href="#prop-9" onclick="scrollToSection('prop-9', event)">// FEATURES.*.GEOMETRY.TYPE</a>
+        <a href="#prop-9" onclick="scrollToSection('prop-9', event)">// FEATURES.*.GEOMETRY</a>
       </li>
     
       <li class="toc-item" id="toc-item-10">
-        <a href="#prop-10" onclick="scrollToSection('prop-10', event)">// FEATURES.*.GEOMETRY.COORDINATES</a>
+        <a href="#prop-10" onclick="scrollToSection('prop-10', event)">// FEATURES.*.GEOMETRY.TYPE</a>
       </li>
     
       <li class="toc-item" id="toc-item-11">
-        <a href="#prop-11" onclick="scrollToSection('prop-11', event)">// FEATURES.*.GEOMETRY.COORDINATES.*</a>
+        <a href="#prop-11" onclick="scrollToSection('prop-11', event)">// FEATURES.*.GEOMETRY.COORDINATES</a>
       </li>
     
       <li class="toc-item" id="toc-item-12">
-        <a href="#prop-12" onclick="scrollToSection('prop-12', event)">// FEATURES.*.GEOMETRY.*</a>
+        <a href="#prop-12" onclick="scrollToSection('prop-12', event)">// FEATURES.*.GEOMETRY.COORDINATES.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-13">
-        <a href="#prop-13" onclick="scrollToSection('prop-13', event)">// FEATURES.*.*</a>
+        <a href="#prop-13" onclick="scrollToSection('prop-13', event)">// FEATURES.*.GEOMETRY.COORDINATES.*.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-14">
-        <a href="#prop-14" onclick="scrollToSection('prop-14', event)">// CRS</a>
+        <a href="#prop-14" onclick="scrollToSection('prop-14', event)">// FEATURES.*.GEOMETRY.COORDINATES.*.*.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-15">
-        <a href="#prop-15" onclick="scrollToSection('prop-15', event)">// CRS.TYPE</a>
+        <a href="#prop-15" onclick="scrollToSection('prop-15', event)">// FEATURES.*.GEOMETRY.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-16">
-        <a href="#prop-16" onclick="scrollToSection('prop-16', event)">// CRS.PROPERTIES</a>
+        <a href="#prop-16" onclick="scrollToSection('prop-16', event)">// FEATURES.*.*</a>
       </li>
     
       <li class="toc-item" id="toc-item-17">
-        <a href="#prop-17" onclick="scrollToSection('prop-17', event)">// CRS.PROPERTIES.NAME</a>
+        <a href="#prop-17" onclick="scrollToSection('prop-17', event)">// CRS</a>
       </li>
     
       <li class="toc-item" id="toc-item-18">
-        <a href="#prop-18" onclick="scrollToSection('prop-18', event)">// CRS.PROPERTIES.*</a>
+        <a href="#prop-18" onclick="scrollToSection('prop-18', event)">// CRS.TYPE</a>
       </li>
     
       <li class="toc-item" id="toc-item-19">
-        <a href="#prop-19" onclick="scrollToSection('prop-19', event)">// CRS.*</a>
+        <a href="#prop-19" onclick="scrollToSection('prop-19', event)">// CRS.PROPERTIES</a>
       </li>
     
       <li class="toc-item" id="toc-item-20">
-        <a href="#prop-20" onclick="scrollToSection('prop-20', event)">// *</a>
+        <a href="#prop-20" onclick="scrollToSection('prop-20', event)">// CRS.PROPERTIES.NAME</a>
+      </li>
+    
+      <li class="toc-item" id="toc-item-21">
+        <a href="#prop-21" onclick="scrollToSection('prop-21', event)">// CRS.PROPERTIES.*</a>
+      </li>
+    
+      <li class="toc-item" id="toc-item-22">
+        <a href="#prop-22" onclick="scrollToSection('prop-22', event)">// CRS.*</a>
+      </li>
+    
+      <li class="toc-item" id="toc-item-23">
+        <a href="#prop-23" onclick="scrollToSection('prop-23', event)">// *</a>
       </li>
     
     </ul>
@@ -374,14 +386,14 @@
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">[OBJECT OBJECT] | [OBJECT OBJECT]</strong></span>
+          <span>FORMAT: <strong class="m-val">NUMBER</strong></span>
           <span>REQUIRED: <strong class="m-val">NO</strong></span>
         </div>
 
         <p class="article-desc">
           <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
         </p>
-        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p></blockquote>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
       <section id="prop-7" class="wired-article" data-idx="7">
@@ -391,20 +403,46 @@
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">[OBJECT OBJECT] | [OBJECT OBJECT]</strong></span>
+          <span>FORMAT: <strong class="m-val">OBJECT</strong></span>
           <span>REQUIRED: <strong class="m-val">YES</strong></span>
         </div>
 
         <p class="article-desc">
           <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
         </p>
-        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p></blockquote>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p>
+            <p>“The parameter strictly mandates <strong>enum</strong> to match:
+              <span class="nested-toggle" style="color: #FF3366; cursor: pointer; font-weight: bold; margin-left: 5px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show rules' : '▼ hide rules';">▶ show rules</span>
+              <span class="nested-detail-box" style="display:none; margin-top: 5px; width: 100%; font-style: normal; display: block;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #EAE9E4; padding: 5px; border-left: 2px solid #FF3366; overflow-x: auto;">[
+  null
+]</pre>
+              </span>
+            ”</p>
+          </blockquote>
       </section>
     
       <section id="prop-8" class="wired-article" data-idx="8">
         <div class="heading-row">
-          <h2>features.*.geometry</h2>
+          <h2>features.*.properties.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-8')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">STRING</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
+      </section>
+    
+      <section id="prop-9" class="wired-article" data-idx="9">
+        <div class="heading-row">
+          <h2>features.*.geometry</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-9')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -428,10 +466,10 @@
           </blockquote>
       </section>
     
-      <section id="prop-9" class="wired-article" data-idx="9">
+      <section id="prop-10" class="wired-article" data-idx="10">
         <div class="heading-row">
           <h2>features.*.geometry.type</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-9')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-10')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -445,10 +483,10 @@
         <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>default</strong> to match <code>"Point"</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
-      <section id="prop-10" class="wired-article" data-idx="10">
+      <section id="prop-11" class="wired-article" data-idx="11">
         <div class="heading-row">
           <h2>features.*.geometry.coordinates</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-10')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-11')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -462,31 +500,48 @@
         <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minItems</strong> to match <code>0</code>”</p><p>“The parameter strictly mandates <strong>uniqueItems</strong> to match <code>false</code>”</p></blockquote>
       </section>
     
-      <section id="prop-11" class="wired-article" data-idx="11">
-        <div class="heading-row">
-          <h2>features.*.geometry.coordinates.*</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-11')">¶</span>
-        </div>
-        
-        <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">[OBJECT OBJECT] | [OBJECT OBJECT]</strong></span>
-          <span>REQUIRED: <strong class="m-val">NO</strong></span>
-        </div>
-
-        <p class="article-desc">
-          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
-        </p>
-        
-      </section>
-    
       <section id="prop-12" class="wired-article" data-idx="12">
         <div class="heading-row">
-          <h2>features.*.geometry.*</h2>
+          <h2>features.*.geometry.coordinates.*</h2>
           <span class="anchor-link" onclick="copyAnchor('prop-12')">¶</span>
         </div>
         
         <div class="wired-meta">
-          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>FORMAT: <strong class="m-val">ARRAY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>minItems</strong> to match <code>0</code>”</p><p>“The parameter strictly mandates <strong>uniqueItems</strong> to match <code>false</code>”</p></blockquote>
+      </section>
+    
+      <section id="prop-13" class="wired-article" data-idx="13">
+        <div class="heading-row">
+          <h2>features.*.geometry.coordinates.*.*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-13')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">ARRAY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>minItems</strong> to match <code>0</code>”</p><p>“The parameter strictly mandates <strong>uniqueItems</strong> to match <code>false</code>”</p></blockquote>
+      </section>
+    
+      <section id="prop-14" class="wired-article" data-idx="14">
+        <div class="heading-row">
+          <h2>features.*.geometry.coordinates.*.*.*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-14')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">NUMBER</strong></span>
           <span>REQUIRED: <strong class="m-val">NO</strong></span>
         </div>
 
@@ -496,10 +551,10 @@
         
       </section>
     
-      <section id="prop-13" class="wired-article" data-idx="13">
+      <section id="prop-15" class="wired-article" data-idx="15">
         <div class="heading-row">
-          <h2>features.*.*</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-13')">¶</span>
+          <h2>features.*.geometry.*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-15')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -513,10 +568,27 @@
         
       </section>
     
-      <section id="prop-14" class="wired-article" data-idx="14">
+      <section id="prop-16" class="wired-article" data-idx="16">
+        <div class="heading-row">
+          <h2>features.*.*</h2>
+          <span class="anchor-link" onclick="copyAnchor('prop-16')">¶</span>
+        </div>
+        
+        <div class="wired-meta">
+          <span>FORMAT: <strong class="m-val">ANY</strong></span>
+          <span>REQUIRED: <strong class="m-val">NO</strong></span>
+        </div>
+
+        <p class="article-desc">
+          <span class="drop-cap">N</span>o supplementary comments accompany this configuration parameter.
+        </p>
+        
+      </section>
+    
+      <section id="prop-17" class="wired-article" data-idx="17">
         <div class="heading-row">
           <h2>crs</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-14')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-17')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -540,10 +612,10 @@
           </blockquote>
       </section>
     
-      <section id="prop-15" class="wired-article" data-idx="15">
+      <section id="prop-18" class="wired-article" data-idx="18">
         <div class="heading-row">
           <h2>crs.type</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-15')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-18')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -557,10 +629,10 @@
         <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>default</strong> to match <code>"name"</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
-      <section id="prop-16" class="wired-article" data-idx="16">
+      <section id="prop-19" class="wired-article" data-idx="19">
         <div class="heading-row">
           <h2>crs.properties</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-16')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-19')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -583,10 +655,10 @@
           </blockquote>
       </section>
     
-      <section id="prop-17" class="wired-article" data-idx="17">
+      <section id="prop-20" class="wired-article" data-idx="20">
         <div class="heading-row">
           <h2>crs.properties.name</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-17')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-20')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -600,10 +672,10 @@
         <blockquote class="wired-quote"><p>“The parameter strictly mandates <strong>required</strong> to match <code>false</code>”</p><p>“The parameter strictly mandates <strong>minLength</strong> to match <code>0</code>”</p></blockquote>
       </section>
     
-      <section id="prop-18" class="wired-article" data-idx="18">
+      <section id="prop-21" class="wired-article" data-idx="21">
         <div class="heading-row">
           <h2>crs.properties.*</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-18')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-21')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -617,10 +689,10 @@
         
       </section>
     
-      <section id="prop-19" class="wired-article" data-idx="19">
+      <section id="prop-22" class="wired-article" data-idx="22">
         <div class="heading-row">
           <h2>crs.*</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-19')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-22')">¶</span>
         </div>
         
         <div class="wired-meta">
@@ -634,10 +706,10 @@
         
       </section>
     
-      <section id="prop-20" class="wired-article" data-idx="20">
+      <section id="prop-23" class="wired-article" data-idx="23">
         <div class="heading-row">
           <h2>*</h2>
-          <span class="anchor-link" onclick="copyAnchor('prop-20')">¶</span>
+          <span class="anchor-link" onclick="copyAnchor('prop-23')">¶</span>
         </div>
         
         <div class="wired-meta">
