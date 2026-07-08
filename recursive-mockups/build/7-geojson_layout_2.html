@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GeoJSON Feature Collection Specification - Linear Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #080808; /* Linear Void Black */
+      color: #E2E8F0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .board-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+    
+    .board-header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .board-header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: #FFF; }
+    
+    .board-columns {
+      display: flex;
+      gap: 1.25rem;
+      flex: 1;
+      min-width: 900px;
+    }
+    
+    .board-col {
+      flex: 1;
+      background-color: #121315; /* Linear Column Gray */
+      border: 1px solid #1F2023;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-height: calc(100vh - 150px);
+    }
+    .col-header {
+      padding: 1rem;
+      border-bottom: 1px solid #1F2023;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8E9196;
+    }
+    .col-count { background-color: #1F2023; color: #FFF; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.7rem; }
+    
+    .cards-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+    }
+    
+    .linear-card {
+      background-color: #161719;
+      border: 1px solid #202226;
+      border-radius: 6px;
+      padding: 0.85rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+      transition: all 0.15s ease;
+    }
+    .linear-card:hover { border-color: #3b3d42; background-color: #1a1c1f; }
+    .linear-card.active { border-color: #5E6AD2; box-shadow: 0 0 10px rgba(94, 106, 210, 0.25); }
+
+    .card-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .card-id { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #5E6AD2; }
+    .card-priority { font-size: 0.7rem; }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #FFF;
+      margin-bottom: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
+    }
+
+    .card-tags-row { display: flex; gap: 0.35rem; }
+    .tag-badge { background-color: #202226; color: #8E9196; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; font-family: monospace; }
+    .tag-depth { background-color: rgba(94, 106, 210, 0.1); color: #5E6AD2; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; }
+
+    .resizer { width: 4px; cursor: col-resize; background-color: #1F2023; z-index: 10; }
+    .resizer:hover { background-color: #5E6AD2; }
+
+    .inspector-pane {
+      width: 320px;
+      min-width: 250px;
+      max-width: 480px;
+      background-color: #0E0F11;
+      border-left: 1px solid #1F2023;
+      height: 100%;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    
+    .linear-inspector { display: none; }
+    .linear-inspector.active { display: block; }
+    
+    .ins-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .ins-header h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #5E6AD2; }
+    
+    .ins-status-badge { font-size: 0.7rem; font-weight: 700; background-color: #202226; color: #FFF; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    
+    .linear-inspector h2 { font-size: 1.25rem; font-weight: 700; color: #FFF; margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+    
+    .ins-property-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.75rem; border-bottom: 1px solid #161719; padding-bottom: 0.5rem; }
+    .prop-lbl { color: #8E9196; }
+    .prop-val { color: #FFF; font-weight: 600; }
+    .prop-val.active-val { color: #5E6AD2; font-family: 'JetBrains Mono', monospace; }
+
+    .ins-section { margin-top: 2rem; }
+    .ins-section h4 { font-size: 0.75rem; color: #8E9196; text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700; }
+    .ins-desc { font-size: 0.85rem; color: #C2C2C6; line-height: 1.5; }
+
+    .c-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+    .c-item { background-color: #121315; border: 1px solid #1F2023; padding: 0.5rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+    .c-k { color: #8E9196; }
+    .c-v { color: #5E6AD2; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="board-pane">
+    <div class="board-header">
+      <h1>Project Board: GeoJSON Feature Collection Specification</h1>
+      <span style="font-size: 0.8rem; color:#8E9196;">Active sprint settings</span>
+    </div>
+    
+    <div class="board-columns">
+      <div class="board-col">
+        <div class="col-header">
+          <span>Backlog</span>
+          <span class="col-count">6</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-2" onclick="focusLinearCard(2)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-103</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">bbox.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">number</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-12" onclick="focusLinearCard(12)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-113</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">features.*.geometry.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L4</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-13" onclick="focusLinearCard(13)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-114</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">features.*.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-18" onclick="focusLinearCard(18)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-119</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">crs.properties.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-19" onclick="focusLinearCard(19)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-120</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">crs.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-20" onclick="focusLinearCard(20)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-121</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    </div>
+      </div>
+      
+      <div class="board-col">
+        <div class="col-header">
+          <span>Todo</span>
+          <span class="col-count">0</span>
+        </div>
+        <div class="cards-list"></div>
+      </div>
+
+      <div class="board-col">
+        <div class="col-header">
+          <span>In Progress</span>
+          <span class="col-count">6</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-1" onclick="focusLinearCard(1)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-102</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">bbox</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-3" onclick="focusLinearCard(3)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-104</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">features</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-4" onclick="focusLinearCard(4)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-105</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">features.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-6" onclick="focusLinearCard(6)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-107</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">features.*.id</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">[object Object] | [object Object]</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-11" onclick="focusLinearCard(11)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-112</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">features.*.geometry.coordinates.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">[object Object] | [object Object]</span>
+          <span class="tag-depth">L5</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-14" onclick="focusLinearCard(14)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-115</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">crs</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <div class="board-col">
+        <div class="col-header">
+          <span>Done</span>
+          <span class="col-count">9</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-0" onclick="focusLinearCard(0)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-101</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">type</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-5" onclick="focusLinearCard(5)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-106</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">features.*.type</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-7" onclick="focusLinearCard(7)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-108</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">features.*.properties</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">[object Object] | [object Object]</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-8" onclick="focusLinearCard(8)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-109</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">features.*.geometry</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-9" onclick="focusLinearCard(9)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-110</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">features.*.geometry.type</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L4</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-10" onclick="focusLinearCard(10)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-111</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">features.*.geometry.coordinates</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L4</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-15" onclick="focusLinearCard(15)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-116</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">crs.type</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-16" onclick="focusLinearCard(16)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-117</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">crs.properties</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-17" onclick="focusLinearCard(17)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-118</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">crs.properties.name</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resizer" id="pane-resizer"></div>
+
+  <div class="inspector-pane" id="inspector-pane">
+    
+      <div id="inspector-0" class="linear-inspector active">
+        <div class="ins-header">
+          <h3>SCH-101</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>type</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">true</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"FeatureCollection"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-1" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-102</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>bbox</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">maxItems:</span>
+              <span class="c-v">6</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">4</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-2" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-103</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>bbox.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">NUMBER</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-3" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-104</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>features</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-4" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-105</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>features.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  "type",
+  "geometry",
+  "properties"
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-5" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-106</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>features.*.type</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"Feature"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-6" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-107</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>features.*.id</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-7" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-108</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>features.*.properties</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-8" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-109</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>features.*.geometry</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  "type",
+  "coordinates"
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-9" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-110</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>features.*.geometry.type</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">4 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"Point"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-10" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-111</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>features.*.geometry.coordinates</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">4 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-11" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-112</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>features.*.geometry.coordinates.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">[OBJECT OBJECT] | [OBJECT OBJECT]</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">5 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-12" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-113</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>features.*.geometry.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">4 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-13" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-114</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>features.*.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-14" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-115</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>crs</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  "type",
+  "properties"
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-15" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-116</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>crs.type</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"name"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-16" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-117</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>crs.properties</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  "name"
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-17" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-118</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>crs.properties.name</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-18" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-119</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>crs.properties.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-19" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-120</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>crs.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-20" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-121</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+  </div>
+
+  <script>
+    document.querySelector('.linear-card')?.classList.add('active');
+
+    function focusLinearCard(idx) {
+      document.querySelectorAll('.linear-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('card-' + idx).classList.add('active');
+
+      document.querySelectorAll('.linear-inspector').forEach(ins => ins.classList.remove('active'));
+      document.getElementById('inspector-' + idx).classList.add('active');
+    }
+
+    const insPane = document.getElementById('inspector-pane');
+    const resizer = document.getElementById('pane-resizer');
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', () => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth > 250 && newWidth < 480) {
+        insPane.style.width = newWidth + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isResizing = false;
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,2784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TypeScript Compiler Settings - Linear Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #080808; /* Linear Void Black */
+      color: #E2E8F0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .board-pane {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 2rem;
+      overflow-x: auto;
+    }
+    
+    .board-header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .board-header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: #FFF; }
+    
+    .board-columns {
+      display: flex;
+      gap: 1.25rem;
+      flex: 1;
+      min-width: 900px;
+    }
+    
+    .board-col {
+      flex: 1;
+      background-color: #121315; /* Linear Column Gray */
+      border: 1px solid #1F2023;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-height: calc(100vh - 150px);
+    }
+    .col-header {
+      padding: 1rem;
+      border-bottom: 1px solid #1F2023;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8E9196;
+    }
+    .col-count { background-color: #1F2023; color: #FFF; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.7rem; }
+    
+    .cards-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+    }
+    
+    .linear-card {
+      background-color: #161719;
+      border: 1px solid #202226;
+      border-radius: 6px;
+      padding: 0.85rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+      transition: all 0.15s ease;
+    }
+    .linear-card:hover { border-color: #3b3d42; background-color: #1a1c1f; }
+    .linear-card.active { border-color: #5E6AD2; box-shadow: 0 0 10px rgba(94, 106, 210, 0.25); }
+
+    .card-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+    .card-id { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #5E6AD2; }
+    .card-priority { font-size: 0.7rem; }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #FFF;
+      margin-bottom: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      word-break: break-all;
+    }
+
+    .card-tags-row { display: flex; gap: 0.35rem; }
+    .tag-badge { background-color: #202226; color: #8E9196; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; font-family: monospace; }
+    .tag-depth { background-color: rgba(94, 106, 210, 0.1); color: #5E6AD2; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; }
+
+    .resizer { width: 4px; cursor: col-resize; background-color: #1F2023; z-index: 10; }
+    .resizer:hover { background-color: #5E6AD2; }
+
+    .inspector-pane {
+      width: 320px;
+      min-width: 250px;
+      max-width: 480px;
+      background-color: #0E0F11;
+      border-left: 1px solid #1F2023;
+      height: 100%;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+    
+    .linear-inspector { display: none; }
+    .linear-inspector.active { display: block; }
+    
+    .ins-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .ins-header h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #5E6AD2; }
+    
+    .ins-status-badge { font-size: 0.7rem; font-weight: 700; background-color: #202226; color: #FFF; padding: 0.2rem 0.5rem; border-radius: 4px; }
+    
+    .linear-inspector h2 { font-size: 1.25rem; font-weight: 700; color: #FFF; margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+    
+    .ins-property-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.75rem; border-bottom: 1px solid #161719; padding-bottom: 0.5rem; }
+    .prop-lbl { color: #8E9196; }
+    .prop-val { color: #FFF; font-weight: 600; }
+    .prop-val.active-val { color: #5E6AD2; font-family: 'JetBrains Mono', monospace; }
+
+    .ins-section { margin-top: 2rem; }
+    .ins-section h4 { font-size: 0.75rem; color: #8E9196; text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700; }
+    .ins-desc { font-size: 0.85rem; color: #C2C2C6; line-height: 1.5; }
+
+    .c-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+    .c-item { background-color: #121315; border: 1px solid #1F2023; padding: 0.5rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+    .c-k { color: #8E9196; }
+    .c-v { color: #5E6AD2; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="board-pane">
+    <div class="board-header">
+      <h1>Project Board: TypeScript Compiler Settings</h1>
+      <span style="font-size: 0.8rem; color:#8E9196;">Active sprint settings</span>
+    </div>
+    
+    <div class="board-columns">
+      <div class="board-col">
+        <div class="col-header">
+          <span>Backlog</span>
+          <span class="col-count">3</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-31" onclick="focusLinearCard(31)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-132</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">compilerOptions.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-42" onclick="focusLinearCard(42)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-143</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">references.*.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-43" onclick="focusLinearCard(43)" data-status="backlog">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-144</span>
+          <span class="card-priority">⚪</span>
+        </div>
+        <div class="card-title">*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    </div>
+      </div>
+      
+      <div class="board-col">
+        <div class="col-header">
+          <span>Todo</span>
+          <span class="col-count">31</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-1" onclick="focusLinearCard(1)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-102</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.target</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-2" onclick="focusLinearCard(2)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-103</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.module</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-4" onclick="focusLinearCard(4)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-105</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.lib.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-5" onclick="focusLinearCard(5)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-106</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.allowJs</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-6" onclick="focusLinearCard(6)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-107</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.checkJs</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-7" onclick="focusLinearCard(7)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-108</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.jsx</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-8" onclick="focusLinearCard(8)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-109</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.declaration</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-9" onclick="focusLinearCard(9)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-110</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.declarationMap</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-10" onclick="focusLinearCard(10)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-111</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.emitDeclarationOnly</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-11" onclick="focusLinearCard(11)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-112</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.sourceMap</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-12" onclick="focusLinearCard(12)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-113</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.outDir</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-13" onclick="focusLinearCard(13)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-114</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.rootDir</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-14" onclick="focusLinearCard(14)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-115</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.removeComments</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-15" onclick="focusLinearCard(15)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-116</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.noEmit</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-16" onclick="focusLinearCard(16)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-117</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.strict</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-17" onclick="focusLinearCard(17)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-118</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.noImplicitAny</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-18" onclick="focusLinearCard(18)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-119</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.strictNullChecks</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-19" onclick="focusLinearCard(19)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-120</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.strictFunctionTypes</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-20" onclick="focusLinearCard(20)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-121</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.noUnusedLocals</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-21" onclick="focusLinearCard(21)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-122</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.noUnusedParameters</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-22" onclick="focusLinearCard(22)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-123</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.noImplicitReturns</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-23" onclick="focusLinearCard(23)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-124</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.moduleResolution</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-24" onclick="focusLinearCard(24)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-125</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.baseUrl</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-27" onclick="focusLinearCard(27)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-128</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.paths.*.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L4</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-28" onclick="focusLinearCard(28)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-129</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.esModuleInterop</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-29" onclick="focusLinearCard(29)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-130</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.experimentalDecorators</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-30" onclick="focusLinearCard(30)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-131</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.emitDecoratorMetadata</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-33" onclick="focusLinearCard(33)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-134</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">files.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-35" onclick="focusLinearCard(35)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-136</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">include.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-37" onclick="focusLinearCard(37)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-138</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">exclude.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-41" onclick="focusLinearCard(41)" data-status="todo">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-142</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">references.*.prepend</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">any</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <div class="board-col">
+        <div class="col-header">
+          <span>In Progress</span>
+          <span class="col-count">9</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-0" onclick="focusLinearCard(0)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-101</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-3" onclick="focusLinearCard(3)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-104</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.lib</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-25" onclick="focusLinearCard(25)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-126</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.paths</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-26" onclick="focusLinearCard(26)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-127</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">compilerOptions.paths.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-32" onclick="focusLinearCard(32)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-133</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">files</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-34" onclick="focusLinearCard(34)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-135</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">include</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-36" onclick="focusLinearCard(36)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-137</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">exclude</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-38" onclick="focusLinearCard(38)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-139</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">references</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">array</span>
+          <span class="tag-depth">L1</span>
+        </div>
+      </div>
+    
+      <div class="linear-card" id="card-39" onclick="focusLinearCard(39)" data-status="inProgress">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-140</span>
+          <span class="card-priority">🟡</span>
+        </div>
+        <div class="card-title">references.*</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">object</span>
+          <span class="tag-depth">L2</span>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <div class="board-col">
+        <div class="col-header">
+          <span>Done</span>
+          <span class="col-count">1</span>
+        </div>
+        <div class="cards-list">
+      <div class="linear-card" id="card-40" onclick="focusLinearCard(40)" data-status="done">
+        <div class="card-meta-row">
+          <span class="card-id">SCH-141</span>
+          <span class="card-priority">🔴</span>
+        </div>
+        <div class="card-title">references.*.path</div>
+        <div class="card-tags-row">
+          <span class="tag-badge">string</span>
+          <span class="tag-depth">L3</span>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resizer" id="pane-resizer"></div>
+
+  <div class="inspector-pane" id="inspector-pane">
+    
+      <div id="inspector-0" class="linear-inspector active">
+        <div class="ins-header">
+          <h3>SCH-101</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-1" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-102</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.target</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"es2022"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-2" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-103</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.module</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"commonjs"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-3" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-104</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.lib</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-4" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-105</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.lib.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-5" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-106</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.allowJs</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-6" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-107</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.checkJs</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-7" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-108</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.jsx</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-8" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-109</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.declaration</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-9" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-110</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.declarationMap</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-10" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-111</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.emitDeclarationOnly</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-11" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-112</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.sourceMap</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-12" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-113</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.outDir</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-13" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-114</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.rootDir</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-14" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-115</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.removeComments</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-15" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-116</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.noEmit</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-16" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-117</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.strict</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">true</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-17" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-118</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.noImplicitAny</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">true</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-18" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-119</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.strictNullChecks</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">true</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-19" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-120</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.strictFunctionTypes</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">true</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-20" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-121</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.noUnusedLocals</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-21" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-122</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.noUnusedParameters</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-22" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-123</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.noImplicitReturns</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-23" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-124</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.moduleResolution</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">"node"</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-24" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-125</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.baseUrl</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-25" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-126</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.paths</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-26" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-127</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.paths.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-27" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-128</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.paths.*.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">4 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-28" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-129</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.esModuleInterop</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">true</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-29" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-130</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.experimentalDecorators</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-30" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-131</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.emitDecoratorMetadata</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-31" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-132</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>compilerOptions.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-32" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-133</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>files</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-33" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-134</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>files.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-34" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-135</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>include</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-35" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-136</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>include.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-36" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-137</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>exclude</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-37" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-138</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>exclude.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-38" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-139</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>references</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ARRAY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minItems:</span>
+              <span class="c-v">0</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">uniqueItems:</span>
+              <span class="c-v">false</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-39" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-140</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>references.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">OBJECT</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">2 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">required:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  "path"
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-40" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-141</h3>
+          <span class="ins-status-badge">Done</span>
+        </div>
+        
+        <h2>references.*.path</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">STRING</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">minLength:</span>
+              <span class="c-v">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-41" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-142</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>references.*.prepend</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <div class="c-grid">
+            <div class="c-item">
+              <span class="c-k">required:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item">
+              <span class="c-k">default:</span>
+              <span class="c-v">false</span>
+            </div>
+          
+            <div class="c-item nested" style="grid-column: 1 / -1;">
+              <span class="c-k">enum:</span>
+              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
+                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-42" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-143</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>references.*.*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">3 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+      <div id="inspector-43" class="linear-inspector ">
+        <div class="ins-header">
+          <h3>SCH-144</h3>
+          <span class="ins-status-badge">Todo</span>
+        </div>
+        
+        <h2>*</h2>
+        
+        <div class="ins-property-row">
+          <span class="prop-lbl">Assignee</span>
+          <span class="prop-val">Compiler Bot</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Type</span>
+          <span class="prop-val active-val">ANY</span>
+        </div>
+        <div class="ins-property-row">
+          <span class="prop-lbl">Depth</span>
+          <span class="prop-val">1 Levels</span>
+        </div>
+
+        <div class="ins-section">
+          <h4>Description</h4>
+          <p class="ins-desc">No description provided.</p>
+        </div>
+
+        <div class="ins-section">
+          <h4>Validation Rules</h4>
+          <span style="color:#666; font-style:italic;">None</span>
+        </div>
+      </div>
+    
+  </div>
+
+  <script>
+    document.querySelector('.linear-card')?.classList.add('active');
+
+    function focusLinearCard(idx) {
+      document.querySelectorAll('.linear-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('card-' + idx).classList.add('active');
+
+      document.querySelectorAll('.linear-inspector').forEach(ins => ins.classList.remove('active'));
+      document.getElementById('inspector-' + idx).classList.add('active');
+    }
+
+    const insPane = document.getElementById('inspector-pane');
+    const resizer = document.getElementById('pane-resizer');
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', () => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth > 250 && newWidth < 480) {
+        insPane.style.width = newWidth + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isResizing = false;
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    });
+  </script>
+</body>
+</html>

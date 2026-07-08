@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TypeScript Compiler Settings - Stripe API Docs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --side-bg: #F8F9FA;
+      --border: #E3E8EE;
+      --text: #1F2937;
+      --text-dim: #6B7280;
+      --accent: #635BFF;
+      --code-bg: #0A101D;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      min-width: 180px;
+      max-width: 400px;
+      background-color: var(--side-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-header h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text); }
+    .nav-list { list-style: none; overflow-y: auto; flex: 1; padding: 1rem 0.5rem; }
+    .nav-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 4px;
+      margin-bottom: 0.15rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-item:hover { color: var(--text); background-color: rgba(0,0,0,0.02); }
+    .nav-item.active { color: var(--accent); background-color: rgba(99, 91, 255, 0.08); font-weight: 600; }
+    .req-dot { width: 5px; height: 5px; background: #EF4444; border-radius: 50%; }
+
+    .resizer {
+      width: 4px;
+      cursor: col-resize;
+      background-color: var(--border);
+      transition: background-color 0.2s;
+      z-index: 10;
+    }
+    .resizer:hover, .resizer.resizing { background-color: var(--accent); }
+
+    .doc-column {
+      flex: 1;
+      overflow-y: auto;
+      padding: 3rem 4rem;
+      scroll-behavior: smooth;
+    }
+    .doc-header {
+      max-width: 700px;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    .doc-header h1 { font-size: 2rem; font-weight: 700; color: #111827; }
+    .doc-header p { color: var(--text-dim); margin-top: 0.5rem; font-size: 0.9rem; }
+
+    .stripe-section {
+      max-width: 700px;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .section-header h2 { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: #111827; }
+    .type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(99, 91, 255, 0.08); padding: 0.15rem 0.4rem; font-weight: 600; }
+    
+    .status-badge { font-size: 0.65rem; font-weight: bold; padding: 0.15rem 0.35rem; }
+    .status-badge.required { color: #DC2626; background: rgba(220, 38, 38, 0.08); }
+    .status-badge.optional { color: var(--text-dim); background: rgba(0, 0, 0, 0.04); }
+    
+    .section-desc { font-size: 0.9rem; color: #374151; line-height: 1.6; margin-bottom: 1rem; }
+
+    .stripe-constraints { background: var(--side-bg); border: 1px solid var(--border); padding: 0.75rem 1rem; }
+    .constraint-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.25rem; }
+    .constraint-row:last-child { margin-bottom: 0; }
+    .c-key { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .c-val { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+    .code-column {
+      width: 380px;
+      min-width: 250px;
+      max-width: 600px;
+      background-color: var(--code-bg);
+      border-left: 1px solid #1E293B;
+      color: #94A3B8;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .code-tabs {
+      display: flex;
+      background-color: #0E1626;
+      border-bottom: 1px solid #1E293B;
+      padding: 0 1rem;
+    }
+    .code-tab-btn {
+      background: none;
+      border: none;
+      color: #64748B;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .code-tab-btn.active {
+      color: #FFF;
+      border-bottom: 2px solid var(--accent);
+    }
+    
+    .code-box {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #34D399; line-height: 1.5; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>Schema Paths</h3>
+    </div>
+    <ul class="nav-list">
+      
+      <li class="nav-item" id="nav-item-0" onclick="scrollToSection('0')">
+        <span>compilerOptions</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-1" onclick="scrollToSection('1')">
+        <span>compilerOptions.target</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-2" onclick="scrollToSection('2')">
+        <span>compilerOptions.module</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-3" onclick="scrollToSection('3')">
+        <span>compilerOptions.lib</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-4" onclick="scrollToSection('4')">
+        <span>compilerOptions.lib.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-5" onclick="scrollToSection('5')">
+        <span>compilerOptions.allowJs</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-6" onclick="scrollToSection('6')">
+        <span>compilerOptions.checkJs</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-7" onclick="scrollToSection('7')">
+        <span>compilerOptions.jsx</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-8" onclick="scrollToSection('8')">
+        <span>compilerOptions.declaration</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-9" onclick="scrollToSection('9')">
+        <span>compilerOptions.declarationMap</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-10" onclick="scrollToSection('10')">
+        <span>compilerOptions.emitDeclarationOnly</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-11" onclick="scrollToSection('11')">
+        <span>compilerOptions.sourceMap</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-12" onclick="scrollToSection('12')">
+        <span>compilerOptions.outDir</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-13" onclick="scrollToSection('13')">
+        <span>compilerOptions.rootDir</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-14" onclick="scrollToSection('14')">
+        <span>compilerOptions.removeComments</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-15" onclick="scrollToSection('15')">
+        <span>compilerOptions.noEmit</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-16" onclick="scrollToSection('16')">
+        <span>compilerOptions.strict</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-17" onclick="scrollToSection('17')">
+        <span>compilerOptions.noImplicitAny</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-18" onclick="scrollToSection('18')">
+        <span>compilerOptions.strictNullChecks</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-19" onclick="scrollToSection('19')">
+        <span>compilerOptions.strictFunctionTypes</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-20" onclick="scrollToSection('20')">
+        <span>compilerOptions.noUnusedLocals</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-21" onclick="scrollToSection('21')">
+        <span>compilerOptions.noUnusedParameters</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-22" onclick="scrollToSection('22')">
+        <span>compilerOptions.noImplicitReturns</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-23" onclick="scrollToSection('23')">
+        <span>compilerOptions.moduleResolution</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-24" onclick="scrollToSection('24')">
+        <span>compilerOptions.baseUrl</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-25" onclick="scrollToSection('25')">
+        <span>compilerOptions.paths</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-26" onclick="scrollToSection('26')">
+        <span>compilerOptions.paths.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-27" onclick="scrollToSection('27')">
+        <span>compilerOptions.paths.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-28" onclick="scrollToSection('28')">
+        <span>compilerOptions.esModuleInterop</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-29" onclick="scrollToSection('29')">
+        <span>compilerOptions.experimentalDecorators</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-30" onclick="scrollToSection('30')">
+        <span>compilerOptions.emitDecoratorMetadata</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-31" onclick="scrollToSection('31')">
+        <span>compilerOptions.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-32" onclick="scrollToSection('32')">
+        <span>files</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-33" onclick="scrollToSection('33')">
+        <span>files.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-34" onclick="scrollToSection('34')">
+        <span>include</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-35" onclick="scrollToSection('35')">
+        <span>include.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-36" onclick="scrollToSection('36')">
+        <span>exclude</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-37" onclick="scrollToSection('37')">
+        <span>exclude.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-38" onclick="scrollToSection('38')">
+        <span>references</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-39" onclick="scrollToSection('39')">
+        <span>references.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-40" onclick="scrollToSection('40')">
+        <span>references.*.path</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-41" onclick="scrollToSection('41')">
+        <span>references.*.prepend</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-42" onclick="scrollToSection('42')">
+        <span>references.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-43" onclick="scrollToSection('43')">
+        <span>*</span>
+        
+      </li>
+    
+    </ul>
+  </div>
+
+  <div class="resizer" id="resizer-1"></div>
+
+  <div class="doc-column" id="doc-pane">
+    <header class="doc-header">
+      <h1>TypeScript Compiler Settings API</h1>
+      <p>Extensive TypeScript configuration schema detailing compiler options.</p>
+    </header>
+    <div class="sections-list">
+      
+      <section id="sec-0" class="stripe-section" data-idx="0">
+        <div class="section-header">
+          <h2>compilerOptions</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-1" class="stripe-section" data-idx="1">
+        <div class="section-header">
+          <h2>compilerOptions.target</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">"es2022"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-2" class="stripe-section" data-idx="2">
+        <div class="section-header">
+          <h2>compilerOptions.module</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">"commonjs"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-3" class="stripe-section" data-idx="3">
+        <div class="section-header">
+          <h2>compilerOptions.lib</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-4" class="stripe-section" data-idx="4">
+        <div class="section-header">
+          <h2>compilerOptions.lib.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-5" class="stripe-section" data-idx="5">
+        <div class="section-header">
+          <h2>compilerOptions.allowJs</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-6" class="stripe-section" data-idx="6">
+        <div class="section-header">
+          <h2>compilerOptions.checkJs</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-7" class="stripe-section" data-idx="7">
+        <div class="section-header">
+          <h2>compilerOptions.jsx</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-8" class="stripe-section" data-idx="8">
+        <div class="section-header">
+          <h2>compilerOptions.declaration</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-9" class="stripe-section" data-idx="9">
+        <div class="section-header">
+          <h2>compilerOptions.declarationMap</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-10" class="stripe-section" data-idx="10">
+        <div class="section-header">
+          <h2>compilerOptions.emitDeclarationOnly</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-11" class="stripe-section" data-idx="11">
+        <div class="section-header">
+          <h2>compilerOptions.sourceMap</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-12" class="stripe-section" data-idx="12">
+        <div class="section-header">
+          <h2>compilerOptions.outDir</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-13" class="stripe-section" data-idx="13">
+        <div class="section-header">
+          <h2>compilerOptions.rootDir</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-14" class="stripe-section" data-idx="14">
+        <div class="section-header">
+          <h2>compilerOptions.removeComments</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-15" class="stripe-section" data-idx="15">
+        <div class="section-header">
+          <h2>compilerOptions.noEmit</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-16" class="stripe-section" data-idx="16">
+        <div class="section-header">
+          <h2>compilerOptions.strict</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-17" class="stripe-section" data-idx="17">
+        <div class="section-header">
+          <h2>compilerOptions.noImplicitAny</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-18" class="stripe-section" data-idx="18">
+        <div class="section-header">
+          <h2>compilerOptions.strictNullChecks</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-19" class="stripe-section" data-idx="19">
+        <div class="section-header">
+          <h2>compilerOptions.strictFunctionTypes</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-20" class="stripe-section" data-idx="20">
+        <div class="section-header">
+          <h2>compilerOptions.noUnusedLocals</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-21" class="stripe-section" data-idx="21">
+        <div class="section-header">
+          <h2>compilerOptions.noUnusedParameters</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-22" class="stripe-section" data-idx="22">
+        <div class="section-header">
+          <h2>compilerOptions.noImplicitReturns</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-23" class="stripe-section" data-idx="23">
+        <div class="section-header">
+          <h2>compilerOptions.moduleResolution</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">"node"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-24" class="stripe-section" data-idx="24">
+        <div class="section-header">
+          <h2>compilerOptions.baseUrl</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-25" class="stripe-section" data-idx="25">
+        <div class="section-header">
+          <h2>compilerOptions.paths</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-26" class="stripe-section" data-idx="26">
+        <div class="section-header">
+          <h2>compilerOptions.paths.*</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-27" class="stripe-section" data-idx="27">
+        <div class="section-header">
+          <h2>compilerOptions.paths.*.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-28" class="stripe-section" data-idx="28">
+        <div class="section-header">
+          <h2>compilerOptions.esModuleInterop</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-29" class="stripe-section" data-idx="29">
+        <div class="section-header">
+          <h2>compilerOptions.experimentalDecorators</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-30" class="stripe-section" data-idx="30">
+        <div class="section-header">
+          <h2>compilerOptions.emitDecoratorMetadata</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-31" class="stripe-section" data-idx="31">
+        <div class="section-header">
+          <h2>compilerOptions.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-32" class="stripe-section" data-idx="32">
+        <div class="section-header">
+          <h2>files</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-33" class="stripe-section" data-idx="33">
+        <div class="section-header">
+          <h2>files.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-34" class="stripe-section" data-idx="34">
+        <div class="section-header">
+          <h2>include</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-35" class="stripe-section" data-idx="35">
+        <div class="section-header">
+          <h2>include.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-36" class="stripe-section" data-idx="36">
+        <div class="section-header">
+          <h2>exclude</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-37" class="stripe-section" data-idx="37">
+        <div class="section-header">
+          <h2>exclude.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-38" class="stripe-section" data-idx="38">
+        <div class="section-header">
+          <h2>references</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-39" class="stripe-section" data-idx="39">
+        <div class="section-header">
+          <h2>references.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">required</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  "path"
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-40" class="stripe-section" data-idx="40">
+        <div class="section-header">
+          <h2>references.*.path</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge required">REQUIRED</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-41" class="stripe-section" data-idx="41">
+        <div class="section-header">
+          <h2>references.*.prepend</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">enum</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  false,
+  true
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-42" class="stripe-section" data-idx="42">
+        <div class="section-header">
+          <h2>references.*.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-43" class="stripe-section" data-idx="43">
+        <div class="section-header">
+          <h2>*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+    </div>
+  </div>
+
+  <div class="resizer" id="resizer-2"></div>
+
+  <div class="code-column" id="code-pane">
+    <div class="code-tabs">
+      <button class="code-tab-btn active" onclick="changeLang('curl')">cURL</button>
+      <button class="code-tab-btn" onclick="changeLang('node')">Node.js</button>
+      <button class="code-tab-btn" onclick="changeLang('python')">Python</button>
+    </div>
+    <div class="code-box">
+      <pre class="code-block" id="json-code-box"></pre>
+    </div>
+  </div>
+
+  <script>
+    const rows = [{"path":"compilerOptions","name":"compilerOptions","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"compilerOptions.target","name":"target","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"default":"es2022","minLength":0}},{"path":"compilerOptions.module","name":"module","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"default":"commonjs","minLength":0}},{"path":"compilerOptions.lib","name":"lib","depth":2,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"compilerOptions.lib.*","name":"*","depth":3,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"compilerOptions.allowJs","name":"allowJs","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.checkJs","name":"checkJs","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.jsx","name":"jsx","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"compilerOptions.declaration","name":"declaration","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.declarationMap","name":"declarationMap","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.emitDeclarationOnly","name":"emitDeclarationOnly","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.sourceMap","name":"sourceMap","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.outDir","name":"outDir","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"compilerOptions.rootDir","name":"rootDir","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"compilerOptions.removeComments","name":"removeComments","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.noEmit","name":"noEmit","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.strict","name":"strict","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":true,"enum":[false,true]}},{"path":"compilerOptions.noImplicitAny","name":"noImplicitAny","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":true,"enum":[false,true]}},{"path":"compilerOptions.strictNullChecks","name":"strictNullChecks","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":true,"enum":[false,true]}},{"path":"compilerOptions.strictFunctionTypes","name":"strictFunctionTypes","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":true,"enum":[false,true]}},{"path":"compilerOptions.noUnusedLocals","name":"noUnusedLocals","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.noUnusedParameters","name":"noUnusedParameters","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.noImplicitReturns","name":"noImplicitReturns","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.moduleResolution","name":"moduleResolution","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"default":"node","minLength":0}},{"path":"compilerOptions.baseUrl","name":"baseUrl","depth":2,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"compilerOptions.paths","name":"paths","depth":2,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"compilerOptions.paths.*","name":"*","depth":3,"type":"array","required":false,"description":"","constraints":{"minItems":0,"uniqueItems":false}},{"path":"compilerOptions.paths.*.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"compilerOptions.esModuleInterop","name":"esModuleInterop","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":true,"enum":[false,true]}},{"path":"compilerOptions.experimentalDecorators","name":"experimentalDecorators","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.emitDecoratorMetadata","name":"emitDecoratorMetadata","depth":2,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"compilerOptions.*","name":"*","depth":2,"type":"any","required":false,"description":"","constraints":{}},{"path":"files","name":"files","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"files.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"include","name":"include","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"include.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"exclude","name":"exclude","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"exclude.*","name":"*","depth":2,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"references","name":"references","depth":1,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"references.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["path"]}},{"path":"references.*.path","name":"path","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"references.*.prepend","name":"prepend","depth":3,"type":"any","required":false,"description":"","constraints":{"required":false,"default":false,"enum":[false,true]}},{"path":"references.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
+    let activeIdx = 0;
+    let activeLang = 'curl';
+
+    function scrollToSection(idx) {
+      const target = document.getElementById('sec-' + idx);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      highlightActive(idx);
+    }
+
+    function highlightActive(idx) {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      document.getElementById('nav-item-' + idx)?.classList.add('active');
+      activeIdx = idx;
+      updateCodeBlock();
+    }
+
+    function changeLang(lang) {
+      document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      activeLang = lang;
+      updateCodeBlock();
+    }
+
+    function updateCodeBlock() {
+      const match = rows[activeIdx];
+      if (!match) return;
+
+      let code = '';
+      if (activeLang === 'curl') {
+        code = `curl https://api.stripe.com/v1/spec \\\\n  -u key_live_123: \\\\n  -d "${match.path}"="${match.type}"`;
+      } else if (activeLang === 'node') {
+        code = `const stripe = require('stripe')('key_live_123');\n\nawait stripe.schemas.validate({\n  path: "${match.path}",\n  type: "${match.type}",\n  constraints: ${JSON.stringify(match.constraints)}\n});`;
+      } else if (activeLang === 'python') {
+        code = `import stripe\nstripe.api_key = "key_live_123"\n\nstripe.Schema.validate(\n  path="${match.path}",\n  type="${match.type}",\n  constraints=${JSON.stringify(match.constraints)}\n)`;
+      }
+
+      document.getElementById('json-code-box').innerText = code;
+    }
+
+    // Scrollspy
+    const docPane = document.getElementById('doc-pane');
+    docPane.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.stripe-section');
+      let currentActive = 0;
+      
+      sections.forEach(sec => {
+        const top = sec.offsetTop - docPane.scrollTop;
+        if (top < 150) {
+          currentActive = sec.getAttribute('data-idx');
+        }
+      });
+      
+      if (currentActive !== activeIdx) {
+        highlightActive(currentActive);
+      }
+    });
+
+    highlightActive(0);
+
+    const sidebar = document.getElementById('sidebar');
+    const resizer1 = document.getElementById('resizer-1');
+    const codePane = document.getElementById('code-pane');
+    const resizer2 = document.getElementById('resizer-2');
+
+    let currentResizer = null;
+
+    resizer1.addEventListener('mousedown', () => {
+      currentResizer = 1;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    resizer2.addEventListener('mousedown', () => {
+      currentResizer = 2;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (currentResizer === null) return;
+      if (currentResizer === 1) {
+        if (e.clientX > 180 && e.clientX < 400) sidebar.style.width = e.clientX + 'px';
+      } else if (currentResizer === 2) {
+        const newWidth = window.innerWidth - e.clientX;
+        if (newWidth > 250 && newWidth < 600) codePane.style.width = newWidth + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      currentResizer = null;
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    });
+  </script>
+</body>
+</html>

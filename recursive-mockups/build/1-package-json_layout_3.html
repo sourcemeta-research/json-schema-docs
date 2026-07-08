@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NPM Package Specification - Apple Developer Reference</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #FFFFFF;
+      color: #1D1D1F;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .apple-sidebar {
+      width: 260px;
+      min-width: 180px;
+      max-width: 450px;
+      background-color: #F5F5F7;
+      border-right: 1px solid #D2D2D7;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #D2D2D7; }
+    .sidebar-header h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #86868B; }
+    
+    .nav-list-apple { list-style: none; overflow-y: auto; flex: 1; padding: 0.5rem; }
+    .nav-item-apple {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: #1D1D1F;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-radius: 6px;
+      margin-bottom: 0.15rem;
+    }
+    .nav-item-apple:hover { background-color: rgba(0,0,0,0.04); }
+    .nav-item-apple.active {
+      background-color: #0071E3; /* Apple Blue */
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+    .nav-item-apple.active .icon-cube { color: #FFFFFF; }
+    .icon-cube { color: #86868B; font-size: 0.7rem; }
+    .nav-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; font-family: monospace; }
+
+    .resizer {
+      width: 4px;
+      cursor: col-resize;
+      background-color: #D2D2D7;
+      z-index: 10;
+    }
+    .resizer:hover { background-color: #0071E3; }
+
+    .doc-pane {
+      flex: 1;
+      overflow-y: auto;
+      background-color: #FFFFFF;
+      padding: 3rem 4rem;
+      height: 100%;
+    }
+    
+    .apple-breadcrumbs {
+      font-size: 0.75rem;
+      color: #86868B;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .apple-breadcrumbs span { cursor: pointer; }
+    .apple-breadcrumbs span:hover { color: #0071E3; }
+
+    .apple-doc-content { display: none; max-width: 700px; }
+    .apple-doc-content.active { display: block; }
+    
+    .meta-label { font-size: 0.7rem; font-weight: 700; color: #86868B; letter-spacing: 0.05em; text-transform: uppercase; }
+    .doc-title { font-size: 2.2rem; font-weight: 700; color: #1D1D1F; margin-top: 0.25rem; margin-bottom: 1.5rem; letter-spacing: -0.03em; word-break: break-all; font-family: monospace; }
+
+    .declaration-block { margin-bottom: 2.5rem; }
+    .declaration-block h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .declaration-block pre {
+      background-color: #F5F5F7;
+      border: 1px solid #D2D2D7;
+      padding: 1.25rem 1.5rem;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    .decl-key { color: #B31312; }
+    .decl-name { color: #000; font-weight: bold; }
+    .decl-type { color: #0071E3; }
+    .decl-val { color: #86868B; }
+
+    .doc-section { margin-bottom: 2.5rem; }
+    .doc-section h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; border-bottom: 1px solid #D2D2D7; padding-bottom: 0.5rem; }
+    .desc-text { font-size: 0.95rem; color: #1D1D1F; line-height: 1.5; }
+
+    .apple-constraints-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .constraint-row { display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed #E2E2E2; padding: 0.25rem 0; font-family: monospace; }
+    .c-key { color: #86868B; }
+    .c-val { color: #0071E3; font-weight: 600; }
+
+    .attrib-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .attrib-table td { border-bottom: 1px solid #E2E2E2; padding: 0.5rem 0; }
+    .attrib-table tr td:first-child { width: 30%; color: #86868B; }
+    
+    .none-text { font-size: 0.85rem; color: #86868B; font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <div class="apple-sidebar" id="apple-sidebar">
+    <div class="sidebar-header">
+      <h3>API Reference</h3>
+    </div>
+    <ul class="nav-list-apple">
+      
+      <li class="nav-item-apple" id="apple-nav-0" onclick="showAppleDoc(0)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">name</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-1" onclick="showAppleDoc(1)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">version</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-2" onclick="showAppleDoc(2)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">description</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-3" onclick="showAppleDoc(3)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">keywords</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-4" onclick="showAppleDoc(4)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">keywords.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-5" onclick="showAppleDoc(5)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">homepage</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-6" onclick="showAppleDoc(6)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">bugs</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-7" onclick="showAppleDoc(7)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">license</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-8" onclick="showAppleDoc(8)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">author</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-9" onclick="showAppleDoc(9)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">contributors</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-10" onclick="showAppleDoc(10)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">contributors.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-11" onclick="showAppleDoc(11)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">contributors.*.name</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-12" onclick="showAppleDoc(12)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">contributors.*.email</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-13" onclick="showAppleDoc(13)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">contributors.*.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-14" onclick="showAppleDoc(14)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">bin</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-15" onclick="showAppleDoc(15)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">repository</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-16" onclick="showAppleDoc(16)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">repository.type</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-17" onclick="showAppleDoc(17)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">repository.url</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-18" onclick="showAppleDoc(18)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">repository.directory</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-19" onclick="showAppleDoc(19)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">repository.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-20" onclick="showAppleDoc(20)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">scripts</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-21" onclick="showAppleDoc(21)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">scripts.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-22" onclick="showAppleDoc(22)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">dependencies</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-23" onclick="showAppleDoc(23)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">dependencies.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-24" onclick="showAppleDoc(24)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">devDependencies</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-25" onclick="showAppleDoc(25)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">devDependencies.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-26" onclick="showAppleDoc(26)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">peerDependencies</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-27" onclick="showAppleDoc(27)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">peerDependencies.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-28" onclick="showAppleDoc(28)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">engines</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-29" onclick="showAppleDoc(29)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">engines.node</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-30" onclick="showAppleDoc(30)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">engines.npm</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-31" onclick="showAppleDoc(31)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">engines.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-32" onclick="showAppleDoc(32)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">publishConfig</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-33" onclick="showAppleDoc(33)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">publishConfig.registry</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-34" onclick="showAppleDoc(34)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">publishConfig.access</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-35" onclick="showAppleDoc(35)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">publishConfig.*</span>
+      </li>
+    
+      <li class="nav-item-apple" id="apple-nav-36" onclick="showAppleDoc(36)">
+        <span class="icon-cube">■</span>
+        <span class="nav-name">*</span>
+      </li>
+    
+    </ul>
+  </div>
+
+  <div class="resizer" id="sidebar-resizer"></div>
+
+  <div class="doc-pane">
+    <div class="apple-breadcrumbs">
+      <span>Developer</span> &gt; <span>Documentation</span> &gt; <span>NPM Package Specification</span> &gt; <span style="color:#1D1D1F; font-weight:600;">API Reference</span>
+    </div>
+    
+    <div class="docs-list">
+      
+      <div id="apple-doc-0" class="apple-doc-content active">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">name</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">name</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">The unique name of the package.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">pattern:</span>
+              <span class="c-val">"^[a-zA-Z0-9-._]+$"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>YES</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-1" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">version</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">version</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">Semantic version number.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">pattern:</span>
+              <span class="c-val">"^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>YES</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-2" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">description</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">description</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-3" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">keywords</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">keywords</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems:</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-4" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">keywords.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-5" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">homepage</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">homepage</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">format:</span>
+              <span class="c-val">"uri"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-6" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">bugs</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">bugs</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-7" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">license</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">license</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default:</span>
+              <span class="c-val">"ISC"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-8" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">author</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">author</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-9" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">contributors</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">contributors</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems:</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-10" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">contributors.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-11" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">contributors.*.name</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">name</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">true</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>YES</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 3</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-12" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">contributors.*.email</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">email</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">format:</span>
+              <span class="c-val">"email"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 3</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-13" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">contributors.*.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 3</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-14" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">bin</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">bin</span>: <span class="decl-type">[object Object] | [object Object]</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-15" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">repository</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">repository</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">required:</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F5F5F7; border-left: 2px solid var(--accent); padding: 5px; color: #1D1D1F; overflow-x: auto;">[
+  "type",
+  "url"
+]</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-16" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">repository.type</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">type</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default:</span>
+              <span class="c-val">"git"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>YES</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-17" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">repository.url</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">url</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>YES</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-18" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">repository.directory</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">directory</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-19" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">repository.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-20" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">scripts</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">scripts</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-21" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">scripts.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-22" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">dependencies</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">dependencies</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-23" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">dependencies.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-24" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">devDependencies</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">devDependencies</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-25" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">devDependencies.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-26" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">peerDependencies</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">peerDependencies</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-27" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">peerDependencies.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-28" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">engines</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">engines</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-29" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">engines.node</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">node</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default:</span>
+              <span class="c-val">">=18.0.0"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-30" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">engines.npm</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">npm</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-31" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">engines.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-32" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">publishConfig</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">publishConfig</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-33" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">publishConfig.registry</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">registry</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">format:</span>
+              <span class="c-val">"uri"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-34" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">publishConfig.access</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">access</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <div class="apple-constraints-list">
+            <div class="constraint-row">
+              <span class="c-key">required:</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default:</span>
+              <span class="c-val">"public"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength:</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-35" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">publishConfig.*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 2</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+      <div id="apple-doc-36" class="apple-doc-content ">
+        <span class="meta-label">PROPERTY</span>
+        <h1 class="doc-title">*</h1>
+        
+        <div class="declaration-block">
+          <h3>Declaration</h3>
+          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
+        </div>
+
+        <div class="doc-section">
+          <h3>Discussion</h3>
+          <p class="desc-text">No supplementary comments accompany this property.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Validation Constraints</h3>
+          <p class="none-text">No additional constraints defined.</p>
+        </div>
+
+        <div class="doc-section">
+          <h3>Attributes</h3>
+          <table class="attrib-table">
+            <tr>
+              <td>Required</td>
+              <td><strong>NO</strong></td>
+            </tr>
+            <tr>
+              <td>Depth Index</td>
+              <td><code>Level 1</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+
+  <script>
+    function showAppleDoc(idx) {
+      document.querySelectorAll('.nav-item-apple').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.apple-doc-content').forEach(doc => doc.classList.remove('active'));
+
+      document.getElementById('apple-nav-' + idx).classList.add('active');
+      document.getElementById('apple-doc-' + idx).classList.add('active');
+    }
+
+    showAppleDoc(0);
+
+    const sidebar = document.getElementById('apple-sidebar');
+    const resizer = document.getElementById('sidebar-resizer');
+    let isResizing = false;
+
+    resizer.addEventListener('mousedown', () => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      if (e.clientX > 180 && e.clientX < 450) {
+        sidebar.style.width = e.clientX + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isResizing = false;
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    });
+  </script>
+</body>
+</html>

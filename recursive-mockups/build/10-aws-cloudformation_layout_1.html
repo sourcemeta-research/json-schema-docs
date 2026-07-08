@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AWS CloudFormation Specification - Stripe API Docs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --side-bg: #F8F9FA;
+      --border: #E3E8EE;
+      --text: #1F2937;
+      --text-dim: #6B7280;
+      --accent: #635BFF;
+      --code-bg: #0A101D;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      min-width: 180px;
+      max-width: 400px;
+      background-color: var(--side-bg);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-header h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text); }
+    .nav-list { list-style: none; overflow-y: auto; flex: 1; padding: 1rem 0.5rem; }
+    .nav-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 4px;
+      margin-bottom: 0.15rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .nav-item:hover { color: var(--text); background-color: rgba(0,0,0,0.02); }
+    .nav-item.active { color: var(--accent); background-color: rgba(99, 91, 255, 0.08); font-weight: 600; }
+    .req-dot { width: 5px; height: 5px; background: #EF4444; border-radius: 50%; }
+
+    .resizer {
+      width: 4px;
+      cursor: col-resize;
+      background-color: var(--border);
+      transition: background-color 0.2s;
+      z-index: 10;
+    }
+    .resizer:hover, .resizer.resizing { background-color: var(--accent); }
+
+    .doc-column {
+      flex: 1;
+      overflow-y: auto;
+      padding: 3rem 4rem;
+      scroll-behavior: smooth;
+    }
+    .doc-header {
+      max-width: 700px;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+    .doc-header h1 { font-size: 2rem; font-weight: 700; color: #111827; }
+    .doc-header p { color: var(--text-dim); margin-top: 0.5rem; font-size: 0.9rem; }
+
+    .stripe-section {
+      max-width: 700px;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .section-header h2 { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: #111827; }
+    .type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(99, 91, 255, 0.08); padding: 0.15rem 0.4rem; font-weight: 600; }
+    
+    .status-badge { font-size: 0.65rem; font-weight: bold; padding: 0.15rem 0.35rem; }
+    .status-badge.required { color: #DC2626; background: rgba(220, 38, 38, 0.08); }
+    .status-badge.optional { color: var(--text-dim); background: rgba(0, 0, 0, 0.04); }
+    
+    .section-desc { font-size: 0.9rem; color: #374151; line-height: 1.6; margin-bottom: 1rem; }
+
+    .stripe-constraints { background: var(--side-bg); border: 1px solid var(--border); padding: 0.75rem 1rem; }
+    .constraint-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.25rem; }
+    .constraint-row:last-child { margin-bottom: 0; }
+    .c-key { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .c-val { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+    .code-column {
+      width: 380px;
+      min-width: 250px;
+      max-width: 600px;
+      background-color: var(--code-bg);
+      border-left: 1px solid #1E293B;
+      color: #94A3B8;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .code-tabs {
+      display: flex;
+      background-color: #0E1626;
+      border-bottom: 1px solid #1E293B;
+      padding: 0 1rem;
+    }
+    .code-tab-btn {
+      background: none;
+      border: none;
+      color: #64748B;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .code-tab-btn.active {
+      color: #FFF;
+      border-bottom: 2px solid var(--accent);
+    }
+    
+    .code-box {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+    .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #34D399; line-height: 1.5; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>Schema Paths</h3>
+    </div>
+    <ul class="nav-list">
+      
+      <li class="nav-item" id="nav-item-0" onclick="scrollToSection('0')">
+        <span>AWSTemplateFormatVersion</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-1" onclick="scrollToSection('1')">
+        <span>Description</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-2" onclick="scrollToSection('2')">
+        <span>Parameters</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-3" onclick="scrollToSection('3')">
+        <span>Parameters.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-4" onclick="scrollToSection('4')">
+        <span>Parameters.*.Type</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-5" onclick="scrollToSection('5')">
+        <span>Parameters.*.Default</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-6" onclick="scrollToSection('6')">
+        <span>Parameters.*.AllowedValues</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-7" onclick="scrollToSection('7')">
+        <span>Parameters.*.AllowedValues.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-8" onclick="scrollToSection('8')">
+        <span>Parameters.*.Description</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-9" onclick="scrollToSection('9')">
+        <span>Parameters.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-10" onclick="scrollToSection('10')">
+        <span>Mappings</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-11" onclick="scrollToSection('11')">
+        <span>Mappings.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-12" onclick="scrollToSection('12')">
+        <span>Mappings.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-13" onclick="scrollToSection('13')">
+        <span>Mappings.*.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-14" onclick="scrollToSection('14')">
+        <span>Resources</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-15" onclick="scrollToSection('15')">
+        <span>Resources.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-16" onclick="scrollToSection('16')">
+        <span>Resources.*.Type</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-17" onclick="scrollToSection('17')">
+        <span>Resources.*.Properties</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-18" onclick="scrollToSection('18')">
+        <span>Resources.*.Properties.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-19" onclick="scrollToSection('19')">
+        <span>Resources.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-20" onclick="scrollToSection('20')">
+        <span>Outputs</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-21" onclick="scrollToSection('21')">
+        <span>Outputs.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-22" onclick="scrollToSection('22')">
+        <span>Outputs.*.Description</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-23" onclick="scrollToSection('23')">
+        <span>Outputs.*.Value</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-24" onclick="scrollToSection('24')">
+        <span>Outputs.*.Export</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-25" onclick="scrollToSection('25')">
+        <span>Outputs.*.Export.Name</span>
+        <span class="req-dot"></span>
+      </li>
+    
+      <li class="nav-item" id="nav-item-26" onclick="scrollToSection('26')">
+        <span>Outputs.*.Export.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-27" onclick="scrollToSection('27')">
+        <span>Outputs.*.*</span>
+        
+      </li>
+    
+      <li class="nav-item" id="nav-item-28" onclick="scrollToSection('28')">
+        <span>*</span>
+        
+      </li>
+    
+    </ul>
+  </div>
+
+  <div class="resizer" id="resizer-1"></div>
+
+  <div class="doc-column" id="doc-pane">
+    <header class="doc-header">
+      <h1>AWS CloudFormation Specification API</h1>
+      <p>Infrastructure template parameters, intrinsic mappings, and output variables.</p>
+    </header>
+    <div class="sections-list">
+      
+      <section id="sec-0" class="stripe-section" data-idx="0">
+        <div class="section-header">
+          <h2>AWSTemplateFormatVersion</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">"2010-09-09"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-1" class="stripe-section" data-idx="1">
+        <div class="section-header">
+          <h2>Description</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-2" class="stripe-section" data-idx="2">
+        <div class="section-header">
+          <h2>Parameters</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-3" class="stripe-section" data-idx="3">
+        <div class="section-header">
+          <h2>Parameters.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">required</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  "Type"
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-4" class="stripe-section" data-idx="4">
+        <div class="section-header">
+          <h2>Parameters.*.Type</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge required">REQUIRED</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">default</span>
+              <span class="c-val">"String"</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-5" class="stripe-section" data-idx="5">
+        <div class="section-header">
+          <h2>Parameters.*.Default</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-6" class="stripe-section" data-idx="6">
+        <div class="section-header">
+          <h2>Parameters.*.AllowedValues</h2>
+          <span class="type-badge">array</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minItems</span>
+              <span class="c-val">0</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">uniqueItems</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-7" class="stripe-section" data-idx="7">
+        <div class="section-header">
+          <h2>Parameters.*.AllowedValues.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-8" class="stripe-section" data-idx="8">
+        <div class="section-header">
+          <h2>Parameters.*.Description</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-9" class="stripe-section" data-idx="9">
+        <div class="section-header">
+          <h2>Parameters.*.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-10" class="stripe-section" data-idx="10">
+        <div class="section-header">
+          <h2>Mappings</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-11" class="stripe-section" data-idx="11">
+        <div class="section-header">
+          <h2>Mappings.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-12" class="stripe-section" data-idx="12">
+        <div class="section-header">
+          <h2>Mappings.*.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-13" class="stripe-section" data-idx="13">
+        <div class="section-header">
+          <h2>Mappings.*.*.*</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-14" class="stripe-section" data-idx="14">
+        <div class="section-header">
+          <h2>Resources</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-15" class="stripe-section" data-idx="15">
+        <div class="section-header">
+          <h2>Resources.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">required</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  "Type",
+  "Properties"
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-16" class="stripe-section" data-idx="16">
+        <div class="section-header">
+          <h2>Resources.*.Type</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge required">REQUIRED</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-17" class="stripe-section" data-idx="17">
+        <div class="section-header">
+          <h2>Resources.*.Properties</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge required">REQUIRED</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-18" class="stripe-section" data-idx="18">
+        <div class="section-header">
+          <h2>Resources.*.Properties.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-19" class="stripe-section" data-idx="19">
+        <div class="section-header">
+          <h2>Resources.*.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-20" class="stripe-section" data-idx="20">
+        <div class="section-header">
+          <h2>Outputs</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-21" class="stripe-section" data-idx="21">
+        <div class="section-header">
+          <h2>Outputs.*</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">required</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  "Value"
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-22" class="stripe-section" data-idx="22">
+        <div class="section-header">
+          <h2>Outputs.*.Description</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-23" class="stripe-section" data-idx="23">
+        <div class="section-header">
+          <h2>Outputs.*.Value</h2>
+          <span class="type-badge">[object Object] | [object Object]</span>
+          <span class="status-badge required">REQUIRED</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-24" class="stripe-section" data-idx="24">
+        <div class="section-header">
+          <h2>Outputs.*.Export</h2>
+          <span class="type-badge">object</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row nested" style="flex-wrap: wrap;">
+              <span class="c-key">required</span>
+              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">[
+  "Name"
+]</pre>
+              </div>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-25" class="stripe-section" data-idx="25">
+        <div class="section-header">
+          <h2>Outputs.*.Export.Name</h2>
+          <span class="type-badge">string</span>
+          <span class="status-badge required">REQUIRED</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        <div class="stripe-constraints">
+            <div class="constraint-row">
+              <span class="c-key">required</span>
+              <span class="c-val">false</span>
+            </div>
+          
+            <div class="constraint-row">
+              <span class="c-key">minLength</span>
+              <span class="c-val">0</span>
+            </div>
+          </div>
+      </section>
+    
+      <section id="sec-26" class="stripe-section" data-idx="26">
+        <div class="section-header">
+          <h2>Outputs.*.Export.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-27" class="stripe-section" data-idx="27">
+        <div class="section-header">
+          <h2>Outputs.*.*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+      <section id="sec-28" class="stripe-section" data-idx="28">
+        <div class="section-header">
+          <h2>*</h2>
+          <span class="type-badge">any</span>
+          <span class="status-badge optional">OPTIONAL</span>
+        </div>
+        <p class="section-desc">No descriptive comments are provided for this parameter.</p>
+        
+      </section>
+    
+    </div>
+  </div>
+
+  <div class="resizer" id="resizer-2"></div>
+
+  <div class="code-column" id="code-pane">
+    <div class="code-tabs">
+      <button class="code-tab-btn active" onclick="changeLang('curl')">cURL</button>
+      <button class="code-tab-btn" onclick="changeLang('node')">Node.js</button>
+      <button class="code-tab-btn" onclick="changeLang('python')">Python</button>
+    </div>
+    <div class="code-box">
+      <pre class="code-block" id="json-code-box"></pre>
+    </div>
+  </div>
+
+  <script>
+    const rows = [{"path":"AWSTemplateFormatVersion","name":"AWSTemplateFormatVersion","depth":1,"type":"string","required":false,"description":"","constraints":{"required":false,"default":"2010-09-09","minLength":0}},{"path":"Description","name":"Description","depth":1,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"Parameters","name":"Parameters","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"Parameters.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["Type"]}},{"path":"Parameters.*.Type","name":"Type","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"default":"String","minLength":0}},{"path":"Parameters.*.Default","name":"Default","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"Parameters.*.AllowedValues","name":"AllowedValues","depth":3,"type":"array","required":false,"description":"","constraints":{"required":false,"minItems":0,"uniqueItems":false}},{"path":"Parameters.*.AllowedValues.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"Parameters.*.Description","name":"Description","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"Parameters.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"Mappings","name":"Mappings","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"Mappings.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{}},{"path":"Mappings.*.*","name":"*","depth":3,"type":"object","required":false,"description":"","constraints":{}},{"path":"Mappings.*.*.*","name":"*","depth":4,"type":"string","required":false,"description":"","constraints":{"minLength":0}},{"path":"Resources","name":"Resources","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"Resources.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["Type","Properties"]}},{"path":"Resources.*.Type","name":"Type","depth":3,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"Resources.*.Properties","name":"Properties","depth":3,"type":"object","required":true,"description":"","constraints":{"required":false}},{"path":"Resources.*.Properties.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"Resources.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"Outputs","name":"Outputs","depth":1,"type":"object","required":false,"description":"","constraints":{"required":false}},{"path":"Outputs.*","name":"*","depth":2,"type":"object","required":false,"description":"","constraints":{"required":["Value"]}},{"path":"Outputs.*.Description","name":"Description","depth":3,"type":"string","required":false,"description":"","constraints":{"required":false,"minLength":0}},{"path":"Outputs.*.Value","name":"Value","depth":3,"type":"[object Object] | [object Object]","required":true,"description":"","constraints":{"required":false}},{"path":"Outputs.*.Export","name":"Export","depth":3,"type":"object","required":false,"description":"","constraints":{"required":["Name"]}},{"path":"Outputs.*.Export.Name","name":"Name","depth":4,"type":"string","required":true,"description":"","constraints":{"required":false,"minLength":0}},{"path":"Outputs.*.Export.*","name":"*","depth":4,"type":"any","required":false,"description":"","constraints":{}},{"path":"Outputs.*.*","name":"*","depth":3,"type":"any","required":false,"description":"","constraints":{}},{"path":"*","name":"*","depth":1,"type":"any","required":false,"description":"","constraints":{}}];
+    let activeIdx = 0;
+    let activeLang = 'curl';
+
+    function scrollToSection(idx) {
+      const target = document.getElementById('sec-' + idx);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      highlightActive(idx);
+    }
+
+    function highlightActive(idx) {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      document.getElementById('nav-item-' + idx)?.classList.add('active');
+      activeIdx = idx;
+      updateCodeBlock();
+    }
+
+    function changeLang(lang) {
+      document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      activeLang = lang;
+      updateCodeBlock();
+    }
+
+    function updateCodeBlock() {
+      const match = rows[activeIdx];
+      if (!match) return;
+
+      let code = '';
+      if (activeLang === 'curl') {
+        code = `curl https://api.stripe.com/v1/spec \\\\n  -u key_live_123: \\\\n  -d "${match.path}"="${match.type}"`;
+      } else if (activeLang === 'node') {
+        code = `const stripe = require('stripe')('key_live_123');\n\nawait stripe.schemas.validate({\n  path: "${match.path}",\n  type: "${match.type}",\n  constraints: ${JSON.stringify(match.constraints)}\n});`;
+      } else if (activeLang === 'python') {
+        code = `import stripe\nstripe.api_key = "key_live_123"\n\nstripe.Schema.validate(\n  path="${match.path}",\n  type="${match.type}",\n  constraints=${JSON.stringify(match.constraints)}\n)`;
+      }
+
+      document.getElementById('json-code-box').innerText = code;
+    }
+
+    // Scrollspy
+    const docPane = document.getElementById('doc-pane');
+    docPane.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.stripe-section');
+      let currentActive = 0;
+      
+      sections.forEach(sec => {
+        const top = sec.offsetTop - docPane.scrollTop;
+        if (top < 150) {
+          currentActive = sec.getAttribute('data-idx');
+        }
+      });
+      
+      if (currentActive !== activeIdx) {
+        highlightActive(currentActive);
+      }
+    });
+
+    highlightActive(0);
+
+    const sidebar = document.getElementById('sidebar');
+    const resizer1 = document.getElementById('resizer-1');
+    const codePane = document.getElementById('code-pane');
+    const resizer2 = document.getElementById('resizer-2');
+
+    let currentResizer = null;
+
+    resizer1.addEventListener('mousedown', () => {
+      currentResizer = 1;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    resizer2.addEventListener('mousedown', () => {
+      currentResizer = 2;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (currentResizer === null) return;
+      if (currentResizer === 1) {
+        if (e.clientX > 180 && e.clientX < 400) sidebar.style.width = e.clientX + 'px';
+      } else if (currentResizer === 2) {
+        const newWidth = window.innerWidth - e.clientX;
+        if (newWidth > 250 && newWidth < 600) codePane.style.width = newWidth + 'px';
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      currentResizer = null;
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    });
+  </script>
+</body>
+</html>

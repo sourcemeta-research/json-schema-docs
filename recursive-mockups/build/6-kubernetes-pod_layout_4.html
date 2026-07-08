@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kubernetes Pod Template - Cursor Editor</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #f7f7f4; /* Cursor warm cream background */
+      color: #26251e; /* Cursor warm ink text */
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .cursor-window {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      border: 1px solid #ccd0c9;
+    }
+
+    /* Left pane: File directory tree */
+    .cursor-left-pane {
+      width: 250px;
+      background-color: #f0f0eb;
+      border-right: 1px solid #ccd0c9;
+      display: flex;
+      flex-direction: column;
+    }
+    .left-header {
+      padding: 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #ccd0c9;
+      color: #72726b;
+    }
+    .left-tree { flex: 1; overflow-y: auto; padding: 0.5rem; }
+    .cursor-tree-row {
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      color: #5c5c56;
+    }
+    .cursor-tree-row:hover { background-color: rgba(0,0,0,0.03); }
+    .cursor-tree-row.active {
+      background-color: #e5e5df;
+      color: #000;
+      font-weight: 600;
+    }
+    .tree-bullet { color: #f54e00; }
+
+    /* Middle pane: Editor workspace */
+    .cursor-editor-pane {
+      flex: 1.2;
+      background-color: #f7f7f4;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .editor-header {
+      padding: 0.75rem 1.5rem;
+      border-bottom: 1px solid #ccd0c9;
+      background-color: #f0f0eb;
+      font-size: 0.8rem;
+      color: #72726b;
+      display: flex;
+      justify-content: space-between;
+    }
+    .editor-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+    
+    .cursor-code-block { display: none; }
+    .cursor-code-block.active { display: block; }
+    
+    .line { display: flex; margin-bottom: 0.25rem; }
+    .l-num { width: 30px; color: #ccd0c9; flex-shrink: 0; }
+    .token.comment { color: #8e928a; }
+    .token.key { color: #a626a4; }
+    .token.val { color: #f54e00; }
+    .token.str { color: #50a14f; }
+    .token.bool { color: #4078f2; }
+
+    /* Right pane: AI Chat sidebar */
+    .cursor-chat-pane {
+      width: 320px;
+      background-color: #f0f0eb;
+      border-left: 1px solid #ccd0c9;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+    .chat-header {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #72726b;
+      text-transform: uppercase;
+      border-bottom: 1px solid #ccd0c9;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .chat-body { flex: 1; overflow-y: auto; }
+    
+    .cursor-chat-bubble { display: none; }
+    .cursor-chat-bubble.active { display: block; }
+    
+    .chat-agent {
+      font-weight: 700;
+      color: #f54e00; /* Cursor Orange */
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .cursor-chat-bubble p { font-size: 0.85rem; line-height: 1.4; color: #5c5c56; }
+    
+    .ai-diff {
+      background-color: #e5e5df;
+      border: 1px solid #ccd0c9;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .diff-line.plus { color: #22863a; }
+    
+    .apply-btn {
+      margin-top: 1rem;
+      background-color: #f54e00;
+      color: #FFF;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border-radius: 4px;
+      width: 100%;
+    }
+    .apply-btn:hover { background-color: #d44300; }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-window">
+    <div class="cursor-left-pane">
+      <div class="left-header">Editor Explorer</div>
+      <div class="left-tree">
+        
+      <div class="cursor-tree-row active" id="tree-row-0" onclick="focusCursorElement(0)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">apiVersion</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-1" onclick="focusCursorElement(1)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">kind</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-2" onclick="focusCursorElement(2)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-3" onclick="focusCursorElement(3)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.name</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-4" onclick="focusCursorElement(4)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.namespace</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-5" onclick="focusCursorElement(5)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.labels</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-6" onclick="focusCursorElement(6)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.labels.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-7" onclick="focusCursorElement(7)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.annotations</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-8" onclick="focusCursorElement(8)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.annotations.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-9" onclick="focusCursorElement(9)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">metadata.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-10" onclick="focusCursorElement(10)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-11" onclick="focusCursorElement(11)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.restartPolicy</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-12" onclick="focusCursorElement(12)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.dnsPolicy</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-13" onclick="focusCursorElement(13)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.hostNetwork</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-14" onclick="focusCursorElement(14)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-15" onclick="focusCursorElement(15)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-16" onclick="focusCursorElement(16)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.name</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-17" onclick="focusCursorElement(17)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.image</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-18" onclick="focusCursorElement(18)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.command</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-19" onclick="focusCursorElement(19)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.command.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-20" onclick="focusCursorElement(20)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.workingDir</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-21" onclick="focusCursorElement(21)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.ports</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-22" onclick="focusCursorElement(22)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.ports.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-23" onclick="focusCursorElement(23)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.ports.*.name</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-24" onclick="focusCursorElement(24)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.ports.*.containerPort</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-25" onclick="focusCursorElement(25)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.ports.*.protocol</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-26" onclick="focusCursorElement(26)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.ports.*.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-27" onclick="focusCursorElement(27)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.imagePullPolicy</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-28" onclick="focusCursorElement(28)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.containers.*.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-29" onclick="focusCursorElement(29)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">spec.*</span>
+      </div>
+    
+      <div class="cursor-tree-row " id="tree-row-30" onclick="focusCursorElement(30)">
+        <span class="tree-bullet">◇</span>
+        <span class="tree-text">*</span>
+      </div>
+    
+      </div>
+    </div>
+    
+    <div class="cursor-editor-pane">
+      <div class="editor-header">
+        <span>Active Tab: schema.json</span>
+        <span>JSON Schema Draft 3</span>
+      </div>
+      <div class="editor-body">
+        
+      <div id="editor-block-0" class="cursor-code-block active">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: apiVersion</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"apiVersion"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">true</span>,
+  <span class="token key">"default"</span>: <span class="token val">"v1"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-1" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: kind</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"kind"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">true</span>,
+  <span class="token key">"default"</span>: <span class="token val">"Pod"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-2" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"metadata"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">["name"]</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-3" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.name</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"name"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-4" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.namespace</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"namespace"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"default"</span>: <span class="token val">"default"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-5" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.labels</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"labels"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-6" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.labels.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-7" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.annotations</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"annotations"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-8" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.annotations.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-9" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: metadata.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-10" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"spec"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">["containers"]</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-11" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.restartPolicy</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"restartPolicy"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"default"</span>: <span class="token val">"Always"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-12" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.dnsPolicy</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"dnsPolicy"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"default"</span>: <span class="token val">"ClusterFirst"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-13" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.hostNetwork</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"hostNetwork"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"default"</span>: <span class="token val">false</span>,
+  <span class="token key">"enum"</span>: <span class="token val">[false,true]</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-14" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"containers"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"array"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minItems"</span>: <span class="token val">0</span>,
+  <span class="token key">"uniqueItems"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-15" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">["name","image"]</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-16" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.name</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"name"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-17" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.image</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"image"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-18" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.command</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"command"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"array"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minItems"</span>: <span class="token val">0</span>,
+  <span class="token key">"uniqueItems"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-19" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.command.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-20" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.workingDir</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"workingDir"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-21" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.ports</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"ports"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"array"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minItems"</span>: <span class="token val">0</span>,
+  <span class="token key">"uniqueItems"</span>: <span class="token val">false</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-22" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.ports.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"object"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">["containerPort"]</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-23" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.ports.*.name</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"name"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-24" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.ports.*.containerPort</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"containerPort"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"integer"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">true</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"divisibleBy"</span>: <span class="token val">1</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-25" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.ports.*.protocol</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"protocol"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"default"</span>: <span class="token val">"TCP"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-26" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.ports.*.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-27" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.imagePullPolicy</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"imagePullPolicy"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"string"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        <div class="line"><span class="l-num">6</span>   <span class="token key">"required"</span>: <span class="token val">false</span>,
+  <span class="token key">"default"</span>: <span class="token val">"IfNotPresent"</span>,
+  <span class="token key">"minLength"</span>: <span class="token val">0</span>,
+</div>
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-28" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.containers.*.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-29" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: spec.*</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      <div id="editor-block-30" class="cursor-code-block ">
+        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: *</span></div>
+        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: No notes available.</span></div>
+        <div class="line"><span class="l-num">3</span> <span class="token key">"*"</span>: {</div>
+        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"any"</span>,</div>
+        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">false</span>,</div>
+        
+        <div class="line"><span class="l-num">7</span> }</div>
+      </div>
+    
+      </div>
+    </div>
+    
+    <div class="cursor-chat-pane">
+      <div class="chat-header">
+        <span>Cursor Chat</span>
+        <span style="color:#f54e00;">● Active</span>
+      </div>
+      <div class="chat-body">
+        
+      <div id="chat-block-0" class="cursor-chat-bubble active">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>apiVersion</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": true</div>
+<div class="diff-line plus">+ "default": "v1"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-1" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>kind</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": true</div>
+<div class="diff-line plus">+ "default": "Pod"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-2" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "object"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "required": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  "name"
+]</pre>
+                </span>
+              </div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-3" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.name</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-4" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.namespace</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "default": "default"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-5" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.labels</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "object"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-6" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.labels.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-7" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.annotations</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "object"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-8" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.annotations.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-9" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>metadata.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-10" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "object"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "required": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  "containers"
+]</pre>
+                </span>
+              </div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-11" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.restartPolicy</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "default": "Always"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-12" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.dnsPolicy</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "default": "ClusterFirst"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-13" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.hostNetwork</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "default": false</div>
+
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "enum": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  false,
+  true
+]</pre>
+                </span>
+              </div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-14" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "array"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minItems": 0</div>
+<div class="diff-line plus">+ "uniqueItems": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-15" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "object"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "required": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  "name",
+  "image"
+]</pre>
+                </span>
+              </div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-16" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.name</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-17" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.image</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-18" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.command</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "array"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minItems": 0</div>
+<div class="diff-line plus">+ "uniqueItems": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-19" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.command.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-20" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.workingDir</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-21" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.ports</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "array"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minItems": 0</div>
+<div class="diff-line plus">+ "uniqueItems": false</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-22" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.ports.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "object"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
+                <span>+ "required": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">[
+  "containerPort"
+]</pre>
+                </span>
+              </div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-23" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.ports.*.name</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-24" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.ports.*.containerPort</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "integer"</div>
+          <div class="diff-line plus">+ "required": true</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "divisibleBy": 1</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>strictly mandatory</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-25" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.ports.*.protocol</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "default": "TCP"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-26" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.ports.*.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-27" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.imagePullPolicy</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "string"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          <div class="diff-line plus">+ "required": false</div>
+<div class="diff-line plus">+ "default": "IfNotPresent"</div>
+<div class="diff-line plus">+ "minLength": 0</div>
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-28" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.containers.*.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-29" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>spec.*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      <div id="chat-block-30" class="cursor-chat-bubble ">
+        <div class="chat-agent">Cursor AI</div>
+        <p>I audited the property <code>*</code>. Here is my analysis of the constraints:</p>
+        
+        <div class="ai-diff">
+          <div class="diff-line plus">+ "type": "any"</div>
+          <div class="diff-line plus">+ "required": false</div>
+          
+        </div>
+
+        <p style="margin-top: 1rem;">This property is <strong>optional</strong>. Let me know if you want to modify this setting.</p>
+        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
+      </div>
+    
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function focusCursorElement(idx) {
+      document.querySelectorAll('.cursor-tree-row').forEach(r => r.classList.remove('active'));
+      document.querySelectorAll('.cursor-code-block').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.cursor-chat-bubble').forEach(c => c.classList.remove('active'));
+
+      document.getElementById('tree-row-' + idx).classList.add('active');
+      document.getElementById('editor-block-' + idx).classList.add('active');
+      document.getElementById('chat-block-' + idx).classList.add('active');
+    }
+  </script>
+</body>
+</html>

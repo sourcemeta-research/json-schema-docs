@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VS Code Manifest settings - RFC Documentation</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #FFFFFF;
+      color: #000000;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 3rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    
+    .rfc-header-block {
+      border-bottom: 1.5px solid #000;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .header-left, .header-right { display: flex; flex-direction: column; }
+    .header-right { text-align: right; }
+
+    .rfc-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+
+    .rfc-intro { margin-bottom: 3rem; }
+    .rfc-intro h2 { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; text-transform: uppercase; }
+    
+    .rfc-toc { margin-bottom: 4rem; }
+    .rfc-toc h2 { font-size: 1.1rem; font-weight: bold; margin-bottom: 1rem; text-transform: uppercase; }
+    .rfc-toc-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.35rem; }
+    .toc-dots { flex: 1; text-align: center; overflow: hidden; white-space: nowrap; margin: 0 0.5rem; color: #888; }
+
+    .rfc-section { margin-bottom: 3rem; padding-left: 2rem; }
+    .rfc-section h3 { font-size: 1.05rem; font-weight: bold; margin-left: -2rem; margin-bottom: 0.75rem; text-transform: uppercase; }
+    
+    .rfc-text { margin-bottom: 1rem; text-align: justify; text-indent: 2rem; }
+
+    .rfc-constraints {
+      font-family: monospace;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+      border-left: 3px double #000;
+      padding-left: 1rem;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="rfc-header-block">
+    <div class="header-left">
+      <span>Network Working Group</span>
+      <span>Request for Comments: 2026</span>
+      <span>Category: Standards Track</span>
+    </div>
+    <div class="header-right">
+      <span>Sourcemeta Research</span>
+      <span>July 2026</span>
+    </div>
+  </div>
+
+  <div class="rfc-title">VS Code Manifest settings Specification</div>
+
+  <div class="rfc-intro">
+    <h2>1.  Status of this Memo</h2>
+    <p class="rfc-text">
+      This document specifies an Internet standards track protocol for the Internet community, and requests discussion and suggestions for improvements.
+      Please refer to the current edition of the "Internet Official Protocol Standards" for the standardization state and status of this protocol.
+    </p>
+    
+    <h2>2.  Overview & Description</h2>
+    <p class="rfc-text">
+      Integration configurations describing visual components and menu contributions.
+    </p>
+  </div>
+
+  <div class="rfc-toc">
+    <h2>Table of Contents</h2>
+    
+      <div class="rfc-toc-row">
+        <span>3.1.  publisher</span>
+        <span class="toc-dots">...................................................</span>
+        <span>4</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.2.  displayName</span>
+        <span class="toc-dots">...................................................</span>
+        <span>5</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.3.  categories</span>
+        <span class="toc-dots">...................................................</span>
+        <span>6</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.4.  categories.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>7</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.5.  activationEvents</span>
+        <span class="toc-dots">...................................................</span>
+        <span>8</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.6.  activationEvents.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>9</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.7.  engines</span>
+        <span class="toc-dots">...................................................</span>
+        <span>10</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.8.  engines.vscode</span>
+        <span class="toc-dots">...................................................</span>
+        <span>11</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.9.  engines.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>12</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.10.  contributes</span>
+        <span class="toc-dots">...................................................</span>
+        <span>13</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.11.  contributes.commands</span>
+        <span class="toc-dots">...................................................</span>
+        <span>14</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.12.  contributes.commands.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>15</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.13.  contributes.commands.*.command</span>
+        <span class="toc-dots">...................................................</span>
+        <span>16</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.14.  contributes.commands.*.title</span>
+        <span class="toc-dots">...................................................</span>
+        <span>17</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.15.  contributes.commands.*.category</span>
+        <span class="toc-dots">...................................................</span>
+        <span>18</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.16.  contributes.commands.*.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>19</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.17.  contributes.menus</span>
+        <span class="toc-dots">...................................................</span>
+        <span>20</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.18.  contributes.menus.editor/title</span>
+        <span class="toc-dots">...................................................</span>
+        <span>21</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.19.  contributes.menus.editor/title.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>22</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.20.  contributes.menus.editor/title.*.command</span>
+        <span class="toc-dots">...................................................</span>
+        <span>23</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.21.  contributes.menus.editor/title.*.when</span>
+        <span class="toc-dots">...................................................</span>
+        <span>24</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.22.  contributes.menus.editor/title.*.group</span>
+        <span class="toc-dots">...................................................</span>
+        <span>25</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.23.  contributes.menus.editor/title.*.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>26</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.24.  contributes.menus.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>27</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.25.  contributes.configuration</span>
+        <span class="toc-dots">...................................................</span>
+        <span>28</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.26.  contributes.configuration.title</span>
+        <span class="toc-dots">...................................................</span>
+        <span>29</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.27.  contributes.configuration.properties</span>
+        <span class="toc-dots">...................................................</span>
+        <span>30</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.28.  contributes.configuration.properties.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>31</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.29.  contributes.configuration.properties.*.type</span>
+        <span class="toc-dots">...................................................</span>
+        <span>32</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.30.  contributes.configuration.properties.*.default</span>
+        <span class="toc-dots">...................................................</span>
+        <span>33</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.31.  contributes.configuration.properties.*.description</span>
+        <span class="toc-dots">...................................................</span>
+        <span>34</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.32.  contributes.configuration.properties.*.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>35</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.33.  contributes.configuration.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>36</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.34.  contributes.*</span>
+        <span class="toc-dots">...................................................</span>
+        <span>37</span>
+      </div>
+    
+      <div class="rfc-toc-row">
+        <span>3.35.  *</span>
+        <span class="toc-dots">...................................................</span>
+        <span>38</span>
+      </div>
+    
+  </div>
+
+  <div class="rfc-sections-container">
+    <h2>3.  Parameter Definitions</h2>
+    <br>
+    
+      <div class="rfc-section" id="rfc-sec-0">
+        <h3>3.1.  The "publisher" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: YES)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: true<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-1">
+        <h3>3.2.  The "displayName" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-2">
+        <h3>3.3.  The "categories" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ARRAY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-3">
+        <h3>3.4.  The "categories.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-4">
+        <h3>3.5.  The "activationEvents" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ARRAY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-5">
+        <h3>3.6.  The "activationEvents.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-6">
+        <h3>3.7.  The "engines" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: <span class="nested-toggle" style="text-decoration: underline; cursor: pointer; color: blue;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '[expand]' : '[collapse]';">[expand]</span><div class="nested-detail-box" style="display:none; margin-top: 5px; padding-left:10px; border-left: 2px solid #000;">[
+  "vscode"
+]</div><br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-7">
+        <h3>3.8.  The "engines.vscode" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: YES)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - default: "^1.80.0"<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-8">
+        <h3>3.9.  The "engines.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-9">
+        <h3>3.10.  The "contributes" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-10">
+        <h3>3.11.  The "contributes.commands" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ARRAY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-11">
+        <h3>3.12.  The "contributes.commands.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: <span class="nested-toggle" style="text-decoration: underline; cursor: pointer; color: blue;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '[expand]' : '[collapse]';">[expand]</span><div class="nested-detail-box" style="display:none; margin-top: 5px; padding-left:10px; border-left: 2px solid #000;">[
+  "command",
+  "title"
+]</div><br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-12">
+        <h3>3.13.  The "contributes.commands.*.command" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: YES)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-13">
+        <h3>3.14.  The "contributes.commands.*.title" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: YES)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-14">
+        <h3>3.15.  The "contributes.commands.*.category" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-15">
+        <h3>3.16.  The "contributes.commands.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-16">
+        <h3>3.17.  The "contributes.menus" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-17">
+        <h3>3.18.  The "contributes.menus.editor/title" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ARRAY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minItems: 0<br>|  - uniqueItems: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-18">
+        <h3>3.19.  The "contributes.menus.editor/title.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-19">
+        <h3>3.20.  The "contributes.menus.editor/title.*.command" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-20">
+        <h3>3.21.  The "contributes.menus.editor/title.*.when" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-21">
+        <h3>3.22.  The "contributes.menus.editor/title.*.group" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-22">
+        <h3>3.23.  The "contributes.menus.editor/title.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-23">
+        <h3>3.24.  The "contributes.menus.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-24">
+        <h3>3.25.  The "contributes.configuration" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-25">
+        <h3>3.26.  The "contributes.configuration.title" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-26">
+        <h3>3.27.  The "contributes.configuration.properties" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-27">
+        <h3>3.28.  The "contributes.configuration.properties.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "OBJECT" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-28">
+        <h3>3.29.  The "contributes.configuration.properties.*.type" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-29">
+        <h3>3.30.  The "contributes.configuration.properties.*.default" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "[OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT] | [OBJECT OBJECT]" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-30">
+        <h3>3.31.  The "contributes.configuration.properties.*.description" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "STRING" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        <div class="rfc-constraints">|  VALIDATION CONSTRAINTS:<br>|  - required: false<br>|  - minLength: 0<br></div>
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-31">
+        <h3>3.32.  The "contributes.configuration.properties.*.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-32">
+        <h3>3.33.  The "contributes.configuration.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-33">
+        <h3>3.34.  The "contributes.*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+      <div class="rfc-section" id="rfc-sec-34">
+        <h3>3.35.  The "*" Parameter</h3>
+        
+        <p class="rfc-text">
+          Type representation: "ANY" (Required: NO)
+        </p>
+
+        <p class="rfc-text">
+          DESCRIPTION:
+          No descriptive text was supplied in this section.
+        </p>
+
+        
+      </div>
+    
+  </div>
+
+</body>
+</html>

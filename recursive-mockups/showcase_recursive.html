@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recursive Schema Docs Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F3F4F6;
+      color: #1F2937;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Top Dashboard Controls Bar */
+    .controls-bar {
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: max-height 0.3s ease, padding 0.3s ease, border-width 0.3s ease, opacity 0.2s ease;
+      max-height: 150px;
+      overflow: hidden;
+      opacity: 1;
+    }
+    body.nav-collapsed .controls-bar {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom-width: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .title-area h1 { font-size: 1.25rem; font-weight: 700; color: #111827; letter-spacing: -0.02em; }
+    .title-area p { font-size: 0.8rem; color: #6B7280; margin-top: 0.15rem; }
+
+    .size-controls { display: flex; gap: 0.5rem; align-items: center; }
+    .btn {
+      background-color: #FFFFFF;
+      border: 1px solid #D1D5DB;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background-color: #F9FAFB; border-color: #9CA3AF; }
+    .btn.active { background-color: #111827; border-color: #111827; color: #FFFFFF; }
+
+    /* Layout Tab buttons bar wrapper */
+    .tabs-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+      z-index: 10;
+      transition: max-height 0.3s ease, padding 0.3s ease, border-width 0.3s ease, opacity 0.2s ease;
+      max-height: 150px;
+      overflow: hidden;
+      opacity: 1;
+    }
+    body.nav-collapsed .tabs-wrapper {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom-width: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .tabs-bar {
+      flex: 1;
+      background-color: #FFFFFF;
+      padding: 0.5rem 1rem;
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none; /* Hide scrollbar for Firefox */
+    }
+    .tabs-bar::-webkit-scrollbar {
+      display: none; /* Hide scrollbar for Chrome/Safari/Edge */
+    }
+    .scroll-arrow {
+      background: #FFFFFF;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #9CA3AF;
+      cursor: pointer;
+      padding: 0.5rem 1.25rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s, background-color 0.15s;
+      z-index: 20;
+      user-select: none;
+      border-left: 1px solid #F3F4F6;
+      border-right: 1px solid #F3F4F6;
+    }
+    .scroll-arrow:hover {
+      color: #111827;
+      background-color: #F9FAFB;
+    }
+
+    /* Floating toggle menu button */
+    .nav-toggle-trigger {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #111827;
+      color: #FFFFFF;
+      border: 1px solid #374151;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      z-index: 1000;
+      font-size: 1.25rem;
+      transition: background-color 0.15s;
+    }
+    .nav-toggle-trigger:hover {
+      background-color: #374151;
+    }
+    .tab-btn {
+      background: none;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #4B5563;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover { background-color: #F3F4F6; color: #111827; }
+    .tab-btn.active {
+      background-color: #EEF2FF;
+      color: #4F46E5;
+      border-color: rgba(79, 70, 229, 0.2);
+      font-weight: 600;
+    }
+
+    /* Main Workspace */
+    .workspace {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Sidebar - Schema selection */
+    .sidebar {
+      width: 280px;
+      background-color: #FFFFFF;
+      border-right: 1px solid #E5E7EB;
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: width 0.3s ease, padding 0.3s ease, border-width 0.3s ease, opacity 0.2s ease;
+      opacity: 1;
+      overflow-x: hidden;
+    }
+    body.nav-collapsed .sidebar {
+      width: 0;
+      padding: 0;
+      border-right-width: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .sidebar-item {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #4B5563;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+    }
+    .sidebar-item:hover { background-color: #F3F4F6; color: #111827; }
+    .sidebar-item.active {
+      background-color: #F9FAFB;
+      border-color: #E5E7EB;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    /* Main IFrame display canvas */
+    .canvas {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      overflow: auto;
+      background-color: #F3F4F6;
+    }
+    .frame-container {
+      background-color: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+      transition: width 0.30s ease;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls-bar">
+    <div class="title-area">
+      <h1>Recursive Schema Docs Preview</h1>
+      <p>Traversing canonical schemas directly into visual HTML trees.</p>
+    </div>
+    
+    <div class="size-controls">
+      <span style="font-size: 0.8rem; color: #6B7280; margin-right: 0.5rem;">Viewport:</span>
+      <button class="btn active" id="size-desktop" onclick="setFrameSize('100%', this)">Desktop (100%)</button>
+      <button class="btn" id="size-tablet" onclick="setFrameSize('768px', this)">Tablet (768px)</button>
+      <button class="btn" id="size-mobile" onclick="setFrameSize('375px', this)">Mobile (375px)</button>
+    </div>
+  </div>
+
+  <div class="tabs-wrapper">
+    <button class="scroll-arrow left" onclick="scrollTabs(-200)">◀</button>
+    <div class="tabs-bar" id="tabs-bar-id">
+      <button class="tab-btn active" onclick="selectLayout('layout_1', this)">1. Stripe Docs</button>
+      <button class="tab-btn" onclick="selectLayout('layout_2', this)">2. Linear</button>
+      <button class="tab-btn" onclick="selectLayout('layout_3', this)">3. Apple Dev</button>
+      <button class="tab-btn" onclick="selectLayout('layout_4', this)">4. Cursor Editor</button>
+      <button class="tab-btn" onclick="selectLayout('layout_5', this)">5. IBM Carbon</button>
+      <button class="tab-btn" onclick="selectLayout('layout_6', this)">6. Wired Magazine</button>
+      <button class="tab-btn" onclick="selectLayout('layout_7', this)">7. xAI Cosmic</button>
+      <button class="tab-btn" onclick="selectLayout('layout_8', this)">8. Cal.com</button>
+      <button class="tab-btn" onclick="selectLayout('layout_9', this)">9. Wise Fintech</button>
+      <button class="tab-btn" onclick="selectLayout('layout_10', this)">10. Kraken Fintech</button>
+      <button class="tab-btn" onclick="selectLayout('layout_11', this)">11. Vercel Console</button>
+      <button class="tab-btn" onclick="selectLayout('layout_12', this)">12. Supabase DB</button>
+      <button class="tab-btn" onclick="selectLayout('layout_13', this)">13. Warp CLI</button>
+      <button class="tab-btn" onclick="selectLayout('layout_14', this)">14. Raycast Spotlight</button>
+      <button class="tab-btn" onclick="selectLayout('layout_15', this)">15. Sentry Issues</button>
+      <button class="tab-btn" onclick="selectLayout('layout_16', this)">16. Wikipedia Article</button>
+      <button class="tab-btn" onclick="selectLayout('layout_17', this)">17. Google Dev</button>
+      <button class="tab-btn" onclick="selectLayout('layout_18', this)">18. JSON Schema Official</button>
+      <button class="tab-btn" onclick="selectLayout('layout_19', this)">19. Excalidraw Canvas</button>
+      <button class="tab-btn" onclick="selectLayout('layout_20', this)">20. RFC Document</button>
+    </div>
+    <button class="scroll-arrow right" onclick="scrollTabs(200)">▶</button>
+  </div>
+
+  <div class="workspace">
+    <div class="sidebar" id="dashboard-sidebar">
+      <h3 style="font-size: 0.75rem; text-transform: uppercase; color: #4B5563; margin-bottom: 1rem; letter-spacing: 0.05em;">Select Schema</h3>
+      <div class="sidebar-item active" onclick="selectSchema('1-package-json', this)">1. NPM Package Config</div>
+      <div class="sidebar-item" onclick="selectSchema('2-tsconfig-json', this)">2. TypeScript Compiler Settings</div>
+      <div class="sidebar-item" onclick="selectSchema('3-docker-compose', this)">3. Docker Compose Setup</div>
+      <div class="sidebar-item" onclick="selectSchema('4-github-workflow', this)">4. GitHub Actions Workflow</div>
+      <div class="sidebar-item" onclick="selectSchema('5-openapi', this)">5. OpenAPI / Swagger Spec</div>
+      <div class="sidebar-item" onclick="selectSchema('6-kubernetes-pod', this)">6. Kubernetes Pod Spec</div>
+      <div class="sidebar-item" onclick="selectSchema('7-geojson', this)">7. GeoJSON Geography Spec</div>
+      <div class="sidebar-item" onclick="selectSchema('8-web-manifest', this)">8. Web App Manifest</div>
+      <div class="sidebar-item" onclick="selectSchema('9-vscode-extension', this)">9. VS Code Extension API</div>
+      <div class="sidebar-item" onclick="selectSchema('10-aws-cloudformation', this)">10. AWS CloudFormation Template</div>
+    </div>
+
+    <div class="canvas">
+      <div class="frame-container" id="frame-wrapper" style="width: 100%;">
+        <iframe id="preview-iframe" src="build/1-package-json_layout_1.html"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <button class="nav-toggle-trigger" onclick="toggleNavBars()" title="Hide Navigation Panels">☰</button>
+
+  <script>
+    let activeSchema = '1-package-json';
+    let activeLayout = 'layout_1';
+
+    function setFrameSize(width, btnEl) {
+      document.getElementById('frame-wrapper').style.width = width;
+      document.querySelectorAll('.size-controls .btn').forEach(btn => btn.classList.remove('active'));
+      btnEl.classList.add('active');
+    }
+
+    function selectSchema(schemaId, element) {
+      document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      activeSchema = schemaId;
+      updateIframe();
+    }
+
+    function selectLayout(layoutId, element) {
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      activeLayout = layoutId;
+      updateIframe();
+    }
+
+    function updateIframe() {
+      const url = `build/${activeSchema}_${activeLayout}.html`;
+      document.getElementById('preview-iframe').src = url;
+    }
+
+    function toggleNavBars() {
+      document.body.classList.toggle('nav-collapsed');
+      const trigger = document.querySelector('.nav-toggle-trigger');
+      if (document.body.classList.contains('nav-collapsed')) {
+        trigger.innerText = '⚙️';
+        trigger.title = 'Show Navigation Panels';
+      } else {
+        trigger.innerText = '☰';
+        trigger.title = 'Hide Navigation Panels';
+      }
+    }
+
+    function scrollTabs(amount) {
+      document.getElementById('tabs-bar-id').scrollBy({ left: amount, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

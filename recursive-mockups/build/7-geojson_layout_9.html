@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GeoJSON Feature Collection Specification - Wise Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #F4F6F2;
+      color: #1A1D1A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    .wise-widget {
+      width: 100%;
+      max-width: 580px;
+      background-color: #FFFFFF;
+      border: 1px solid #E4E8E1;
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    }
+    
+    .widget-header {
+      margin-bottom: 2rem;
+      border-bottom: 1.5px solid #F4F6F2;
+      padding-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #000;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .widget-header p { font-size: 0.85rem; color: #555855; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; margin-top: 0.5rem; }
+
+    /* Sender Inputs */
+    .wise-inputs { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+    .input-box {
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+    }
+    .input-left { display: flex; flex-direction: column; }
+    .input-left label { font-size: 0.7rem; color: #666; font-weight: 600; text-transform: uppercase; }
+    .input-left input { border: none; font-size: 1.2rem; font-weight: 700; outline: none; background: none; margin-top: 0.25rem; width: 150px; }
+    
+    .input-right {
+      background-color: #1A1D1A;
+      color: #FFF;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .input-right.lime { background-color: #9FE870; color: #1A1D1A; }
+
+    /* Fee list connector */
+    .breakdown-list { display: flex; flex-direction: column; margin-bottom: 2rem; }
+    .calculator-step { display: flex; cursor: pointer; }
+    
+    .step-connector { display: flex; flex-direction: column; align-items: center; margin-right: 1.25rem; width: 20px; }
+    .step-circle { width: 10px; height: 10px; border-radius: 50%; background-color: #9FE870; margin-top: 0.35rem; }
+    .step-circle.critical { background-color: #FF5E00; }
+    .step-circle.stable { background-color: #9FE870; }
+    .step-line { width: 2px; flex: 1; background-color: #E4E8E1; min-height: 40px; }
+    .calculator-step:last-child .step-line { display: none; }
+    
+    .step-main { flex: 1; padding-bottom: 1.5rem; }
+    .step-top-row { display: flex; justify-content: space-between; align-items: center; }
+    .step-path { font-weight: 700; font-size: 0.95rem; color: #000; font-family: 'JetBrains Mono', monospace; }
+    .step-type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #666; background-color: #F4F6F2; padding: 0.15rem 0.4rem; font-weight: 600; }
+    .step-desc-p { font-size: 0.85rem; color: #555855; line-height: 1.4; margin-top: 0.25rem; }
+    
+    .wise-step-drawer {
+      display: none;
+      background-color: #F4F6F2;
+      border: 1px solid #E4E8E1;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+    }
+    .wise-step-drawer.open { display: block; }
+    
+    .wise-calc-specs { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
+    .spec-row { display: flex; justify-content: space-between; padding: 0.15rem 0; border-bottom: 1px dashed #E4E8E1; }
+    .spec-row:last-child { border-bottom: none; }
+    .s-k { color: #666; }
+    .s-v { color: #000; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <div class="wise-widget">
+    <div class="widget-header">
+      <h1>Wise Transfer</h1>
+      <p>GeoJSON Feature Collection Specification // Conversion Calculator</p>
+    </div>
+    
+    <div class="wise-inputs">
+      <div class="input-box">
+        <div class="input-left">
+          <label>You send</label>
+          <input type="text" value="1,000">
+        </div>
+        <div class="input-right">USD</div>
+      </div>
+    </div>
+
+    <div class="breakdown-list">
+      
+      <div class="calculator-step" onclick="toggleWiseCalcRow(0)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">type</span>
+            <span class="step-type-badge">string</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-0" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">true</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">default:</span>
+              <span class="s-v">"FeatureCollection"</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minLength:</span>
+              <span class="s-v">0</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(1)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">bbox</span>
+            <span class="step-type-badge">array</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-1" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">maxItems:</span>
+              <span class="s-v">6</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minItems:</span>
+              <span class="s-v">4</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">uniqueItems:</span>
+              <span class="s-v">false</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(2)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">bbox.*</span>
+            <span class="step-type-badge">number</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-2" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(3)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features</span>
+            <span class="step-type-badge">array</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-3" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minItems:</span>
+              <span class="s-v">0</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">uniqueItems:</span>
+              <span class="s-v">false</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(4)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*</span>
+            <span class="step-type-badge">object</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-4" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row nested" style="flex-wrap: wrap;">
+              <span class="s-k">required:</span>
+              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">[
+  "type",
+  "geometry",
+  "properties"
+]</pre>
+              </div>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(5)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.type</span>
+            <span class="step-type-badge">string</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-5" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">default:</span>
+              <span class="s-v">"Feature"</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minLength:</span>
+              <span class="s-v">0</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(6)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.id</span>
+            <span class="step-type-badge">[object Object] | [object Object]</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-6" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(7)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.properties</span>
+            <span class="step-type-badge">[object Object] | [object Object]</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-7" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(8)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.geometry</span>
+            <span class="step-type-badge">object</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-8" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row nested" style="flex-wrap: wrap;">
+              <span class="s-k">required:</span>
+              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">[
+  "type",
+  "coordinates"
+]</pre>
+              </div>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(9)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.geometry.type</span>
+            <span class="step-type-badge">string</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-9" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">default:</span>
+              <span class="s-v">"Point"</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minLength:</span>
+              <span class="s-v">0</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(10)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.geometry.coordinates</span>
+            <span class="step-type-badge">array</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-10" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minItems:</span>
+              <span class="s-v">0</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">uniqueItems:</span>
+              <span class="s-v">false</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(11)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.geometry.coordinates.*</span>
+            <span class="step-type-badge">[object Object] | [object Object]</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-11" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(12)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.geometry.*</span>
+            <span class="step-type-badge">any</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-12" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(13)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">features.*.*</span>
+            <span class="step-type-badge">any</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-13" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(14)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">crs</span>
+            <span class="step-type-badge">object</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-14" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row nested" style="flex-wrap: wrap;">
+              <span class="s-k">required:</span>
+              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">[
+  "type",
+  "properties"
+]</pre>
+              </div>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(15)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">crs.type</span>
+            <span class="step-type-badge">string</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-15" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">default:</span>
+              <span class="s-v">"name"</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minLength:</span>
+              <span class="s-v">0</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(16)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">crs.properties</span>
+            <span class="step-type-badge">object</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-16" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row nested" style="flex-wrap: wrap;">
+              <span class="s-k">required:</span>
+              <span class="nested-toggle" style="color: #9FE870; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
+              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
+                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F6F2; border-left: 2px solid #9FE870; padding: 5px; color: #1A1D1A; overflow-x: auto;">[
+  "name"
+]</pre>
+              </div>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(17)">
+        <div class="step-connector">
+          <div class="step-circle critical"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">crs.properties.name</span>
+            <span class="step-type-badge">string</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-17" class="wise-step-drawer">
+            <div class="wise-calc-specs">
+            <div class="spec-row">
+              <span class="s-k">required:</span>
+              <span class="s-v">false</span>
+            </div>
+          
+            <div class="spec-row">
+              <span class="s-k">minLength:</span>
+              <span class="s-v">0</span>
+            </div>
+          </div>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>REQUIRED TRANSACTION LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(18)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">crs.properties.*</span>
+            <span class="step-type-badge">any</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-18" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(19)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">crs.*</span>
+            <span class="step-type-badge">any</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-19" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="calculator-step" onclick="toggleWiseCalcRow(20)">
+        <div class="step-connector">
+          <div class="step-circle stable"></div>
+          <div class="step-line"></div>
+        </div>
+        
+        <div class="step-main">
+          <div class="step-top-row">
+            <span class="step-path">*</span>
+            <span class="step-type-badge">any</span>
+          </div>
+          <p class="step-desc-p">No transfer description available.</p>
+          
+          <div id="calc-drawer-20" class="wise-step-drawer">
+            <span style="color:#666; font-style:italic;">No transfer boundary rules.</span>
+            <div style="margin-top:0.75rem; font-size:0.75rem; color:#888;">
+              Status: <strong>OPTIONAL LAYER</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+
+    <div class="wise-inputs">
+      <div class="input-box">
+        <div class="input-left">
+          <label>Recipient Gets</label>
+          <input type="text" value="984.50" readonly>
+        </div>
+        <div class="input-right lime">EUR</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleWiseCalcRow(idx) {
+      const drawer = document.getElementById('calc-drawer-' + idx);
+      drawer.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

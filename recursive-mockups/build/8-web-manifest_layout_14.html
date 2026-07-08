@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Web App Manifest Specification - Raycast Command Palette</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0E0E10;
+      color: #E2E8F0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      padding: 1.5rem;
+    }
+    
+    .raycast-panel {
+      width: 100%;
+      max-width: 900px;
+      height: 520px;
+      background-color: #17171A; /* Raycast Charcoal */
+      border: 1px solid #2D2D30;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    }
+    
+    .ray-search-bar {
+      display: flex;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #2D2D30;
+    }
+    .ray-search-icon { font-size: 1.2rem; color: #8E8E93; margin-right: 1rem; }
+    .ray-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #FFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      outline: none;
+    }
+    .ray-input::placeholder { color: #5B5B5E; }
+
+    .ray-workspace {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    
+    .ray-list-pane {
+      flex: 1.2;
+      overflow-y: auto;
+      padding: 0.75rem;
+      border-right: 1px solid #2D2D30;
+    }
+    .ray-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      margin-bottom: 0.25rem;
+      transition: background-color 0.1s;
+    }
+    .ray-row:hover { background-color: rgba(255,255,255,0.03); }
+    .ray-row.active {
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid #3d3d42;
+    }
+    .ray-row.active .ray-label { color: #FFF; }
+    
+    .row-left { display: flex; align-items: center; gap: 0.75rem; overflow: hidden; }
+    .ray-icon { font-family: monospace; font-size: 0.85rem; color: #8E8E93; }
+    .ray-label { font-size: 0.85rem; color: #C2C2C6; font-family: 'JetBrains Mono', monospace; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 250px; }
+    
+    .row-right { display: flex; align-items: center; gap: 0.5rem; }
+    .ray-type-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #FF66A0; text-transform: lowercase; }
+    .ray-req-dot { width: 6px; height: 6px; background-color: #FF5252; border-radius: 50%; }
+
+    .ray-inspector-pane {
+      flex: 0.8;
+      background-color: #121214;
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .ray-inspector-panel { display: none; height: 100%; flex-direction: column; }
+    .ray-inspector-panel.active { display: flex; }
+    
+    .ray-inspector-panel h3 { font-size: 1.15rem; font-weight: 700; color: #FFF; margin-bottom: 0.5rem; word-break: break-all; }
+    
+    .badge { font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 4px; display: inline-block; margin-bottom: 1.5rem; }
+    .badge.req { background-color: rgba(255, 82, 82, 0.15); color: #FF5252; }
+    .badge.opt { background-color: rgba(255,255,255,0.05); color: #8E8E93; }
+
+    .sec-meta { display: flex; justify-content: space-between; border-bottom: 1px solid #2D2D30; padding-bottom: 1rem; margin-bottom: 1rem; }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-k { font-size: 0.75rem; color: #5B5B5E; text-transform: uppercase; }
+    .meta-v { font-size: 0.8rem; font-weight: 600; color: #FFF; }
+
+    .sec-body { margin-bottom: 1.5rem; }
+    .sec-body h4 { font-size: 0.7rem; color: #5B5B5E; margin-bottom: 0.5rem; font-weight: 700; letter-spacing: 0.05em; }
+    .sec-body p { font-size: 0.8rem; color: #C2C2C6; line-height: 1.4; }
+    .sec-body pre { background: #0E0E10; border: 1px solid #2D2D30; padding: 0.5rem; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #34D399; overflow-x: auto; }
+
+    .ray-actions { border-top: 1px solid #2D2D30; padding-top: 1rem; margin-top: auto; }
+    .action-shortcut { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: #8E8E93; margin-bottom: 0.5rem; }
+    kbd { background-color: #2D2D30; border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.7rem; color: #FFF; font-family: inherit; }
+  </style>
+</head>
+<body>
+
+  <div class="raycast-panel">
+    <div class="ray-search-bar">
+      <span class="ray-search-icon">🔍</span>
+      <input type="text" class="ray-input" placeholder="Search commands, properties or paths..." oninput="filterRaycast(this.value)">
+    </div>
+    
+    <div class="ray-workspace">
+      <div class="ray-list-pane" id="ray-list">
+        
+      <div class="ray-row active" id="ray-row-0" onclick="focusRayRow(0)" data-path="name">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">name</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          <span class="ray-req-dot"></span>
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-1" onclick="focusRayRow(1)" data-path="short_name">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">short_name</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-2" onclick="focusRayRow(2)" data-path="description">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">description</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-3" onclick="focusRayRow(3)" data-path="start_url">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">start_url</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-4" onclick="focusRayRow(4)" data-path="display">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">display</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-5" onclick="focusRayRow(5)" data-path="orientation">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">orientation</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-6" onclick="focusRayRow(6)" data-path="background_color">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">background_color</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-7" onclick="focusRayRow(7)" data-path="theme_color">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">theme_color</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-8" onclick="focusRayRow(8)" data-path="lang">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">lang</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-9" onclick="focusRayRow(9)" data-path="dir">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">dir</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-10" onclick="focusRayRow(10)" data-path="scope">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">scope</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-11" onclick="focusRayRow(11)" data-path="prefer_related_applications">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">prefer_related_applications</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-12" onclick="focusRayRow(12)" data-path="categories">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">categories</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">array</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-13" onclick="focusRayRow(13)" data-path="categories.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">categories.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-14" onclick="focusRayRow(14)" data-path="icons">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">array</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-15" onclick="focusRayRow(15)" data-path="icons.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">object</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-16" onclick="focusRayRow(16)" data-path="icons.*.src">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons.*.src</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          <span class="ray-req-dot"></span>
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-17" onclick="focusRayRow(17)" data-path="icons.*.sizes">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons.*.sizes</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          <span class="ray-req-dot"></span>
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-18" onclick="focusRayRow(18)" data-path="icons.*.type">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons.*.type</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-19" onclick="focusRayRow(19)" data-path="icons.*.purpose">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons.*.purpose</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-20" onclick="focusRayRow(20)" data-path="icons.*.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">icons.*.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-21" onclick="focusRayRow(21)" data-path="shortcuts">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">array</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-22" onclick="focusRayRow(22)" data-path="shortcuts.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">object</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-23" onclick="focusRayRow(23)" data-path="shortcuts.*.name">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.name</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          <span class="ray-req-dot"></span>
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-24" onclick="focusRayRow(24)" data-path="shortcuts.*.short_name">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.short_name</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-25" onclick="focusRayRow(25)" data-path="shortcuts.*.url">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.url</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          <span class="ray-req-dot"></span>
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-26" onclick="focusRayRow(26)" data-path="shortcuts.*.icons">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.icons</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">array</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-27" onclick="focusRayRow(27)" data-path="shortcuts.*.icons.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.icons.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">object</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-28" onclick="focusRayRow(28)" data-path="shortcuts.*.icons.*.src">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.icons.*.src</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-29" onclick="focusRayRow(29)" data-path="shortcuts.*.icons.*.sizes">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.icons.*.sizes</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">string</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-30" onclick="focusRayRow(30)" data-path="shortcuts.*.icons.*.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.icons.*.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-31" onclick="focusRayRow(31)" data-path="shortcuts.*.*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">shortcuts.*.*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      <div class="ray-row " id="ray-row-32" onclick="focusRayRow(32)" data-path="*">
+        <div class="row-left">
+          <span class="ray-icon">⌘</span>
+          <span class="ray-label">*</span>
+        </div>
+        <div class="row-right">
+          <span class="ray-type-tag">any</span>
+          
+        </div>
+      </div>
+    
+      </div>
+      
+      <div class="ray-inspector-pane">
+        
+      <div id="inspector-0" class="ray-inspector-panel active">
+        <h3>name</h3>
+        <span class="badge req">REQUIRED</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": true,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-1" class="ray-inspector-panel ">
+        <h3>short_name</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-2" class="ray-inspector-panel ">
+        <h3>description</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-3" class="ray-inspector-panel ">
+        <h3>start_url</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "/",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-4" class="ray-inspector-panel ">
+        <h3>display</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "standalone",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-5" class="ray-inspector-panel ">
+        <h3>orientation</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "any",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-6" class="ray-inspector-panel ">
+        <h3>background_color</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "#ffffff",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-7" class="ray-inspector-panel ">
+        <h3>theme_color</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-8" class="ray-inspector-panel ">
+        <h3>lang</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "en-US",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-9" class="ray-inspector-panel ">
+        <h3>dir</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "ltr",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-10" class="ray-inspector-panel ">
+        <h3>scope</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-11" class="ray-inspector-panel ">
+        <h3>prefer_related_applications</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": false,
+  "enum": [
+    false,
+    true
+  ]
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-12" class="ray-inspector-panel ">
+        <h3>categories</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ARRAY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-13" class="ray-inspector-panel ">
+        <h3>categories.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">2 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-14" class="ray-inspector-panel ">
+        <h3>icons</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ARRAY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-15" class="ray-inspector-panel ">
+        <h3>icons.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">OBJECT</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">2 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": [
+    "src",
+    "sizes"
+  ]
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-16" class="ray-inspector-panel ">
+        <h3>icons.*.src</h3>
+        <span class="badge req">REQUIRED</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-17" class="ray-inspector-panel ">
+        <h3>icons.*.sizes</h3>
+        <span class="badge req">REQUIRED</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-18" class="ray-inspector-panel ">
+        <h3>icons.*.type</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "image/png",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-19" class="ray-inspector-panel ">
+        <h3>icons.*.purpose</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "default": "any",
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-20" class="ray-inspector-panel ">
+        <h3>icons.*.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-21" class="ray-inspector-panel ">
+        <h3>shortcuts</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ARRAY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-22" class="ray-inspector-panel ">
+        <h3>shortcuts.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">OBJECT</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">2 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": [
+    "name",
+    "url"
+  ]
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-23" class="ray-inspector-panel ">
+        <h3>shortcuts.*.name</h3>
+        <span class="badge req">REQUIRED</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-24" class="ray-inspector-panel ">
+        <h3>shortcuts.*.short_name</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-25" class="ray-inspector-panel ">
+        <h3>shortcuts.*.url</h3>
+        <span class="badge req">REQUIRED</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-26" class="ray-inspector-panel ">
+        <h3>shortcuts.*.icons</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ARRAY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minItems": 0,
+  "uniqueItems": false
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-27" class="ray-inspector-panel ">
+        <h3>shortcuts.*.icons.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">OBJECT</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">4 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-28" class="ray-inspector-panel ">
+        <h3>shortcuts.*.icons.*.src</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">5 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-29" class="ray-inspector-panel ">
+        <h3>shortcuts.*.icons.*.sizes</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">STRING</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">5 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{
+  "required": false,
+  "minLength": 0
+}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-30" class="ray-inspector-panel ">
+        <h3>shortcuts.*.icons.*.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">5 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-31" class="ray-inspector-panel ">
+        <h3>shortcuts.*.*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">3 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      <div id="inspector-32" class="ray-inspector-panel ">
+        <h3>*</h3>
+        <span class="badge opt">OPTIONAL</span>
+        
+        <div class="sec-meta">
+          <div class="meta-item">
+            <span class="meta-k">Type</span>
+            <span class="meta-v">ANY</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-k">Depth</span>
+            <span class="meta-v">1 LEVELS</span>
+          </div>
+        </div>
+
+        <div class="sec-body">
+          <h4>DESCRIPTION</h4>
+          <p>No documentation comments available.</p>
+        </div>
+
+        <div class="sec-body">
+          <h4>CONSTRAINTS</h4>
+          <span class="nested-toggle" style="color: #FF66A0; cursor: pointer; font-weight: bold; font-size: 0.75rem;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ show constraints' : '▼ hide constraints';">▶ show constraints</span>
+          <pre style="display:none; margin-top:5px;"><code>{}</code></pre>
+        </div>
+
+        <div class="ray-actions">
+          <div class="action-shortcut">
+            <span>Copy Parameter Name</span>
+            <kbd>⌘ C</kbd>
+          </div>
+          <div class="action-shortcut">
+            <span>Toggle Inspector Drawer</span>
+            <kbd>↵</kbd>
+          </div>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let focusedIndex = 0;
+
+    function focusRayRow(idx) {
+      document.querySelectorAll('.ray-row').forEach(r => r.classList.remove('active'));
+      document.querySelectorAll('.ray-inspector-panel').forEach(p => p.classList.remove('active'));
+
+      document.getElementById('ray-row-' + idx).classList.add('active');
+      document.getElementById('inspector-' + idx).classList.add('active');
+      focusedIndex = idx;
+    }
+
+    function filterRaycast(val) {
+      const filter = val.toLowerCase();
+      let firstVisible = null;
+
+      document.querySelectorAll('.ray-row').forEach((row, idx) => {
+        const path = row.getAttribute('data-path').toLowerCase();
+        if (path.includes(filter)) {
+          row.style.display = 'flex';
+          if (firstVisible === null) firstVisible = idx;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      if (firstVisible !== null) {
+        focusRayRow(firstVisible);
+      }
+    }
+  </script>
+</body>
+</html>
