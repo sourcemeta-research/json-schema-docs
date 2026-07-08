@@ -1,0 +1,361 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "TypeScript Compiler Settings",
+  "description": "Extensive TypeScript configuration schema detailing compiler options.",
+  "type": "object",
+  "properties": {
+    "compilerOptions": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {
+            "target": {
+              "extends": [
+                {
+                  "default": "es2022",
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "module": {
+              "extends": [
+                {
+                  "default": "commonjs",
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "lib": {
+              "extends": [
+                {
+                  "type": "array",
+                  "minItems": 0,
+                  "uniqueItems": false,
+                  "items": {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                }
+              ],
+              "required": false
+            },
+            "allowJs": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "checkJs": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "jsx": {
+              "extends": [
+                {
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "declaration": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "declarationMap": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "emitDeclarationOnly": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "sourceMap": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "outDir": {
+              "extends": [
+                {
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "rootDir": {
+              "extends": [
+                {
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "removeComments": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "noEmit": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "strict": {
+              "extends": [
+                {
+                  "default": true,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "noImplicitAny": {
+              "extends": [
+                {
+                  "default": true,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "strictNullChecks": {
+              "extends": [
+                {
+                  "default": true,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "strictFunctionTypes": {
+              "extends": [
+                {
+                  "default": true,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "noUnusedLocals": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "noUnusedParameters": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "noImplicitReturns": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "moduleResolution": {
+              "extends": [
+                {
+                  "default": "node",
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "baseUrl": {
+              "extends": [
+                {
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "paths": {
+              "extends": [
+                {
+                  "type": "object",
+                  "properties": {},
+                  "patternProperties": {},
+                  "additionalProperties": {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  }
+                }
+              ],
+              "required": false
+            },
+            "esModuleInterop": {
+              "extends": [
+                {
+                  "default": true,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "experimentalDecorators": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            },
+            "emitDecoratorMetadata": {
+              "extends": [
+                {
+                  "default": false,
+                  "enum": [ false, true ]
+                }
+              ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      ],
+      "required": false
+    },
+    "files": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "include": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "exclude": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "references": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "object",
+            "required": [ "path" ],
+            "properties": {
+              "path": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "prepend": {
+                "extends": [
+                  {
+                    "default": false,
+                    "enum": [ false, true ]
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "VS Code Manifest settings",
+  "description": "Integration configurations describing visual components and menu contributions.",
+  "type": "object",
+  "properties": {
+    "publisher": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "displayName": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "categories": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "activationEvents": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "engines": {
+      "type": "object",
+      "required": [ "vscode" ],
+      "properties": {
+        "vscode": {
+          "extends": [
+            {
+              "default": "^1.80.0",
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        }
+      },
+      "patternProperties": {},
+      "additionalProperties": {}
+    },
+    "contributes": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {
+            "commands": {
+              "extends": [
+                {
+                  "type": "array",
+                  "minItems": 0,
+                  "uniqueItems": false,
+                  "items": {
+                    "type": "object",
+                    "required": [ "command", "title" ],
+                    "properties": {
+                      "command": {
+                        "extends": [
+                          {
+                            "type": "string",
+                            "minLength": 0
+                          }
+                        ],
+                        "required": false
+                      },
+                      "title": {
+                        "extends": [
+                          {
+                            "type": "string",
+                            "minLength": 0
+                          }
+                        ],
+                        "required": false
+                      },
+                      "category": {
+                        "extends": [
+                          {
+                            "type": "string",
+                            "minLength": 0
+                          }
+                        ],
+                        "required": false
+                      }
+                    },
+                    "patternProperties": {},
+                    "additionalProperties": {}
+                  }
+                }
+              ],
+              "required": false
+            },
+            "menus": {
+              "extends": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "editor/title": {
+                      "extends": [
+                        {
+                          "type": "array",
+                          "minItems": 0,
+                          "uniqueItems": false,
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "command": {
+                                "extends": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 0
+                                  }
+                                ],
+                                "required": false
+                              },
+                              "when": {
+                                "extends": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 0
+                                  }
+                                ],
+                                "required": false
+                              },
+                              "group": {
+                                "extends": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 0
+                                  }
+                                ],
+                                "required": false
+                              }
+                            },
+                            "patternProperties": {},
+                            "additionalProperties": {}
+                          }
+                        }
+                      ],
+                      "required": false
+                    }
+                  },
+                  "patternProperties": {},
+                  "additionalProperties": {}
+                }
+              ],
+              "required": false
+            },
+            "configuration": {
+              "extends": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "extends": [
+                        {
+                          "type": "string",
+                          "minLength": 0
+                        }
+                      ],
+                      "required": false
+                    },
+                    "properties": {
+                      "extends": [
+                        {
+                          "type": "object",
+                          "properties": {},
+                          "patternProperties": {},
+                          "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "extends": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 0
+                                  }
+                                ],
+                                "required": false
+                              },
+                              "default": {
+                                "extends": [
+                                  {
+                                    "type": [
+                                      {
+                                        "enum": [ null ]
+                                      },
+                                      {
+                                        "enum": [ false, true ]
+                                      },
+                                      {
+                                        "type": "object",
+                                        "properties": {},
+                                        "patternProperties": {},
+                                        "additionalProperties": {}
+                                      },
+                                      {
+                                        "type": "array",
+                                        "minItems": 0,
+                                        "uniqueItems": false,
+                                        "items": {}
+                                      },
+                                      {
+                                        "type": "string",
+                                        "minLength": 0
+                                      },
+                                      {
+                                        "type": "number"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "required": false
+                              },
+                              "description": {
+                                "extends": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 0
+                                  }
+                                ],
+                                "required": false
+                              }
+                            },
+                            "patternProperties": {},
+                            "additionalProperties": {}
+                          }
+                        }
+                      ],
+                      "required": false
+                    }
+                  },
+                  "patternProperties": {},
+                  "additionalProperties": {}
+                }
+              ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

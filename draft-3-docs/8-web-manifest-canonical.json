@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Web App Manifest Specification",
+  "description": "Configuration metadata enabling progressive web application installation.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "short_name": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "description": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "start_url": {
+      "extends": [
+        {
+          "default": "/",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "display": {
+      "extends": [
+        {
+          "default": "standalone",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "orientation": {
+      "extends": [
+        {
+          "default": "any",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "background_color": {
+      "extends": [
+        {
+          "default": "#ffffff",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "theme_color": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "lang": {
+      "extends": [
+        {
+          "default": "en-US",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "dir": {
+      "extends": [
+        {
+          "default": "ltr",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "scope": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "prefer_related_applications": {
+      "extends": [
+        {
+          "default": false,
+          "enum": [ false, true ]
+        }
+      ],
+      "required": false
+    },
+    "categories": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "icons": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "object",
+            "required": [ "src", "sizes" ],
+            "properties": {
+              "src": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "sizes": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "type": {
+                "extends": [
+                  {
+                    "default": "image/png",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "purpose": {
+                "extends": [
+                  {
+                    "default": "any",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    },
+    "shortcuts": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "object",
+            "required": [ "name", "url" ],
+            "properties": {
+              "name": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "short_name": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "url": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "icons": {
+                "extends": [
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "src": {
+                          "extends": [
+                            {
+                              "type": "string",
+                              "minLength": 0
+                            }
+                          ],
+                          "required": false
+                        },
+                        "sizes": {
+                          "extends": [
+                            {
+                              "type": "string",
+                              "minLength": 0
+                            }
+                          ],
+                          "required": false
+                        }
+                      },
+                      "patternProperties": {},
+                      "additionalProperties": {}
+                    }
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

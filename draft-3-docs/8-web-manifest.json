@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Web App Manifest Specification",
+  "description": "Configuration metadata enabling progressive web application installation.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "short_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "start_url": {
+      "type": "string",
+      "default": "/"
+    },
+    "display": {
+      "type": "string",
+      "default": "standalone"
+    },
+    "orientation": {
+      "type": "string",
+      "default": "any"
+    },
+    "background_color": {
+      "type": "string",
+      "default": "#ffffff"
+    },
+    "theme_color": {
+      "type": "string"
+    },
+    "lang": {
+      "type": "string",
+      "default": "en-US"
+    },
+    "dir": {
+      "type": "string",
+      "default": "ltr"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "prefer_related_applications": {
+      "type": "boolean",
+      "default": false
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "icons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "src",
+          "sizes"
+        ],
+        "properties": {
+          "src": {
+            "type": "string"
+          },
+          "sizes": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "default": "image/png"
+          },
+          "purpose": {
+            "type": "string",
+            "default": "any"
+          }
+        }
+      }
+    },
+    "shortcuts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "url"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "short_name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "icons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string"
+                },
+                "sizes": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

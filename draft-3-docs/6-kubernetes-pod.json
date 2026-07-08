@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Kubernetes Pod Template",
+  "description": "Standard configuration parameters defining container runtime environments.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "required": true,
+      "default": "v1"
+    },
+    "kind": {
+      "type": "string",
+      "required": true,
+      "default": "Pod"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string",
+          "default": "default"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": [
+        "containers"
+      ],
+      "properties": {
+        "restartPolicy": {
+          "type": "string",
+          "default": "Always"
+        },
+        "dnsPolicy": {
+          "type": "string",
+          "default": "ClusterFirst"
+        },
+        "hostNetwork": {
+          "type": "boolean",
+          "default": false
+        },
+        "containers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "image"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "image": {
+                "type": "string"
+              },
+              "command": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "workingDir": {
+                "type": "string"
+              },
+              "ports": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "containerPort"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "containerPort": {
+                      "type": "integer"
+                    },
+                    "protocol": {
+                      "type": "string",
+                      "default": "TCP"
+                    }
+                  }
+                }
+              },
+              "imagePullPolicy": {
+                "type": "string",
+                "default": "IfNotPresent"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

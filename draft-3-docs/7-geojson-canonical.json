@@ -1,0 +1,189 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "GeoJSON Feature Collection Specification",
+  "description": "Data structures representing spatial coordinates and feature properties.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "extends": [
+        {
+          "default": "FeatureCollection",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "bbox": {
+      "extends": [
+        {
+          "type": "array",
+          "maxItems": 6,
+          "minItems": 4,
+          "uniqueItems": false,
+          "items": {
+            "type": "number"
+          }
+        }
+      ],
+      "required": false
+    },
+    "features": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "object",
+            "required": [ "type", "geometry", "properties" ],
+            "properties": {
+              "type": {
+                "extends": [
+                  {
+                    "default": "Feature",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "id": {
+                "extends": [
+                  {
+                    "type": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ]
+                  }
+                ],
+                "required": false
+              },
+              "properties": {
+                "extends": [
+                  {
+                    "type": [
+                      {
+                        "type": "object",
+                        "properties": {},
+                        "patternProperties": {},
+                        "additionalProperties": {
+                          "type": "string",
+                          "minLength": 0
+                        }
+                      },
+                      {
+                        "enum": [ null ]
+                      }
+                    ]
+                  }
+                ],
+                "required": false
+              },
+              "geometry": {
+                "type": "object",
+                "required": [ "type", "coordinates" ],
+                "properties": {
+                  "type": {
+                    "extends": [
+                      {
+                        "default": "Point",
+                        "type": "string",
+                        "minLength": 0
+                      }
+                    ],
+                    "required": false
+                  },
+                  "coordinates": {
+                    "extends": [
+                      {
+                        "type": "array",
+                        "minItems": 0,
+                        "uniqueItems": false,
+                        "items": {
+                          "type": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "array",
+                              "minItems": 0,
+                              "uniqueItems": false,
+                              "items": {
+                                "type": [
+                                  {
+                                    "type": "number"
+                                  },
+                                  {
+                                    "type": "array",
+                                    "minItems": 0,
+                                    "uniqueItems": false,
+                                    "items": {
+                                      "type": "number"
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "required": false
+                  }
+                },
+                "patternProperties": {},
+                "additionalProperties": {}
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    },
+    "crs": {
+      "type": "object",
+      "required": [ "type", "properties" ],
+      "properties": {
+        "type": {
+          "extends": [
+            {
+              "default": "name",
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "properties": {
+          "type": "object",
+          "required": [ "name" ],
+          "properties": {
+            "name": {
+              "extends": [
+                {
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      },
+      "patternProperties": {},
+      "additionalProperties": {}
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

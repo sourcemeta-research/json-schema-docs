@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "TypeScript Compiler Settings",
+  "description": "Extensive TypeScript configuration schema detailing compiler options.",
+  "type": "object",
+  "properties": {
+    "compilerOptions": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "default": "es2022"
+        },
+        "module": {
+          "type": "string",
+          "default": "commonjs"
+        },
+        "lib": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowJs": {
+          "type": "boolean",
+          "default": false
+        },
+        "checkJs": {
+          "type": "boolean",
+          "default": false
+        },
+        "jsx": {
+          "type": "string"
+        },
+        "declaration": {
+          "type": "boolean",
+          "default": false
+        },
+        "declarationMap": {
+          "type": "boolean",
+          "default": false
+        },
+        "emitDeclarationOnly": {
+          "type": "boolean",
+          "default": false
+        },
+        "sourceMap": {
+          "type": "boolean",
+          "default": false
+        },
+        "outDir": {
+          "type": "string"
+        },
+        "rootDir": {
+          "type": "string"
+        },
+        "removeComments": {
+          "type": "boolean",
+          "default": false
+        },
+        "noEmit": {
+          "type": "boolean",
+          "default": false
+        },
+        "strict": {
+          "type": "boolean",
+          "default": true
+        },
+        "noImplicitAny": {
+          "type": "boolean",
+          "default": true
+        },
+        "strictNullChecks": {
+          "type": "boolean",
+          "default": true
+        },
+        "strictFunctionTypes": {
+          "type": "boolean",
+          "default": true
+        },
+        "noUnusedLocals": {
+          "type": "boolean",
+          "default": false
+        },
+        "noUnusedParameters": {
+          "type": "boolean",
+          "default": false
+        },
+        "noImplicitReturns": {
+          "type": "boolean",
+          "default": false
+        },
+        "moduleResolution": {
+          "type": "string",
+          "default": "node"
+        },
+        "baseUrl": {
+          "type": "string"
+        },
+        "paths": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "esModuleInterop": {
+          "type": "boolean",
+          "default": true
+        },
+        "experimentalDecorators": {
+          "type": "boolean",
+          "default": false
+        },
+        "emitDecoratorMetadata": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "include": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "exclude": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "prepend": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,377 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "NPM Package Specification",
+  "description": "Comprehensive NPM package.json configuration schema for Node.js developers.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "extends": [
+        {
+          "description": "The unique name of the package.",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9-._]+$",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "version": {
+      "extends": [
+        {
+          "description": "Semantic version number.",
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "description": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "keywords": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "homepage": {
+      "extends": [
+        {
+          "type": "string",
+          "format": "uri",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "bugs": {
+      "extends": [
+        {
+          "type": [
+            {
+              "type": "string",
+              "minLength": 0
+            },
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "format": "uri",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "email": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "format": "email",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                }
+              },
+              "patternProperties": {},
+              "additionalProperties": {}
+            }
+          ]
+        }
+      ],
+      "required": false
+    },
+    "license": {
+      "extends": [
+        {
+          "default": "ISC",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "author": {
+      "extends": [
+        {
+          "type": [
+            {
+              "type": "string",
+              "minLength": 0
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": true
+                },
+                "email": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "format": "email",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "url": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "format": "uri",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                }
+              },
+              "patternProperties": {},
+              "additionalProperties": {}
+            }
+          ]
+        }
+      ],
+      "required": false
+    },
+    "contributors": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": true
+              },
+              "email": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "format": "email",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    },
+    "bin": {
+      "extends": [
+        {
+          "type": [
+            {
+              "type": "string",
+              "minLength": 0
+            },
+            {
+              "type": "object",
+              "properties": {},
+              "patternProperties": {},
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 0
+              }
+            }
+          ]
+        }
+      ],
+      "required": false
+    },
+    "repository": {
+      "type": "object",
+      "required": [ "type", "url" ],
+      "properties": {
+        "type": {
+          "extends": [
+            {
+              "default": "git",
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "url": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "directory": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        }
+      },
+      "patternProperties": {},
+      "additionalProperties": {}
+    },
+    "scripts": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "dependencies": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "devDependencies": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "peerDependencies": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "engines": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {
+            "node": {
+              "extends": [
+                {
+                  "default": ">=18.0.0",
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "npm": {
+              "extends": [
+                {
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      ],
+      "required": false
+    },
+    "publishConfig": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {
+            "registry": {
+              "extends": [
+                {
+                  "type": "string",
+                  "format": "uri",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            },
+            "access": {
+              "extends": [
+                {
+                  "default": "public",
+                  "type": "string",
+                  "minLength": 0
+                }
+              ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

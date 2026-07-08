@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "OpenAPI / Swagger Contract",
+  "description": "Comprehensive structure defining API paths, security, and objects.",
+  "type": "object",
+  "properties": {
+    "swagger": {
+      "extends": [
+        {
+          "default": "2.0",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "info": {
+      "type": "object",
+      "required": [ "title", "version" ],
+      "properties": {
+        "title": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "version": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "description": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "termsOfService": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "contact": {
+          "extends": [
+            {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "email": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "url": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                }
+              },
+              "patternProperties": {},
+              "additionalProperties": {}
+            }
+          ],
+          "required": false
+        }
+      },
+      "patternProperties": {},
+      "additionalProperties": {}
+    },
+    "host": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "basePath": {
+      "extends": [
+        {
+          "default": "/",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": false
+    },
+    "schemes": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "consumes": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "produces": {
+      "extends": [
+        {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": false,
+          "items": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "paths": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "object",
+            "properties": {},
+            "patternProperties": {},
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "summary": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "description": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "operationId": {
+                  "extends": [
+                    {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  ],
+                  "required": false
+                },
+                "parameters": {
+                  "extends": [
+                    {
+                      "type": "array",
+                      "minItems": 0,
+                      "uniqueItems": false,
+                      "items": {
+                        "type": "object",
+                        "required": [ "name", "in" ],
+                        "properties": {
+                          "name": {
+                            "extends": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          },
+                          "in": {
+                            "extends": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          },
+                          "description": {
+                            "extends": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          },
+                          "required": {
+                            "extends": [
+                              {
+                                "default": false,
+                                "enum": [ false, true ]
+                              }
+                            ],
+                            "required": false
+                          },
+                          "type": {
+                            "extends": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          }
+                        },
+                        "patternProperties": {},
+                        "additionalProperties": {}
+                      }
+                    }
+                  ],
+                  "required": false
+                }
+              },
+              "patternProperties": {},
+              "additionalProperties": {}
+            }
+          }
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

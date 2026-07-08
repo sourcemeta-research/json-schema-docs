@@ -1,0 +1,237 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Kubernetes Pod Template",
+  "description": "Standard configuration parameters defining container runtime environments.",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "extends": [
+        {
+          "default": "v1",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "kind": {
+      "extends": [
+        {
+          "default": "Pod",
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "metadata": {
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "name": {
+          "extends": [
+            {
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "namespace": {
+          "extends": [
+            {
+              "default": "default",
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "labels": {
+          "extends": [
+            {
+              "type": "object",
+              "properties": {},
+              "patternProperties": {},
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 0
+              }
+            }
+          ],
+          "required": false
+        },
+        "annotations": {
+          "extends": [
+            {
+              "type": "object",
+              "properties": {},
+              "patternProperties": {},
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 0
+              }
+            }
+          ],
+          "required": false
+        }
+      },
+      "patternProperties": {},
+      "additionalProperties": {}
+    },
+    "spec": {
+      "type": "object",
+      "required": [ "containers" ],
+      "properties": {
+        "restartPolicy": {
+          "extends": [
+            {
+              "default": "Always",
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "dnsPolicy": {
+          "extends": [
+            {
+              "default": "ClusterFirst",
+              "type": "string",
+              "minLength": 0
+            }
+          ],
+          "required": false
+        },
+        "hostNetwork": {
+          "extends": [
+            {
+              "default": false,
+              "enum": [ false, true ]
+            }
+          ],
+          "required": false
+        },
+        "containers": {
+          "extends": [
+            {
+              "type": "array",
+              "minItems": 0,
+              "uniqueItems": false,
+              "items": {
+                "type": "object",
+                "required": [ "name", "image" ],
+                "properties": {
+                  "name": {
+                    "extends": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      }
+                    ],
+                    "required": false
+                  },
+                  "image": {
+                    "extends": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      }
+                    ],
+                    "required": false
+                  },
+                  "command": {
+                    "extends": [
+                      {
+                        "type": "array",
+                        "minItems": 0,
+                        "uniqueItems": false,
+                        "items": {
+                          "type": "string",
+                          "minLength": 0
+                        }
+                      }
+                    ],
+                    "required": false
+                  },
+                  "workingDir": {
+                    "extends": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      }
+                    ],
+                    "required": false
+                  },
+                  "ports": {
+                    "extends": [
+                      {
+                        "type": "array",
+                        "minItems": 0,
+                        "uniqueItems": false,
+                        "items": {
+                          "type": "object",
+                          "required": [ "containerPort" ],
+                          "properties": {
+                            "name": {
+                              "extends": [
+                                {
+                                  "type": "string",
+                                  "minLength": 0
+                                }
+                              ],
+                              "required": false
+                            },
+                            "containerPort": {
+                              "extends": [
+                                {
+                                  "type": "integer",
+                                  "divisibleBy": 1
+                                }
+                              ],
+                              "required": false
+                            },
+                            "protocol": {
+                              "extends": [
+                                {
+                                  "default": "TCP",
+                                  "type": "string",
+                                  "minLength": 0
+                                }
+                              ],
+                              "required": false
+                            }
+                          },
+                          "patternProperties": {},
+                          "additionalProperties": {}
+                        }
+                      }
+                    ],
+                    "required": false
+                  },
+                  "imagePullPolicy": {
+                    "extends": [
+                      {
+                        "default": "IfNotPresent",
+                        "type": "string",
+                        "minLength": 0
+                      }
+                    ],
+                    "required": false
+                  }
+                },
+                "patternProperties": {},
+                "additionalProperties": {}
+              }
+            }
+          ],
+          "required": false
+        }
+      },
+      "patternProperties": {},
+      "additionalProperties": {}
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

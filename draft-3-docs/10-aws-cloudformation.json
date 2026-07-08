@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "AWS CloudFormation Specification",
+  "description": "Infrastructure template parameters, intrinsic mappings, and output variables.",
+  "type": "object",
+  "properties": {
+    "AWSTemplateFormatVersion": {
+      "type": "string",
+      "default": "2010-09-09"
+    },
+    "Description": {
+      "type": "string"
+    },
+    "Parameters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "Type"
+        ],
+        "properties": {
+          "Type": {
+            "type": "string",
+            "default": "String"
+          },
+          "Default": {
+            "type": "string"
+          },
+          "AllowedValues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Mappings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Resources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "Type",
+          "Properties"
+        ],
+        "properties": {
+          "Type": {
+            "type": "string"
+          },
+          "Properties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "any"
+            }
+          }
+        }
+      }
+    },
+    "Outputs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "Value"
+        ],
+        "properties": {
+          "Description": {
+            "type": "string"
+          },
+          "Value": {
+            "type": [
+              "string",
+              "object"
+            ]
+          },
+          "Export": {
+            "type": "object",
+            "required": [
+              "Name"
+            ],
+            "properties": {
+              "Name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

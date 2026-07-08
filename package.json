@@ -1,0 +1,11 @@
+{
+  "name": "json-docs-test",
+  "version": "1.0.0",
+  "description": "Local sandbox for testing HTML documentation generation from canonical JSON schemas",
+  "main": "generate.js",
+  "scripts": {
+    "start": "node generate.js"
+  },
+  "dependencies": {},
+  "private": true
+}

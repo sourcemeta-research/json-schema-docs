@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "GeoJSON Feature Collection Specification",
+  "description": "Data structures representing spatial coordinates and feature properties.",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "required": true,
+      "default": "FeatureCollection"
+    },
+    "bbox": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 4,
+      "maxItems": 6
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "default": "Feature"
+          },
+          "id": {
+            "type": [
+              "string",
+              "number"
+            ]
+          },
+          "properties": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "geometry": {
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "default": "Point"
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "number",
+                    "array"
+                  ],
+                  "items": {
+                    "type": [
+                      "number",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "crs": {
+      "type": "object",
+      "required": [
+        "type",
+        "properties"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "name"
+        },
+        "properties": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

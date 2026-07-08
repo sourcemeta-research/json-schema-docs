@@ -1,0 +1,136 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "GitHub Actions Workflow Setup",
+  "description": "Complete CI/CD workflow automation pipeline settings.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "on": {
+      "type": [
+        "string",
+        "array",
+        "object"
+      ],
+      "properties": {
+        "push": {
+          "type": "object",
+          "properties": {
+            "branches": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "pull_request": {
+          "type": "object",
+          "properties": {
+            "branches": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "cron": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "env": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "jobs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "runs-on",
+          "steps"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "runs-on": {
+            "type": "string",
+            "default": "ubuntu-latest"
+          },
+          "needs": {
+            "type": [
+              "string",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "env": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "run"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "uses": {
+                  "type": "string"
+                },
+                "with": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "run": {
+                  "type": "string"
+                },
+                "env": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "continue-on-error": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

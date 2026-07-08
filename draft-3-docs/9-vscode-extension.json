@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "VS Code Manifest settings",
+  "description": "Integration configurations describing visual components and menu contributions.",
+  "type": "object",
+  "properties": {
+    "publisher": {
+      "type": "string",
+      "required": true
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "activationEvents": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "engines": {
+      "type": "object",
+      "required": [
+        "vscode"
+      ],
+      "properties": {
+        "vscode": {
+          "type": "string",
+          "default": "^1.80.0"
+        }
+      }
+    },
+    "contributes": {
+      "type": "object",
+      "properties": {
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "command",
+              "title"
+            ],
+            "properties": {
+              "command": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "menus": {
+          "type": "object",
+          "properties": {
+            "editor/title": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "command": {
+                    "type": "string"
+                  },
+                  "when": {
+                    "type": "string"
+                  },
+                  "group": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "default": {
+                    "type": "any"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

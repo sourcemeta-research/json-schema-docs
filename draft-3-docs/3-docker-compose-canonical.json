@@ -1,0 +1,355 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Docker Compose Configuration",
+  "description": "Multi-service container definitions, volumes, and network settings.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "services": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "image": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "build": {
+                "extends": [
+                  {
+                    "type": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "context": {
+                            "extends": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          },
+                          "dockerfile": {
+                            "extends": [
+                              {
+                                "default": "Dockerfile",
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          },
+                          "args": {
+                            "extends": [
+                              {
+                                "type": "object",
+                                "properties": {},
+                                "patternProperties": {},
+                                "additionalProperties": {
+                                  "type": "string",
+                                  "minLength": 0
+                                }
+                              }
+                            ],
+                            "required": false
+                          }
+                        },
+                        "patternProperties": {},
+                        "additionalProperties": {}
+                      }
+                    ]
+                  }
+                ],
+                "required": false
+              },
+              "container_name": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "ports": {
+                "extends": [
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  }
+                ],
+                "required": false
+              },
+              "volumes": {
+                "extends": [
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  }
+                ],
+                "required": false
+              },
+              "networks": {
+                "extends": [
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  }
+                ],
+                "required": false
+              },
+              "environment": {
+                "extends": [
+                  {
+                    "type": [
+                      {
+                        "type": "array",
+                        "minItems": 0,
+                        "uniqueItems": false,
+                        "items": {}
+                      },
+                      {
+                        "type": "object",
+                        "properties": {},
+                        "patternProperties": {},
+                        "additionalProperties": {
+                          "type": "string",
+                          "minLength": 0
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "required": false
+              },
+              "command": {
+                "extends": [
+                  {
+                    "type": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 0,
+                        "uniqueItems": false,
+                        "items": {
+                          "type": "string",
+                          "minLength": 0
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "required": false
+              },
+              "restart": {
+                "extends": [
+                  {
+                    "default": "always",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "depends_on": {
+                "extends": [
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  }
+                ],
+                "required": false
+              },
+              "healthcheck": {
+                "extends": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "test": {
+                        "extends": [
+                          {
+                            "type": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              },
+                              {
+                                "type": "array",
+                                "minItems": 0,
+                                "uniqueItems": false,
+                                "items": {
+                                  "type": "string",
+                                  "minLength": 0
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "required": false
+                      },
+                      "interval": {
+                        "extends": [
+                          {
+                            "default": "30s",
+                            "type": "string",
+                            "minLength": 0
+                          }
+                        ],
+                        "required": false
+                      },
+                      "timeout": {
+                        "extends": [
+                          {
+                            "default": "10s",
+                            "type": "string",
+                            "minLength": 0
+                          }
+                        ],
+                        "required": false
+                      },
+                      "retries": {
+                        "extends": [
+                          {
+                            "default": 3,
+                            "type": "integer",
+                            "divisibleBy": 1
+                          }
+                        ],
+                        "required": false
+                      }
+                    },
+                    "patternProperties": {},
+                    "additionalProperties": {}
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    },
+    "volumes": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "driver": {
+                "extends": [
+                  {
+                    "default": "local",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "external": {
+                "extends": [
+                  {
+                    "default": false,
+                    "enum": [ false, true ]
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    },
+    "networks": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "driver": {
+                "extends": [
+                  {
+                    "default": "bridge",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "external": {
+                "extends": [
+                  {
+                    "default": false,
+                    "enum": [ false, true ]
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

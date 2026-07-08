@@ -1,0 +1,306 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "GitHub Actions Workflow Setup",
+  "description": "Complete CI/CD workflow automation pipeline settings.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "extends": [
+        {
+          "type": "string",
+          "minLength": 0
+        }
+      ],
+      "required": true
+    },
+    "on": {
+      "extends": [
+        {
+          "type": [
+            {
+              "type": "string",
+              "minLength": 0
+            },
+            {
+              "type": "array",
+              "minItems": 0,
+              "uniqueItems": false,
+              "items": {}
+            },
+            {
+              "type": "object",
+              "properties": {
+                "push": {
+                  "extends": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "branches": {
+                          "extends": [
+                            {
+                              "type": "array",
+                              "minItems": 0,
+                              "uniqueItems": false,
+                              "items": {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            }
+                          ],
+                          "required": false
+                        },
+                        "tags": {
+                          "extends": [
+                            {
+                              "type": "array",
+                              "minItems": 0,
+                              "uniqueItems": false,
+                              "items": {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            }
+                          ],
+                          "required": false
+                        }
+                      },
+                      "patternProperties": {},
+                      "additionalProperties": {}
+                    }
+                  ],
+                  "required": false
+                },
+                "pull_request": {
+                  "extends": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "branches": {
+                          "extends": [
+                            {
+                              "type": "array",
+                              "minItems": 0,
+                              "uniqueItems": false,
+                              "items": {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            }
+                          ],
+                          "required": false
+                        }
+                      },
+                      "patternProperties": {},
+                      "additionalProperties": {}
+                    }
+                  ],
+                  "required": false
+                },
+                "schedule": {
+                  "extends": [
+                    {
+                      "type": "array",
+                      "minItems": 0,
+                      "uniqueItems": false,
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cron": {
+                            "extends": [
+                              {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            ],
+                            "required": false
+                          }
+                        },
+                        "patternProperties": {},
+                        "additionalProperties": {}
+                      }
+                    }
+                  ],
+                  "required": false
+                }
+              },
+              "patternProperties": {},
+              "additionalProperties": {}
+            }
+          ]
+        }
+      ],
+      "required": false
+    },
+    "env": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 0
+          }
+        }
+      ],
+      "required": false
+    },
+    "jobs": {
+      "extends": [
+        {
+          "type": "object",
+          "properties": {},
+          "patternProperties": {},
+          "additionalProperties": {
+            "type": "object",
+            "required": [ "runs-on", "steps" ],
+            "properties": {
+              "name": {
+                "extends": [
+                  {
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "runs-on": {
+                "extends": [
+                  {
+                    "default": "ubuntu-latest",
+                    "type": "string",
+                    "minLength": 0
+                  }
+                ],
+                "required": false
+              },
+              "needs": {
+                "extends": [
+                  {
+                    "type": [
+                      {
+                        "type": "string",
+                        "minLength": 0
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 0,
+                        "uniqueItems": false,
+                        "items": {
+                          "type": "string",
+                          "minLength": 0
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "required": false
+              },
+              "env": {
+                "extends": [
+                  {
+                    "type": "object",
+                    "properties": {},
+                    "patternProperties": {},
+                    "additionalProperties": {
+                      "type": "string",
+                      "minLength": 0
+                    }
+                  }
+                ],
+                "required": false
+              },
+              "steps": {
+                "extends": [
+                  {
+                    "type": "array",
+                    "minItems": 0,
+                    "uniqueItems": false,
+                    "items": {
+                      "type": "object",
+                      "required": [ "run" ],
+                      "properties": {
+                        "name": {
+                          "extends": [
+                            {
+                              "type": "string",
+                              "minLength": 0
+                            }
+                          ],
+                          "required": false
+                        },
+                        "uses": {
+                          "extends": [
+                            {
+                              "type": "string",
+                              "minLength": 0
+                            }
+                          ],
+                          "required": false
+                        },
+                        "with": {
+                          "extends": [
+                            {
+                              "type": "object",
+                              "properties": {},
+                              "patternProperties": {},
+                              "additionalProperties": {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            }
+                          ],
+                          "required": false
+                        },
+                        "run": {
+                          "extends": [
+                            {
+                              "type": "string",
+                              "minLength": 0
+                            }
+                          ],
+                          "required": false
+                        },
+                        "env": {
+                          "extends": [
+                            {
+                              "type": "object",
+                              "properties": {},
+                              "patternProperties": {},
+                              "additionalProperties": {
+                                "type": "string",
+                                "minLength": 0
+                              }
+                            }
+                          ],
+                          "required": false
+                        },
+                        "continue-on-error": {
+                          "extends": [
+                            {
+                              "default": false,
+                              "enum": [ false, true ]
+                            }
+                          ],
+                          "required": false
+                        }
+                      },
+                      "patternProperties": {},
+                      "additionalProperties": {}
+                    }
+                  }
+                ],
+                "required": false
+              }
+            },
+            "patternProperties": {},
+            "additionalProperties": {}
+          }
+        }
+      ],
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

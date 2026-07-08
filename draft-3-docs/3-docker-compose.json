@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Docker Compose Configuration",
+  "description": "Multi-service container definitions, volumes, and network settings.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "required": true
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string"
+          },
+          "build": {
+            "type": [
+              "string",
+              "object"
+            ],
+            "properties": {
+              "context": {
+                "type": "string"
+              },
+              "dockerfile": {
+                "type": "string",
+                "default": "Dockerfile"
+              },
+              "args": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "container_name": {
+            "type": "string"
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "volumes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "networks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "environment": {
+            "type": [
+              "array",
+              "object"
+            ],
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "command": {
+            "type": [
+              "string",
+              "array"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "restart": {
+            "type": "string",
+            "default": "always"
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "healthcheck": {
+            "type": "object",
+            "properties": {
+              "test": {
+                "type": [
+                  "string",
+                  "array"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "interval": {
+                "type": "string",
+                "default": "30s"
+              },
+              "timeout": {
+                "type": "string",
+                "default": "10s"
+              },
+              "retries": {
+                "type": "integer",
+                "default": 3
+              }
+            }
+          }
+        }
+      }
+    },
+    "volumes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "driver": {
+            "type": "string",
+            "default": "local"
+          },
+          "external": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    "networks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "driver": {
+            "type": "string",
+            "default": "bridge"
+          },
+          "external": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    }
+  }
+}
