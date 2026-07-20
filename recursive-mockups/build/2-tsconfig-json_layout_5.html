@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TypeScript Compiler Settings - IBM Carbon Data Table</title>
+  <title>TypeScript Compiler Settings - Carbon Zebra</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,12 +17,16 @@
     header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
     header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
 
+    /* Distinct from Carbon Classic: sticky header + zebra striped rows, so this
+       is an actual second table treatment instead of a re-titled duplicate. */
     .carbon-table-container {
       border: 1px solid #E0E0E0;
       background-color: #F4F4F4;
       display: flex;
       flex-direction: column;
       position: relative;
+      max-height: 640px;
+      overflow: auto;
     }
 
     /* CSS-Only Batch Actions Bar */
@@ -41,7 +45,7 @@
     body:has(.bx--checkbox:checked) .carbon-batch-actions {
       display: flex;
     }
-    
+
     .batch-btn {
       background: none;
       border: none;
@@ -78,13 +82,16 @@
       background-color: #FFFFFF;
     }
     .bx--data-table th {
+      position: sticky;
+      top: 0;
       background-color: #F4F4F4;
-      border-bottom: 1px solid #E0E0E0;
+      border-bottom: 2px solid #0F62FE;
       padding: 0.75rem 1rem;
       text-align: left;
       font-size: 0.85rem;
       font-weight: 600;
       color: #161616;
+      z-index: 1;
     }
     .bx--data-table td {
       padding: 0.75rem 1rem;
@@ -92,14 +99,15 @@
       font-size: 0.85rem;
       vertical-align: top;
     }
+    .carbon-row:nth-child(even) { background-color: #F8F8F8; }
     .carbon-row:hover { background-color: #E5E5E5; }
-    
+
     .carbon-cell-checkbox { width: 40px; text-align: center; }
     .carbon-cell-path { font-weight: 600; }
-    
+
     code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
     .type-mono { font-family: 'IBM Plex Mono', monospace; color: #0F62FE; font-weight: 600; }
-    
+
     .req-alert { color: #DA1E28; font-size: 0.75rem; }
     .opt-alert { color: #525252; font-size: 0.75rem; }
 
@@ -131,9 +139,9 @@
         <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
       </div>
     </div>
-    
+
     <div class="carbon-toolbar">
-      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec (scroll for more, header stays pinned)</span>
     </div>
 
     <table class="bx--data-table">
