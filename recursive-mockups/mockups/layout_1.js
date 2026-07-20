@@ -1,24 +1,26 @@
 module.exports = function render(title, desc, schema) {
 
   const rows = [];
-  const visited = new Set();
+  const visited = new Map(); // Use Map to track paths of visited nodes
 
   function walk(node, parentPath = [], isRequired = false) {
     if (!node || typeof node !== 'object') return;
     
     if (visited.has(node)) {
+      const targetPath = visited.get(node);
       rows.push({
         path: parentPath.join('.'),
         name: parentPath[parentPath.length - 1],
         depth: parentPath.length,
         type: 'recursiveRef',
+        targetPath: targetPath, // Save target path for anchor navigation!
         required: isRequired,
-        description: 'Recursive reference back to parent definition.',
+        description: 'Recursive reference back to ' + targetPath + '.',
         constraints: {}
       });
       return;
     }
-    visited.add(node);
+    visited.set(node, parentPath.join('.'));
 
     let type = 'any';
     let description = '';
@@ -43,6 +45,14 @@ module.exports = function render(title, desc, schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);
@@ -94,37 +104,25 @@ module.exports = function render(title, desc, schema) {
 
   walk(schema);
 
-  let sidebarLinksHtml = '';
-  let mainContentHtml = '';
-
+  let tableRowsHtml = '';
+  
   rows.forEach((r, idx) => {
-    sidebarLinksHtml += `
-      <li class="nav-item" id="nav-item-${idx}" onclick="scrollToSection('${idx}')">
-        <span>${r.path}</span>
-        ${r.required ? '<span class="req-dot"></span>' : ''}
-      </li>
-    `;
-
     let constraintsHtml = '';
     const constraintEntries = Object.entries(r.constraints);
     if (constraintEntries.length > 0) {
-      constraintsHtml = '<div class="stripe-constraints">';
+      constraintsHtml = '<div class="carbon-constraints">';
       constraintEntries.forEach(([key, val]) => {
         if (typeof val === 'object' && val !== null) {
           constraintsHtml += `
-            <div class="constraint-row nested" style="flex-wrap: wrap;">
-              <span class="c-key">${key}</span>
-              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="event.stopPropagation(); const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; width: 100%; padding-left: 10px; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #fafafa; border-left: 2px solid #ccc; padding: 5px; color: #333;">${JSON.stringify(val, null, 2)}</pre>
-              </div>
-            </div>
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">${key} [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">${JSON.stringify(val, null, 2)}</pre>
+            </details>
           `;
         } else {
           constraintsHtml += `
-            <div class="constraint-row">
-              <span class="c-key">${key}</span>
-              <span class="c-val">${JSON.stringify(val)}</span>
+            <div class="carbon-tag">
+              <span class="t-k">${key}:</span> <span class="t-v">${JSON.stringify(val)}</span>
             </div>
           `;
         }
@@ -132,16 +130,30 @@ module.exports = function render(title, desc, schema) {
       constraintsHtml += '</div>';
     }
 
-    mainContentHtml += `
-      <section id="sec-${idx}" class="stripe-section" data-idx="${idx}">
-        <div class="section-header">
-          <h2>${r.path}</h2>
-          <span class="type-badge">${r.type}</span>
-          ${r.required ? '<span class="status-badge required">REQUIRED</span>' : '<span class="status-badge optional">OPTIONAL</span>'}
-        </div>
-        <p class="section-desc">${r.description || 'No descriptive comments are provided for this parameter.'}</p>
-        ${constraintsHtml}
-      </section>
+    tableRowsHtml += `
+      <tr class="carbon-row" id="node-${r.path}" data-path="${r.path}">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">${r.path}</code>
+          ${r.description ? `
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">${r.description}</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">${JSON.stringify(r.constraints, null, 2)}</pre>
+            </div>
+          </details>` : ''}
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            ${r.type === 'recursiveRef' ? `recursiveRef to <a href="#node-${r.targetPath}" style="color: #0F62FE; font-weight: 600; text-decoration: underline;">${r.targetPath}</a>` : r.type}
+          </span>
+        </td>
+        <td class="carbon-cell-req">${r.required ? '<strong class="req-alert">REQUIRED</strong>' : '<span class="opt-alert">OPTIONAL</span>'}</td>
+        <td class="carbon-cell-validation">${constraintsHtml || '<span style="color:#8d8d8d;">None</span>'}</td>
+      </tr>
     `;
   });
 
@@ -149,276 +161,156 @@ module.exports = function render(title, desc, schema) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>${title} - Stripe API Docs</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>${title} - Carbon Classic</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #FFFFFF;
-      --side-bg: #F8F9FA;
-      --border: #E3E8EE;
-      --text: #1F2937;
-      --text-dim: #6B7280;
-      --accent: #635BFF;
-      --code-bg: #0A101D;
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      background-color: #FFFFFF;
+      color: #161616;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2rem;
     }
 
-    .sidebar {
-      width: 250px;
-      min-width: 180px;
-      max-width: 400px;
-      background-color: var(--side-bg);
-      border-right: 1px solid var(--border);
+    header { margin-bottom: 2rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #E0E0E0;
+      background-color: #F4F4F4;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      position: relative;
     }
-    .sidebar-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .sidebar-header h3 { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text); }
-    .nav-list { list-style: none; overflow-y: auto; flex: 1; padding: 1rem 0.5rem; }
-    .nav-item {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 4px;
-      margin-bottom: 0.15rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .nav-item:hover { color: var(--text); background-color: rgba(0,0,0,0.02); }
-    .nav-item.active { color: var(--accent); background-color: rgba(99, 91, 255, 0.08); font-weight: 600; }
-    .req-dot { width: 5px; height: 5px; background: #EF4444; border-radius: 50%; }
 
-    .resizer {
-      width: 4px;
-      cursor: col-resize;
-      background-color: var(--border);
-      transition: background-color 0.2s;
+    /* CSS-Only Batch Actions Bar */
+    .carbon-batch-actions {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
+      color: #FFFFFF;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.875rem;
       z-index: 10;
     }
-    .resizer:hover, .resizer.resizing { background-color: var(--accent); }
-
-    .doc-column {
-      flex: 1;
-      overflow-y: auto;
-      padding: 3rem 4rem;
-      scroll-behavior: smooth;
-    }
-    .doc-header {
-      max-width: 700px;
-      margin-bottom: 3rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1.5rem;
-    }
-    .doc-header h1 { font-size: 2rem; font-weight: 700; color: #111827; }
-    .doc-header p { color: var(--text-dim); margin-top: 0.5rem; font-size: 0.9rem; }
-
-    .stripe-section {
-      max-width: 700px;
-      padding: 2.5rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
-    .section-header h2 { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: #111827; }
-    .type-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--accent); background: rgba(99, 91, 255, 0.08); padding: 0.15rem 0.4rem; font-weight: 600; }
-    
-    .status-badge { font-size: 0.65rem; font-weight: bold; padding: 0.15rem 0.35rem; }
-    .status-badge.required { color: #DC2626; background: rgba(220, 38, 38, 0.08); }
-    .status-badge.optional { color: var(--text-dim); background: rgba(0, 0, 0, 0.04); }
-    
-    .section-desc { font-size: 0.9rem; color: #374151; line-height: 1.6; margin-bottom: 1rem; }
-
-    .stripe-constraints { background: var(--side-bg); border: 1px solid var(--border); padding: 0.75rem 1rem; }
-    .constraint-row { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.25rem; }
-    .constraint-row:last-child { margin-bottom: 0; }
-    .c-key { color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
-    .c-val { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
-
-    .code-column {
-      width: 380px;
-      min-width: 250px;
-      max-width: 600px;
-      background-color: var(--code-bg);
-      border-left: 1px solid #1E293B;
-      color: #94A3B8;
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
       display: flex;
-      flex-direction: column;
-      height: 100%;
     }
-    .code-tabs {
-      display: flex;
-      background-color: #0E1626;
-      border-bottom: 1px solid #1E293B;
-      padding: 0 1rem;
-    }
-    .code-tab-btn {
+    
+    .batch-btn {
       background: none;
       border: none;
-      color: #64748B;
-      padding: 0.75rem 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
+      color: #FFFFFF;
       cursor: pointer;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
-    .code-tab-btn.active {
-      color: #FFF;
-      border-bottom: 2px solid var(--accent);
+    .batch-btn:hover { background-color: #0353E9; }
+
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
     }
+    .search-input {
+      border: none;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #0F62FE; }
+
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
+    .bx--data-table th {
+      background-color: #F4F4F4;
+      border-bottom: 1px solid #E0E0E0;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #161616;
+    }
+    .bx--data-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #E0E0E0;
+      font-size: 0.85rem;
+      vertical-align: top;
+    }
+    .carbon-row:hover { background-color: #E5E5E5; }
     
-    .code-box {
-      flex: 1;
-      padding: 1.5rem;
-      overflow-y: auto;
+    .carbon-cell-checkbox { width: 40px; text-align: center; }
+    .carbon-cell-path { font-weight: 600; }
+    
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #0F62FE; font-weight: 600; }
+    
+    .req-alert { color: #DA1E28; font-size: 0.75rem; }
+    .opt-alert { color: #525252; font-size: 0.75rem; }
+
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #E8F0FE;
+      border: 1px solid #C2DBFF;
+      color: #0F62FE;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
     }
-    .code-block { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #34D399; line-height: 1.5; white-space: pre-wrap; }
+    .t-k { color: #525252; }
+    .t-v { font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <h3>Schema Paths</h3>
+  <header>
+    <h1>${title} Specification</h1>
+    <p class="desc">${desc}</p>
+  </header>
+
+  <div class="carbon-table-container">
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
+      <div>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
+      </div>
     </div>
-    <ul class="nav-list">
-      ${sidebarLinksHtml}
-    </ul>
+    
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
+    </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th class="carbon-cell-checkbox"></th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRowsHtml}
+      </tbody>
+    </table>
   </div>
 
-  <div class="resizer" id="resizer-1"></div>
-
-  <div class="doc-column" id="doc-pane">
-    <header class="doc-header">
-      <h1>${title} API</h1>
-      <p>${desc}</p>
-    </header>
-    <div class="sections-list">
-      ${mainContentHtml}
-    </div>
-  </div>
-
-  <div class="resizer" id="resizer-2"></div>
-
-  <div class="code-column" id="code-pane">
-    <div class="code-tabs">
-      <button class="code-tab-btn active" onclick="changeLang('curl')">cURL</button>
-      <button class="code-tab-btn" onclick="changeLang('node')">Node.js</button>
-      <button class="code-tab-btn" onclick="changeLang('python')">Python</button>
-    </div>
-    <div class="code-box">
-      <pre class="code-block" id="json-code-box"></pre>
-    </div>
-  </div>
-
-  <script>
-    const rows = ${JSON.stringify(rows)};
-    let activeIdx = 0;
-    let activeLang = 'curl';
-
-    function scrollToSection(idx) {
-      const target = document.getElementById('sec-' + idx);
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      highlightActive(idx);
-    }
-
-    function highlightActive(idx) {
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      document.getElementById('nav-item-' + idx)?.classList.add('active');
-      activeIdx = idx;
-      updateCodeBlock();
-    }
-
-    function changeLang(lang) {
-      document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-      activeLang = lang;
-      updateCodeBlock();
-    }
-
-    function updateCodeBlock() {
-      const match = rows[activeIdx];
-      if (!match) return;
-
-      let code = '';
-      if (activeLang === 'curl') {
-        code = \`curl https://api.stripe.com/v1/spec \\\\\\\\n  -u key_live_123: \\\\\\\\n  -d "\${match.path}"="\${match.type}"\`;
-      } else if (activeLang === 'node') {
-        code = \`const stripe = require('stripe')('key_live_123');\\n\\nawait stripe.schemas.validate({\\n  path: "\${match.path}",\\n  type: "\${match.type}",\\n  constraints: \${JSON.stringify(match.constraints)}\\n});\`;
-      } else if (activeLang === 'python') {
-        code = \`import stripe\\nstripe.api_key = "key_live_123"\\n\\nstripe.Schema.validate(\\n  path="\${match.path}",\\n  type="\${match.type}",\\n  constraints=\${JSON.stringify(match.constraints)}\\n)\`;
-      }
-
-      document.getElementById('json-code-box').innerText = code;
-    }
-
-    // Scrollspy
-    const docPane = document.getElementById('doc-pane');
-    docPane.addEventListener('scroll', () => {
-      const sections = document.querySelectorAll('.stripe-section');
-      let currentActive = 0;
-      
-      sections.forEach(sec => {
-        const top = sec.offsetTop - docPane.scrollTop;
-        if (top < 150) {
-          currentActive = sec.getAttribute('data-idx');
-        }
-      });
-      
-      if (currentActive !== activeIdx) {
-        highlightActive(currentActive);
-      }
-    });
-
-    highlightActive(0);
-
-    const sidebar = document.getElementById('sidebar');
-    const resizer1 = document.getElementById('resizer-1');
-    const codePane = document.getElementById('code-pane');
-    const resizer2 = document.getElementById('resizer-2');
-
-    let currentResizer = null;
-
-    resizer1.addEventListener('mousedown', () => {
-      currentResizer = 1;
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    });
-
-    resizer2.addEventListener('mousedown', () => {
-      currentResizer = 2;
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (currentResizer === null) return;
-      if (currentResizer === 1) {
-        if (e.clientX > 180 && e.clientX < 400) sidebar.style.width = e.clientX + 'px';
-      } else if (currentResizer === 2) {
-        const newWidth = window.innerWidth - e.clientX;
-        if (newWidth > 250 && newWidth < 600) codePane.style.width = newWidth + 'px';
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      currentResizer = null;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
-    });
-  </script>
 </body>
 </html>`;
 };

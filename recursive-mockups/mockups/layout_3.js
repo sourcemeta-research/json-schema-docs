@@ -1,24 +1,26 @@
 module.exports = function render(title, desc, schema) {
 
   const rows = [];
-  const visited = new Set();
+  const visited = new Map(); // Use Map to track paths of visited nodes
 
   function walk(node, parentPath = [], isRequired = false) {
     if (!node || typeof node !== 'object') return;
     
     if (visited.has(node)) {
+      const targetPath = visited.get(node);
       rows.push({
         path: parentPath.join('.'),
         name: parentPath[parentPath.length - 1],
         depth: parentPath.length,
         type: 'recursiveRef',
+        targetPath: targetPath, // Save target path for anchor navigation!
         required: isRequired,
-        description: 'Recursive reference back to parent definition.',
+        description: 'Recursive reference back to ' + targetPath + '.',
         constraints: {}
       });
       return;
     }
-    visited.add(node);
+    visited.set(node, parentPath.join('.'));
 
     let type = 'any';
     let description = '';
@@ -43,6 +45,14 @@ module.exports = function render(title, desc, schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);
@@ -94,37 +104,25 @@ module.exports = function render(title, desc, schema) {
 
   walk(schema);
 
-  let sidebarListHtml = '';
-  let topicsHtml = '';
-
+  let tableRowsHtml = '';
+  
   rows.forEach((r, idx) => {
-    sidebarListHtml += `
-      <li class="nav-item-apple" id="apple-nav-${idx}" onclick="showAppleDoc(${idx})">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">${r.path}</span>
-      </li>
-    `;
-
     let constraintsHtml = '';
     const constraintEntries = Object.entries(r.constraints);
     if (constraintEntries.length > 0) {
-      constraintsHtml = '<div class="apple-constraints-list">';
+      constraintsHtml = '<div class="carbon-constraints">';
       constraintEntries.forEach(([key, val]) => {
         if (typeof val === 'object' && val !== null) {
           constraintsHtml += `
-            <div class="constraint-row nested" style="flex-wrap: wrap;">
-              <span class="c-key">${key}:</span>
-              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F5F5F7; border-left: 2px solid var(--accent); padding: 5px; color: #1D1D1F; overflow-x: auto;">${JSON.stringify(val, null, 2)}</pre>
-              </div>
-            </div>
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">${key} [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">${JSON.stringify(val, null, 2)}</pre>
+            </details>
           `;
         } else {
           constraintsHtml += `
-            <div class="constraint-row">
-              <span class="c-key">${key}:</span>
-              <span class="c-val">${JSON.stringify(val)}</span>
+            <div class="carbon-tag">
+              <span class="t-k">${key}:</span> <span class="t-v">${JSON.stringify(val)}</span>
             </div>
           `;
         }
@@ -132,40 +130,30 @@ module.exports = function render(title, desc, schema) {
       constraintsHtml += '</div>';
     }
 
-    topicsHtml += `
-      <div id="apple-doc-${idx}" class="apple-doc-content ${idx === 0 ? 'active' : ''}">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">${r.path}</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">${r.name}</span>: <span class="decl-type">${r.type}</span> <span class="decl-val">${r.required ? '= required' : '= optional'}</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">${r.description || 'No supplementary comments accompany this property.'}</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          ${constraintsHtml || '<p class="none-text">No additional constraints defined.</p>'}
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>${r.required ? 'YES' : 'NO'}</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level ${r.depth}</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+    tableRowsHtml += `
+      <tr class="carbon-row" id="node-${r.path}" data-path="${r.path}">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">${r.path}</code>
+          ${r.description ? `
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">${r.description}</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">${JSON.stringify(r.constraints, null, 2)}</pre>
+            </div>
+          </details>` : ''}
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            ${r.type === 'recursiveRef' ? `recursiveRef to <a href="#node-${r.targetPath}" style="color: #0F62FE; font-weight: 600; text-decoration: underline;">${r.targetPath}</a>` : r.type}
+          </span>
+        </td>
+        <td class="carbon-cell-req">${r.required ? '<strong class="req-alert">REQUIRED</strong>' : '<span class="opt-alert">OPTIONAL</span>'}</td>
+        <td class="carbon-cell-validation">${constraintsHtml || '<span style="color:#8d8d8d;">None</span>'}</td>
+      </tr>
     `;
   });
 
@@ -173,174 +161,157 @@ module.exports = function render(title, desc, schema) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>${title} - Apple Developer Reference</title>
+  <title>${title} - Carbon Compact</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      padding: 1rem;
       background-color: #FFFFFF;
-      color: #1D1D1F;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      color: #161616;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2rem;
     }
 
-    .apple-sidebar {
-      width: 260px;
-      min-width: 180px;
-      max-width: 450px;
-      background-color: #F5F5F7;
-      border-right: 1px solid #D2D2D7;
+    header { margin-bottom: 1rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #E0E0E0;
+      background-color: #F4F4F4;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      position: relative;
     }
-    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #D2D2D7; }
-    .sidebar-header h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #86868B; }
-    
-    .nav-list-apple { list-style: none; overflow-y: auto; flex: 1; padding: 0.5rem; }
-    .nav-item-apple {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
-      color: #1D1D1F;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-radius: 6px;
-      margin-bottom: 0.15rem;
-    }
-    .nav-item-apple:hover { background-color: rgba(0,0,0,0.04); }
-    .nav-item-apple.active {
-      background-color: #0071E3; /* Apple Blue */
-      color: #FFFFFF;
-      font-weight: 600;
-    }
-    .nav-item-apple.active .icon-cube { color: #FFFFFF; }
-    .icon-cube { color: #86868B; font-size: 0.7rem; }
-    .nav-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; font-family: monospace; }
 
-    .resizer {
-      width: 4px;
-      cursor: col-resize;
-      background-color: #D2D2D7;
+    /* CSS-Only Batch Actions Bar */
+    .carbon-batch-actions {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
+      color: #FFFFFF;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.875rem;
       z-index: 10;
     }
-    .resizer:hover { background-color: #0071E3; }
-
-    .doc-pane {
-      flex: 1;
-      overflow-y: auto;
-      background-color: #FFFFFF;
-      padding: 3rem 4rem;
-      height: 100%;
-    }
-    
-    .apple-breadcrumbs {
-      font-size: 0.75rem;
-      color: #86868B;
-      margin-bottom: 2rem;
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
       display: flex;
-      gap: 0.5rem;
     }
-    .apple-breadcrumbs span { cursor: pointer; }
-    .apple-breadcrumbs span:hover { color: #0071E3; }
-
-    .apple-doc-content { display: none; max-width: 700px; }
-    .apple-doc-content.active { display: block; }
     
-    .meta-label { font-size: 0.7rem; font-weight: 700; color: #86868B; letter-spacing: 0.05em; text-transform: uppercase; }
-    .doc-title { font-size: 2.2rem; font-weight: 700; color: #1D1D1F; margin-top: 0.25rem; margin-bottom: 1.5rem; letter-spacing: -0.03em; word-break: break-all; font-family: monospace; }
-
-    .declaration-block { margin-bottom: 2.5rem; }
-    .declaration-block h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
-    .declaration-block pre {
-      background-color: #F5F5F7;
-      border: 1px solid #D2D2D7;
-      padding: 1.25rem 1.5rem;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 0.85rem;
-      overflow-x: auto;
+    .batch-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
-    .decl-key { color: #B31312; }
-    .decl-name { color: #000; font-weight: bold; }
-    .decl-type { color: #0071E3; }
-    .decl-val { color: #86868B; }
+    .batch-btn:hover { background-color: #0353E9; }
 
-    .doc-section { margin-bottom: 2.5rem; }
-    .doc-section h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; border-bottom: 1px solid #D2D2D7; padding-bottom: 0.5rem; }
-    .desc-text { font-size: 0.95rem; color: #1D1D1F; line-height: 1.5; }
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .search-input {
+      border: none;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #0F62FE; }
 
-    .apple-constraints-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .constraint-row { display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed #E2E2E2; padding: 0.25rem 0; font-family: monospace; }
-    .c-key { color: #86868B; }
-    .c-val { color: #0071E3; font-weight: 600; }
-
-    .attrib-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .attrib-table td { border-bottom: 1px solid #E2E2E2; padding: 0.5rem 0; }
-    .attrib-table tr td:first-child { width: 30%; color: #86868B; }
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
+    .bx--data-table th {
+      background-color: #F4F4F4;
+      border-bottom: 1px solid #E0E0E0;
+      padding: 0.35rem 0.6rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #161616;
+    }
+    .bx--data-table td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid #E0E0E0;
+      font-size: 0.75rem;
+      vertical-align: top;
+    }
+    .carbon-row:hover { background-color: #E5E5E5; }
     
-    .none-text { font-size: 0.85rem; color: #86868B; font-style: italic; }
+    .carbon-cell-checkbox { width: 40px; text-align: center; }
+    .carbon-cell-path { font-weight: 600; }
+    
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #0F62FE; font-weight: 600; }
+    
+    .req-alert { color: #DA1E28; font-size: 0.75rem; }
+    .opt-alert { color: #525252; font-size: 0.75rem; }
+
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #E8F0FE;
+      border: 1px solid #C2DBFF;
+      color: #0F62FE;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #525252; }
+    .t-v { font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="apple-sidebar" id="apple-sidebar">
-    <div class="sidebar-header">
-      <h3>API Reference</h3>
-    </div>
-    <ul class="nav-list-apple">
-      ${sidebarListHtml}
-    </ul>
-  </div>
+  <header>
+    <h1>${title} Specification</h1>
+    <p class="desc">${desc}</p>
+  </header>
 
-  <div class="resizer" id="sidebar-resizer"></div>
-
-  <div class="doc-pane">
-    <div class="apple-breadcrumbs">
-      <span>Developer</span> &gt; <span>Documentation</span> &gt; <span>${title}</span> &gt; <span style="color:#1D1D1F; font-weight:600;">API Reference</span>
+  <div class="carbon-table-container">
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
+      <div>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
+      </div>
     </div>
     
-    <div class="docs-list">
-      ${topicsHtml}
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th class="carbon-cell-checkbox"></th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRowsHtml}
+      </tbody>
+    </table>
   </div>
 
-  <script>
-    function showAppleDoc(idx) {
-      document.querySelectorAll('.nav-item-apple').forEach(item => item.classList.remove('active'));
-      document.querySelectorAll('.apple-doc-content').forEach(doc => doc.classList.remove('active'));
-
-      document.getElementById('apple-nav-' + idx).classList.add('active');
-      document.getElementById('apple-doc-' + idx).classList.add('active');
-    }
-
-    showAppleDoc(0);
-
-    const sidebar = document.getElementById('apple-sidebar');
-    const resizer = document.getElementById('sidebar-resizer');
-    let isResizing = false;
-
-    resizer.addEventListener('mousedown', () => {
-      isResizing = true;
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing) return;
-      if (e.clientX > 180 && e.clientX < 450) {
-        sidebar.style.width = e.clientX + 'px';
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      isResizing = false;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
-    });
-  </script>
 </body>
 </html>`;
 };

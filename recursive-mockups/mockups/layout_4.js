@@ -1,24 +1,26 @@
 module.exports = function render(title, desc, schema) {
 
   const rows = [];
-  const visited = new Set();
+  const visited = new Map(); // Use Map to track paths of visited nodes
 
   function walk(node, parentPath = [], isRequired = false) {
     if (!node || typeof node !== 'object') return;
     
     if (visited.has(node)) {
+      const targetPath = visited.get(node);
       rows.push({
         path: parentPath.join('.'),
         name: parentPath[parentPath.length - 1],
         depth: parentPath.length,
         type: 'recursiveRef',
+        targetPath: targetPath, // Save target path for anchor navigation!
         required: isRequired,
-        description: 'Recursive reference back to parent definition.',
+        description: 'Recursive reference back to ' + targetPath + '.',
         constraints: {}
       });
       return;
     }
-    visited.add(node);
+    visited.set(node, parentPath.join('.'));
 
     let type = 'any';
     let description = '';
@@ -43,6 +45,14 @@ module.exports = function render(title, desc, schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);
@@ -94,62 +104,56 @@ module.exports = function render(title, desc, schema) {
 
   walk(schema);
 
-  let fileTreeHtml = '';
-  let editorLinesHtml = '';
-  let chatSuggestionsHtml = '';
-
+  let tableRowsHtml = '';
+  
   rows.forEach((r, idx) => {
-    fileTreeHtml += `
-      <div class="cursor-tree-row ${idx === 0 ? 'active' : ''}" id="tree-row-${idx}" onclick="focusCursorElement(${idx})">
-        <span class="tree-bullet">◇</span>
-        <span class="tree-text">${r.path}</span>
-      </div>
-    `;
-
-    let constraintLines = '';
+    let constraintsHtml = '';
     const constraintEntries = Object.entries(r.constraints);
     if (constraintEntries.length > 0) {
-      constraintEntries.forEach(([k, v]) => {
-        constraintLines += `  <span class="token key">"${k}"</span>: <span class="token val">${JSON.stringify(v)}</span>,\n`;
+      constraintsHtml = '<div class="carbon-constraints">';
+      constraintEntries.forEach(([key, val]) => {
+        if (typeof val === 'object' && val !== null) {
+          constraintsHtml += `
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">${key} [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">${JSON.stringify(val, null, 2)}</pre>
+            </details>
+          `;
+        } else {
+          constraintsHtml += `
+            <div class="carbon-tag">
+              <span class="t-k">${key}:</span> <span class="t-v">${JSON.stringify(val)}</span>
+            </div>
+          `;
+        }
       });
+      constraintsHtml += '</div>';
     }
 
-    editorLinesHtml += `
-      <div id="editor-block-${idx}" class="cursor-code-block ${idx === 0 ? 'active' : ''}">
-        <div class="line"><span class="l-num">1</span> <span class="token comment">// Property: ${r.path}</span></div>
-        <div class="line"><span class="l-num">2</span> <span class="token comment">// Description: ${r.description || 'No notes available.'}</span></div>
-        <div class="line"><span class="l-num">3</span> <span class="token key">"${r.name}"</span>: {</div>
-        <div class="line"><span class="l-num">4</span>   <span class="token key">"type"</span>: <span class="token str">"${r.type}"</span>,</div>
-        <div class="line"><span class="l-num">5</span>   <span class="token key">"required"</span>: <span class="token bool">${r.required}</span>,</div>
-        ${constraintLines ? `<div class="line"><span class="l-num">6</span> ${constraintLines}</div>` : ''}
-        <div class="line"><span class="l-num">7</span> }</div>
-      </div>
-    `;
-
-    chatSuggestionsHtml += `
-      <div id="chat-block-${idx}" class="cursor-chat-bubble ${idx === 0 ? 'active' : ''}">
-        <div class="chat-agent">Cursor AI</div>
-        <p>I audited the property <code>${r.path}</code>. Here is my analysis of the constraints:</p>
-        
-        <div class="ai-diff">
-          <div class="diff-line plus">+ "type": "${r.type}"</div>
-          <div class="diff-line plus">+ "required": ${r.required}</div>
-          ${constraintEntries.map(([k, v]) => {
-            if (typeof v === 'object' && v !== null) {
-              return `
-              <div class="diff-line plus nested" style="display:flex; flex-direction:column;">
-                <span>+ "${k}": <span style="color:#f54e00; cursor:pointer; font-weight:bold;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-                  <pre style="display:none; margin-top:5px; padding-left:10px; background:#e5e5df; color:#26251e; font-size:0.75rem; border-left: 2px solid #f54e00; overflow-x:auto;">${JSON.stringify(v, null, 2)}</pre>
-                </span>
-              </div>`;
-            }
-            return `<div class="diff-line plus">+ "${k}": ${JSON.stringify(v)}</div>`;
-          }).join('\n')}
-        </div>
-
-        <p style="margin-top: 1rem;">This property is <strong>${r.required ? 'strictly mandatory' : 'optional'}</strong>. Let me know if you want to modify this setting.</p>
-        <button class="apply-btn" onclick="alert('Applied to editor')">Accept (Tab)</button>
-      </div>
+    tableRowsHtml += `
+      <tr class="carbon-row" id="node-${r.path}" data-path="${r.path}">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">${r.path}</code>
+          ${r.description ? `
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">${r.description}</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">${JSON.stringify(r.constraints, null, 2)}</pre>
+            </div>
+          </details>` : ''}
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            ${r.type === 'recursiveRef' ? `recursiveRef to <a href="#node-${r.targetPath}" style="color: #0F62FE; font-weight: 600; text-decoration: underline;">${r.targetPath}</a>` : r.type}
+          </span>
+        </td>
+        <td class="carbon-cell-req">${r.required ? '<strong class="req-alert">REQUIRED</strong>' : '<span class="opt-alert">OPTIONAL</span>'}</td>
+        <td class="carbon-cell-validation">${constraintsHtml || '<span style="color:#8d8d8d;">None</span>'}</td>
+      </tr>
     `;
   });
 
@@ -157,199 +161,157 @@ module.exports = function render(title, desc, schema) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>${title} - Cursor Editor</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>${title} - Carbon Borderless</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #f7f7f4; /* Cursor warm cream background */
-      color: #26251e; /* Cursor warm ink text */
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      background-color: #FFFFFF;
+      color: #161616;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2rem;
     }
 
-    .cursor-window {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      border: 1px solid #ccd0c9;
-    }
+    header { margin-bottom: 2rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
 
-    /* Left pane: File directory tree */
-    .cursor-left-pane {
-      width: 250px;
-      background-color: #f0f0eb;
-      border-right: 1px solid #ccd0c9;
+    .carbon-table-container {
+      border: none;
+      background-color: #FFFFFF;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
-    .left-header {
-      padding: 1rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid #ccd0c9;
-      color: #72726b;
-    }
-    .left-tree { flex: 1; overflow-y: auto; padding: 0.5rem; }
-    .cursor-tree-row {
-      padding: 0.4rem 0.75rem;
-      cursor: pointer;
-      display: flex;
+
+    /* CSS-Only Batch Actions Bar */
+    .carbon-batch-actions {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
+      color: #FFFFFF;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      border-radius: 4px;
-      color: #5c5c56;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.875rem;
+      z-index: 10;
     }
-    .cursor-tree-row:hover { background-color: rgba(0,0,0,0.03); }
-    .cursor-tree-row.active {
-      background-color: #e5e5df;
-      color: #000;
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
+      display: flex;
+    }
+    
+    .batch-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
       font-weight: 600;
     }
-    .tree-bullet { color: #f54e00; }
+    .batch-btn:hover { background-color: #0353E9; }
 
-    /* Middle pane: Editor workspace */
-    .cursor-editor-pane {
-      flex: 1.2;
-      background-color: #f7f7f4;
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
       display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .editor-header {
-      padding: 0.75rem 1.5rem;
-      border-bottom: 1px solid #ccd0c9;
-      background-color: #f0f0eb;
-      font-size: 0.8rem;
-      color: #72726b;
-      display: flex;
+      align-items: center;
       justify-content: space-between;
+      padding: 0 1rem;
     }
-    .editor-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 2rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-    }
-    
-    .cursor-code-block { display: none; }
-    .cursor-code-block.active { display: block; }
-    
-    .line { display: flex; margin-bottom: 0.25rem; }
-    .l-num { width: 30px; color: #ccd0c9; flex-shrink: 0; }
-    .token.comment { color: #8e928a; }
-    .token.key { color: #a626a4; }
-    .token.val { color: #f54e00; }
-    .token.str { color: #50a14f; }
-    .token.bool { color: #4078f2; }
-
-    /* Right pane: AI Chat sidebar */
-    .cursor-chat-pane {
-      width: 320px;
-      background-color: #f0f0eb;
-      border-left: 1px solid #ccd0c9;
-      display: flex;
-      flex-direction: column;
-      padding: 1.5rem;
-    }
-    .chat-header {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #72726b;
-      text-transform: uppercase;
-      border-bottom: 1px solid #ccd0c9;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-    }
-    .chat-body { flex: 1; overflow-y: auto; }
-    
-    .cursor-chat-bubble { display: none; }
-    .cursor-chat-bubble.active { display: block; }
-    
-    .chat-agent {
-      font-weight: 700;
-      color: #f54e00; /* Cursor Orange */
-      font-size: 0.85rem;
-      margin-bottom: 0.5rem;
-    }
-    .cursor-chat-bubble p { font-size: 0.85rem; line-height: 1.4; color: #5c5c56; }
-    
-    .ai-diff {
-      background-color: #e5e5df;
-      border: 1px solid #ccd0c9;
-      padding: 0.75rem;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      margin-top: 0.75rem;
-    }
-    .diff-line.plus { color: #22863a; }
-    
-    .apply-btn {
-      margin-top: 1rem;
-      background-color: #f54e00;
-      color: #FFF;
+    .search-input {
       border: none;
-      padding: 0.5rem 1.25rem;
-      font-weight: 700;
-      font-size: 0.8rem;
-      cursor: pointer;
-      border-radius: 4px;
-      width: 100%;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
     }
-    .apply-btn:hover { background-color: #d44300; }
+    .search-input:focus { border-bottom: 2px solid #0F62FE; }
+
+    .bx--data-table {
+      background-color: #FFFFFF;
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
+    .bx--data-table th {
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #F4F4F4;
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #161616;
+    }
+    .bx--data-table td {
+      padding: 0.85rem 1rem;
+      border-bottom: none;
+      font-size: 0.85rem;
+      vertical-align: top;
+    }
+    .carbon-row:hover { background-color: #F4F4F4; }
+    
+    .carbon-cell-checkbox { width: 40px; text-align: center; }
+    .carbon-cell-path { font-weight: 600; }
+    
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #0F62FE; font-weight: 600; }
+    
+    .req-alert { color: #DA1E28; font-size: 0.75rem; }
+    .opt-alert { color: #525252; font-size: 0.75rem; }
+
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #E8F0FE;
+      border: 1px solid #C2DBFF;
+      color: #0F62FE;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #525252; }
+    .t-v { font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="cursor-window">
-    <div class="cursor-left-pane">
-      <div class="left-header">Editor Explorer</div>
-      <div class="left-tree">
-        ${fileTreeHtml}
+  <header>
+    <h1>${title} Specification</h1>
+    <p class="desc">${desc}</p>
+  </header>
+
+  <div class="carbon-table-container">
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
+      <div>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
       </div>
     </div>
     
-    <div class="cursor-editor-pane">
-      <div class="editor-header">
-        <span>Active Tab: schema.json</span>
-        <span>JSON Schema Draft 3</span>
-      </div>
-      <div class="editor-body">
-        ${editorLinesHtml}
-      </div>
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
-    
-    <div class="cursor-chat-pane">
-      <div class="chat-header">
-        <span>Cursor Chat</span>
-        <span style="color:#f54e00;">● Active</span>
-      </div>
-      <div class="chat-body">
-        ${chatSuggestionsHtml}
-      </div>
-    </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th class="carbon-cell-checkbox"></th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRowsHtml}
+      </tbody>
+    </table>
   </div>
 
-  <script>
-    function focusCursorElement(idx) {
-      document.querySelectorAll('.cursor-tree-row').forEach(r => r.classList.remove('active'));
-      document.querySelectorAll('.cursor-code-block').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.cursor-chat-bubble').forEach(c => c.classList.remove('active'));
-
-      document.getElementById('tree-row-' + idx).classList.add('active');
-      document.getElementById('editor-block-' + idx).classList.add('active');
-      document.getElementById('chat-block-' + idx).classList.add('active');
-    }
-  </script>
 </body>
 </html>`;
 };

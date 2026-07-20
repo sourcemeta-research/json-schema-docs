@@ -10,94 +10,91 @@
       background-color: #FFFFFF;
       color: #161616;
       font-family: 'IBM Plex Sans', sans-serif;
-      padding: 3rem;
+      padding: 2rem;
     }
-    
-    header {
-      border-bottom: 1px solid #E0E0E0;
-      padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: -0.02em; }
-    .desc { font-size: 0.9rem; color: #525252; margin-top: 0.25rem; }
 
-    /* Carbon Table Container */
+    header { margin-bottom: 2rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+
     .carbon-table-container {
       border: 1px solid #E0E0E0;
+      background-color: #F4F4F4;
+      display: flex;
+      flex-direction: column;
       position: relative;
     }
-    
-    /* Batch Actions Toolbar */
+
+    /* CSS-Only Batch Actions Bar */
     .carbon-batch-actions {
       display: none;
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 48px;
-      background-color: #0F62FE; /* Carbon Active Blue */
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
       color: #FFFFFF;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
-      z-index: 20;
+      padding: 0 1rem;
+      font-size: 0.875rem;
+      z-index: 10;
     }
-    .carbon-batch-actions.active { display: flex; }
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
+      display: flex;
+    }
+    
     .batch-btn {
       background: none;
       border: none;
-      color: white;
-      font-weight: 600;
+      color: #FFFFFF;
       cursor: pointer;
-      font-size: 0.85rem;
-      padding: 0 1rem;
-      height: 100%;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
     .batch-btn:hover { background-color: #0353E9; }
 
-    /* Table Toolbar */
     .carbon-toolbar {
       height: 48px;
-      background-color: #F4F4F4;
+      background-color: #FFFFFF;
       border-bottom: 1px solid #E0E0E0;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 0 1rem;
     }
     .search-input {
-      background: none;
       border: none;
-      border-bottom: 1px solid #8D8D8D;
-      color: #161616;
-      padding: 0.25rem 0.5rem;
-      font-family: inherit;
-      font-size: 0.85rem;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
       outline: none;
-      width: 250px;
     }
     .search-input:focus { border-bottom: 2px solid #0F62FE; }
 
-    .bx--data-table { width: 100%; border-collapse: collapse; }
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
     .bx--data-table th {
       background-color: #F4F4F4;
       border-bottom: 1px solid #E0E0E0;
       padding: 0.75rem 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
       text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #161616;
     }
-    
     .bx--data-table td {
       padding: 0.75rem 1rem;
       border-bottom: 1px solid #E0E0E0;
       font-size: 0.85rem;
-      vertical-align: middle;
+      vertical-align: top;
     }
     .carbon-row:hover { background-color: #E5E5E5; }
     
     .carbon-cell-checkbox { width: 40px; text-align: center; }
-    .carbon-cell-expand { width: 40px; text-align: center; cursor: pointer; color: #0F62FE; }
     .carbon-cell-path { font-weight: 600; }
     
     code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
@@ -118,14 +115,6 @@
     }
     .t-k { color: #525252; }
     .t-v { font-weight: 600; }
-
-    /* Expanded Details Drawer */
-    .carbon-expand-row { display: none; background-color: #FCFCFC; }
-    .carbon-expand-row.open { display: table-row; }
-    .expand-wrapper { padding: 1.5rem 3rem; border-bottom: 1px solid #E0E0E0; }
-    .expand-wrapper h4 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #525252; margin-bottom: 0.5rem; }
-    .expand-wrapper p { font-size: 0.85rem; color: #161616; line-height: 1.5; }
-    .expand-wrapper pre { margin-top: 1rem; background-color: #F4F4F4; padding: 1rem; overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -136,41 +125,42 @@
   </header>
 
   <div class="carbon-table-container">
-    <div class="carbon-batch-actions" id="batch-actions-bar">
-      <span><span id="selected-count">0</span> items selected</span>
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
       <div>
-        <button class="batch-btn" onclick="exportSelected()">Export Selected</button>
-        <button class="batch-btn" onclick="clearSelection()">Cancel</button>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
       </div>
     </div>
     
     <div class="carbon-toolbar">
-      <input type="text" class="search-input" placeholder="Search carbon rows..." oninput="filterCarbon(this.value)">
       <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
 
     <table class="bx--data-table">
       <thead>
         <tr>
-          <th class="carbon-cell-checkbox"><input type="checkbox" id="check-all" onchange="toggleCheckAll(this)"></th>
-          <th class="carbon-cell-expand"></th>
+          <th class="carbon-cell-checkbox"></th>
           <th>Name</th>
           <th>Type</th>
           <th>Status</th>
           <th>Validation Constraints</th>
         </tr>
       </thead>
-      <tbody id="table-body">
+      <tbody>
         
-      <tr class="carbon-row" id="row-0" data-path="name">
+      <tr class="carbon-row" id="node-name" data-path="name">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-0" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-0">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(0)">
-          <span class="expand-icon" id="icon-0">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">name</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>name</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -182,30 +172,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-0">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": true,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-1" data-path="short_name">
+      <tr class="carbon-row" id="node-short_name" data-path="short_name">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-1" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-1">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(1)">
-          <span class="expand-icon" id="icon-1">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">short_name</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>short_name</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -217,30 +197,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-1">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-2" data-path="description">
+      <tr class="carbon-row" id="node-description" data-path="description">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-2" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-2">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(2)">
-          <span class="expand-icon" id="icon-2">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">description</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>description</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -252,30 +222,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-2">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-3" data-path="start_url">
+      <tr class="carbon-row" id="node-start_url" data-path="start_url">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-3" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-3">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(3)">
-          <span class="expand-icon" id="icon-3">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">start_url</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>start_url</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -291,31 +251,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-3">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "/",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-4" data-path="display">
+      <tr class="carbon-row" id="node-display" data-path="display">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-4" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-4">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(4)">
-          <span class="expand-icon" id="icon-4">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">display</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>display</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -331,31 +280,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-4">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "standalone",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-5" data-path="orientation">
+      <tr class="carbon-row" id="node-orientation" data-path="orientation">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-5" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-5">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(5)">
-          <span class="expand-icon" id="icon-5">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">orientation</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>orientation</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -371,31 +309,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-5">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "any",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-6" data-path="background_color">
+      <tr class="carbon-row" id="node-background_color" data-path="background_color">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-6" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-6">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(6)">
-          <span class="expand-icon" id="icon-6">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">background_color</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>background_color</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -411,31 +338,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-6">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "#ffffff",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-7" data-path="theme_color">
+      <tr class="carbon-row" id="node-theme_color" data-path="theme_color">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-7" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-7">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(7)">
-          <span class="expand-icon" id="icon-7">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">theme_color</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>theme_color</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -447,30 +363,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-7">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-8" data-path="lang">
+      <tr class="carbon-row" id="node-lang" data-path="lang">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-8" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-8">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(8)">
-          <span class="expand-icon" id="icon-8">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">lang</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>lang</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -486,31 +392,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-8">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "en-US",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-9" data-path="dir">
+      <tr class="carbon-row" id="node-dir" data-path="dir">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-9" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-9">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(9)">
-          <span class="expand-icon" id="icon-9">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">dir</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>dir</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -526,31 +421,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-9">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "ltr",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-10" data-path="scope">
+      <tr class="carbon-row" id="node-scope" data-path="scope">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-10" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-10">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(10)">
-          <span class="expand-icon" id="icon-10">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">scope</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>scope</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -562,30 +446,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-10">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-11" data-path="prefer_related_applications">
+      <tr class="carbon-row" id="node-prefer_related_applications" data-path="prefer_related_applications">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-11" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-11">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(11)">
-          <span class="expand-icon" id="icon-11">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">prefer_related_applications</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>prefer_related_applications</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">any</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -596,46 +470,29 @@
               <span class="t-k">default:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="carbon-tag nested" style="width: 100%; margin-bottom: 5px;">
-              <span class="t-k">enum:</span>
-              <span class="nested-toggle" style="color: #0F62FE; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto;">[
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">enum [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   false,
   true
 ]</pre>
-              </div>
-            </div>
+            </details>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-11">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": false,
-  "enum": [
-    false,
-    true
-  ]
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-12" data-path="categories">
+      <tr class="carbon-row" id="node-categories" data-path="categories">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-12" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-12">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(12)">
-          <span class="expand-icon" id="icon-12">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">categories</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>categories</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">array</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -651,31 +508,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-12">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minItems": 0,
-  "uniqueItems": false
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-13" data-path="categories.*">
+      <tr class="carbon-row" id="node-categories.*" data-path="categories.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-13" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-13">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(13)">
-          <span class="expand-icon" id="icon-13">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">categories.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>categories.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -683,29 +529,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-13">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-14" data-path="icons">
+      <tr class="carbon-row" id="node-icons" data-path="icons">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-14" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-14">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(14)">
-          <span class="expand-icon" id="icon-14">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">array</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -721,71 +558,45 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-14">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minItems": 0,
-  "uniqueItems": false
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-15" data-path="icons.*">
+      <tr class="carbon-row" id="node-icons.*" data-path="icons.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-15" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-15">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(15)">
-          <span class="expand-icon" id="icon-15">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">object</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag nested" style="width: 100%; margin-bottom: 5px;">
-              <span class="t-k">required:</span>
-              <span class="nested-toggle" style="color: #0F62FE; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto;">[
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "src",
   "sizes"
 ]</pre>
-              </div>
-            </div>
+            </details>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-15">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": [
-    "src",
-    "sizes"
-  ]
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-16" data-path="icons.*.src">
+      <tr class="carbon-row" id="node-icons.*.src" data-path="icons.*.src">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-16" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-16">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(16)">
-          <span class="expand-icon" id="icon-16">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.src</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons.*.src</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -797,30 +608,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-16">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-17" data-path="icons.*.sizes">
+      <tr class="carbon-row" id="node-icons.*.sizes" data-path="icons.*.sizes">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-17" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-17">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(17)">
-          <span class="expand-icon" id="icon-17">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.sizes</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons.*.sizes</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -832,30 +633,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-17">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-18" data-path="icons.*.type">
+      <tr class="carbon-row" id="node-icons.*.type" data-path="icons.*.type">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-18" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-18">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(18)">
-          <span class="expand-icon" id="icon-18">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.type</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons.*.type</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -871,31 +662,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-18">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "image/png",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-19" data-path="icons.*.purpose">
+      <tr class="carbon-row" id="node-icons.*.purpose" data-path="icons.*.purpose">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-19" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-19">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(19)">
-          <span class="expand-icon" id="icon-19">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.purpose</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons.*.purpose</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -911,55 +691,37 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-19">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "default": "any",
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-20" data-path="icons.*.*">
+      <tr class="carbon-row" id="node-icons.*.*" data-path="icons.*.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-20" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-20">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(20)">
-          <span class="expand-icon" id="icon-20">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>icons.*.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">any</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-20">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-21" data-path="shortcuts">
+      <tr class="carbon-row" id="node-shortcuts" data-path="shortcuts">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-21" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-21">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(21)">
-          <span class="expand-icon" id="icon-21">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">array</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -975,71 +737,45 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-21">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minItems": 0,
-  "uniqueItems": false
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-22" data-path="shortcuts.*">
+      <tr class="carbon-row" id="node-shortcuts.*" data-path="shortcuts.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-22" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-22">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(22)">
-          <span class="expand-icon" id="icon-22">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">object</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag nested" style="width: 100%; margin-bottom: 5px;">
-              <span class="t-k">required:</span>
-              <span class="nested-toggle" style="color: #0F62FE; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto;">[
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "name",
   "url"
 ]</pre>
-              </div>
-            </div>
+            </details>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-22">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": [
-    "name",
-    "url"
-  ]
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-23" data-path="shortcuts.*.name">
+      <tr class="carbon-row" id="node-shortcuts.*.name" data-path="shortcuts.*.name">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-23" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-23">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(23)">
-          <span class="expand-icon" id="icon-23">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.name</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.name</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -1051,30 +787,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-23">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-24" data-path="shortcuts.*.short_name">
+      <tr class="carbon-row" id="node-shortcuts.*.short_name" data-path="shortcuts.*.short_name">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-24" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-24">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(24)">
-          <span class="expand-icon" id="icon-24">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.short_name</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.short_name</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -1086,30 +812,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-24">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-25" data-path="shortcuts.*.url">
+      <tr class="carbon-row" id="node-shortcuts.*.url" data-path="shortcuts.*.url">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-25" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-25">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(25)">
-          <span class="expand-icon" id="icon-25">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.url</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.url</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -1121,30 +837,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-25">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-26" data-path="shortcuts.*.icons">
+      <tr class="carbon-row" id="node-shortcuts.*.icons" data-path="shortcuts.*.icons">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-26" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-26">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(26)">
-          <span class="expand-icon" id="icon-26">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.icons</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">array</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -1160,55 +866,37 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-26">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minItems": 0,
-  "uniqueItems": false
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-27" data-path="shortcuts.*.icons.*">
+      <tr class="carbon-row" id="node-shortcuts.*.icons.*" data-path="shortcuts.*.icons.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-27" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-27">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(27)">
-          <span class="expand-icon" id="icon-27">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.icons.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">object</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-27">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-28" data-path="shortcuts.*.icons.*.src">
+      <tr class="carbon-row" id="node-shortcuts.*.icons.*.src" data-path="shortcuts.*.icons.*.src">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-28" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-28">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(28)">
-          <span class="expand-icon" id="icon-28">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*.src</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.icons.*.src</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -1220,30 +908,20 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-28">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-29" data-path="shortcuts.*.icons.*.sizes">
+      <tr class="carbon-row" id="node-shortcuts.*.icons.*.sizes" data-path="shortcuts.*.icons.*.sizes">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-29" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-29">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(29)">
-          <span class="expand-icon" id="icon-29">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*.sizes</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.icons.*.sizes</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">string</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
             <div class="carbon-tag">
@@ -1255,161 +933,61 @@
             </div>
           </div></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-29">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{
-  "required": false,
-  "minLength": 0
-}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-30" data-path="shortcuts.*.icons.*.*">
+      <tr class="carbon-row" id="node-shortcuts.*.icons.*.*" data-path="shortcuts.*.icons.*.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-30" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-30">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(30)">
-          <span class="expand-icon" id="icon-30">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.icons.*.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">any</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-30">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-31" data-path="shortcuts.*.*">
+      <tr class="carbon-row" id="node-shortcuts.*.*" data-path="shortcuts.*.*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-31" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-31">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(31)">
-          <span class="expand-icon" id="icon-31">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>shortcuts.*.*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">any</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
       </tr>
-      
-      <tr class="carbon-expand-row" id="expand-31">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{}</code></pre>
-          </div>
-        </td>
-      </tr>
     
-      <tr class="carbon-row" id="row-32" data-path="*">
+      <tr class="carbon-row" id="node-*" data-path="*">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-32" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-32">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(32)">
-          <span class="expand-icon" id="icon-32">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">*</code>
+          
         </td>
-        <td class="carbon-cell-path"><code>*</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">any</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
-      </tr>
-      
-      <tr class="carbon-expand-row" id="expand-32">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>No descriptive comments available.</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>{}</code></pre>
-          </div>
-        </td>
       </tr>
     
       </tbody>
     </table>
   </div>
 
-  <script>
-    function toggleCarbonExpand(idx) {
-      const row = document.getElementById('expand-' + idx);
-      const icon = document.getElementById('icon-' + idx);
-      row.classList.toggle('open');
-      if (row.classList.contains('open')) {
-        icon.innerText = '▼';
-      } else {
-        icon.innerText = '▶';
-      }
-    }
-
-    function toggleBatchToolbar() {
-      const checkboxes = document.querySelectorAll('.bx--checkbox');
-      let count = 0;
-      checkboxes.forEach(c => { if (c.checked) count++; });
-
-      const bar = document.getElementById('batch-actions-bar');
-      if (count > 0) {
-        bar.classList.add('active');
-        document.getElementById('selected-count').innerText = count;
-      } else {
-        bar.classList.remove('active');
-      }
-    }
-
-    function toggleCheckAll(master) {
-      document.querySelectorAll('.bx--checkbox').forEach(c => {
-        c.checked = master.checked;
-      });
-      toggleBatchToolbar();
-    }
-
-    function clearSelection() {
-      document.getElementById('check-all').checked = false;
-      document.querySelectorAll('.bx--checkbox').forEach(c => c.checked = false);
-      toggleBatchToolbar();
-    }
-
-    function exportSelected() {
-      const selectedPaths = [];
-      document.querySelectorAll('.bx--checkbox').forEach((c, idx) => {
-        if (c.checked) {
-          const row = document.getElementById('row-' + idx);
-          selectedPaths.push(row.getAttribute('data-path'));
-        }
-      });
-      alert('Exported:\n' + selectedPaths.join('\n'));
-    }
-
-    function filterCarbon(val) {
-      const filter = val.toLowerCase();
-      document.querySelectorAll('.carbon-row').forEach((row, idx) => {
-        const path = row.getAttribute('data-path').toLowerCase();
-        const expandRow = document.getElementById('expand-' + idx);
-        if (path.includes(filter)) {
-          row.style.display = 'table-row';
-        } else {
-          row.style.display = 'none';
-          expandRow.classList.remove('open');
-          document.getElementById('icon-' + idx).innerText = '▶';
-        }
-      });
-    }
-  </script>
 </body>
 </html>

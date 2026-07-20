@@ -1,24 +1,26 @@
 module.exports = function render(title, desc, schema) {
 
   const rows = [];
-  const visited = new Set();
+  const visited = new Map(); // Use Map to track paths of visited nodes
 
   function walk(node, parentPath = [], isRequired = false) {
     if (!node || typeof node !== 'object') return;
     
     if (visited.has(node)) {
+      const targetPath = visited.get(node);
       rows.push({
         path: parentPath.join('.'),
         name: parentPath[parentPath.length - 1],
         depth: parentPath.length,
         type: 'recursiveRef',
+        targetPath: targetPath, // Save target path for anchor navigation!
         required: isRequired,
-        description: 'Recursive reference back to parent definition.',
+        description: 'Recursive reference back to ' + targetPath + '.',
         constraints: {}
       });
       return;
     }
-    visited.add(node);
+    visited.set(node, parentPath.join('.'));
 
     let type = 'any';
     let description = '';
@@ -43,6 +45,14 @@ module.exports = function render(title, desc, schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);
@@ -104,13 +114,10 @@ module.exports = function render(title, desc, schema) {
       constraintEntries.forEach(([key, val]) => {
         if (typeof val === 'object' && val !== null) {
           constraintsHtml += `
-            <div class="carbon-tag nested" style="width: 100%; margin-bottom: 5px;">
-              <span class="t-k">${key}:</span>
-              <span class="nested-toggle" style="color: #0F62FE; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto;">${JSON.stringify(val, null, 2)}</pre>
-              </div>
-            </div>
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">${key} [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">${JSON.stringify(val, null, 2)}</pre>
+            </details>
           `;
         } else {
           constraintsHtml += `
@@ -124,28 +131,28 @@ module.exports = function render(title, desc, schema) {
     }
 
     tableRowsHtml += `
-      <tr class="carbon-row" id="row-${idx}" data-path="${r.path}">
+      <tr class="carbon-row" id="node-${r.path}" data-path="${r.path}">
         <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}" onchange="toggleBatchToolbar()">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}">
         </td>
-        <td class="carbon-cell-expand" onclick="toggleCarbonExpand(${idx})">
-          <span class="expand-icon" id="icon-${idx}">▶</span>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">${r.path}</code>
+          ${r.description ? `
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">${r.description}</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">${JSON.stringify(r.constraints, null, 2)}</pre>
+            </div>
+          </details>` : ''}
         </td>
-        <td class="carbon-cell-path"><code>${r.path}</code></td>
-        <td class="carbon-cell-type"><span class="type-mono">${r.type}</span></td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            ${r.type === 'recursiveRef' ? `recursiveRef to <a href="#node-${r.targetPath}" style="color: #0F62FE; font-weight: 600; text-decoration: underline;">${r.targetPath}</a>` : r.type}
+          </span>
+        </td>
         <td class="carbon-cell-req">${r.required ? '<strong class="req-alert">REQUIRED</strong>' : '<span class="opt-alert">OPTIONAL</span>'}</td>
         <td class="carbon-cell-validation">${constraintsHtml || '<span style="color:#8d8d8d;">None</span>'}</td>
-      </tr>
-      
-      <tr class="carbon-expand-row" id="expand-${idx}">
-        <td colspan="6">
-          <div class="expand-wrapper">
-            <h4>Description</h4>
-            <p>${r.description || 'No descriptive comments available.'}</p>
-            <h4 style="margin-top: 1rem;">Raw constraints mapping</h4>
-            <pre><code>${JSON.stringify(r.constraints, null, 2)}</code></pre>
-          </div>
-        </td>
       </tr>
     `;
   });
@@ -162,94 +169,91 @@ module.exports = function render(title, desc, schema) {
       background-color: #FFFFFF;
       color: #161616;
       font-family: 'IBM Plex Sans', sans-serif;
-      padding: 3rem;
+      padding: 2rem;
     }
-    
-    header {
-      border-bottom: 1px solid #E0E0E0;
-      padding-bottom: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: -0.02em; }
-    .desc { font-size: 0.9rem; color: #525252; margin-top: 0.25rem; }
 
-    /* Carbon Table Container */
+    header { margin-bottom: 2rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+
     .carbon-table-container {
       border: 1px solid #E0E0E0;
+      background-color: #F4F4F4;
+      display: flex;
+      flex-direction: column;
       position: relative;
     }
-    
-    /* Batch Actions Toolbar */
+
+    /* CSS-Only Batch Actions Bar */
     .carbon-batch-actions {
       display: none;
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 48px;
-      background-color: #0F62FE; /* Carbon Active Blue */
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
       color: #FFFFFF;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
-      z-index: 20;
+      padding: 0 1rem;
+      font-size: 0.875rem;
+      z-index: 10;
     }
-    .carbon-batch-actions.active { display: flex; }
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
+      display: flex;
+    }
+    
     .batch-btn {
       background: none;
       border: none;
-      color: white;
-      font-weight: 600;
+      color: #FFFFFF;
       cursor: pointer;
-      font-size: 0.85rem;
-      padding: 0 1rem;
-      height: 100%;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
     .batch-btn:hover { background-color: #0353E9; }
 
-    /* Table Toolbar */
     .carbon-toolbar {
       height: 48px;
-      background-color: #F4F4F4;
+      background-color: #FFFFFF;
       border-bottom: 1px solid #E0E0E0;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       padding: 0 1rem;
     }
     .search-input {
-      background: none;
       border: none;
-      border-bottom: 1px solid #8D8D8D;
-      color: #161616;
-      padding: 0.25rem 0.5rem;
-      font-family: inherit;
-      font-size: 0.85rem;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
       outline: none;
-      width: 250px;
     }
     .search-input:focus { border-bottom: 2px solid #0F62FE; }
 
-    .bx--data-table { width: 100%; border-collapse: collapse; }
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
     .bx--data-table th {
       background-color: #F4F4F4;
       border-bottom: 1px solid #E0E0E0;
       padding: 0.75rem 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
       text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #161616;
     }
-    
     .bx--data-table td {
       padding: 0.75rem 1rem;
       border-bottom: 1px solid #E0E0E0;
       font-size: 0.85rem;
-      vertical-align: middle;
+      vertical-align: top;
     }
     .carbon-row:hover { background-color: #E5E5E5; }
     
     .carbon-cell-checkbox { width: 40px; text-align: center; }
-    .carbon-cell-expand { width: 40px; text-align: center; cursor: pointer; color: #0F62FE; }
     .carbon-cell-path { font-weight: 600; }
     
     code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
@@ -270,14 +274,6 @@ module.exports = function render(title, desc, schema) {
     }
     .t-k { color: #525252; }
     .t-v { font-weight: 600; }
-
-    /* Expanded Details Drawer */
-    .carbon-expand-row { display: none; background-color: #FCFCFC; }
-    .carbon-expand-row.open { display: table-row; }
-    .expand-wrapper { padding: 1.5rem 3rem; border-bottom: 1px solid #E0E0E0; }
-    .expand-wrapper h4 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #525252; margin-bottom: 0.5rem; }
-    .expand-wrapper p { font-size: 0.85rem; color: #161616; line-height: 1.5; }
-    .expand-wrapper pre { margin-top: 1rem; background-color: #F4F4F4; padding: 1rem; overflow-x: auto; }
   </style>
 </head>
 <body>
@@ -288,101 +284,33 @@ module.exports = function render(title, desc, schema) {
   </header>
 
   <div class="carbon-table-container">
-    <div class="carbon-batch-actions" id="batch-actions-bar">
-      <span><span id="selected-count">0</span> items selected</span>
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
       <div>
-        <button class="batch-btn" onclick="exportSelected()">Export Selected</button>
-        <button class="batch-btn" onclick="clearSelection()">Cancel</button>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
       </div>
     </div>
     
     <div class="carbon-toolbar">
-      <input type="text" class="search-input" placeholder="Search carbon rows..." oninput="filterCarbon(this.value)">
       <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
 
     <table class="bx--data-table">
       <thead>
         <tr>
-          <th class="carbon-cell-checkbox"><input type="checkbox" id="check-all" onchange="toggleCheckAll(this)"></th>
-          <th class="carbon-cell-expand"></th>
+          <th class="carbon-cell-checkbox"></th>
           <th>Name</th>
           <th>Type</th>
           <th>Status</th>
           <th>Validation Constraints</th>
         </tr>
       </thead>
-      <tbody id="table-body">
+      <tbody>
         ${tableRowsHtml}
       </tbody>
     </table>
   </div>
 
-  <script>
-    function toggleCarbonExpand(idx) {
-      const row = document.getElementById('expand-' + idx);
-      const icon = document.getElementById('icon-' + idx);
-      row.classList.toggle('open');
-      if (row.classList.contains('open')) {
-        icon.innerText = '▼';
-      } else {
-        icon.innerText = '▶';
-      }
-    }
-
-    function toggleBatchToolbar() {
-      const checkboxes = document.querySelectorAll('.bx--checkbox');
-      let count = 0;
-      checkboxes.forEach(c => { if (c.checked) count++; });
-
-      const bar = document.getElementById('batch-actions-bar');
-      if (count > 0) {
-        bar.classList.add('active');
-        document.getElementById('selected-count').innerText = count;
-      } else {
-        bar.classList.remove('active');
-      }
-    }
-
-    function toggleCheckAll(master) {
-      document.querySelectorAll('.bx--checkbox').forEach(c => {
-        c.checked = master.checked;
-      });
-      toggleBatchToolbar();
-    }
-
-    function clearSelection() {
-      document.getElementById('check-all').checked = false;
-      document.querySelectorAll('.bx--checkbox').forEach(c => c.checked = false);
-      toggleBatchToolbar();
-    }
-
-    function exportSelected() {
-      const selectedPaths = [];
-      document.querySelectorAll('.bx--checkbox').forEach((c, idx) => {
-        if (c.checked) {
-          const row = document.getElementById('row-' + idx);
-          selectedPaths.push(row.getAttribute('data-path'));
-        }
-      });
-      alert('Exported:\\n' + selectedPaths.join('\\n'));
-    }
-
-    function filterCarbon(val) {
-      const filter = val.toLowerCase();
-      document.querySelectorAll('.carbon-row').forEach((row, idx) => {
-        const path = row.getAttribute('data-path').toLowerCase();
-        const expandRow = document.getElementById('expand-' + idx);
-        if (path.includes(filter)) {
-          row.style.display = 'table-row';
-        } else {
-          row.style.display = 'none';
-          expandRow.classList.remove('open');
-          document.getElementById('icon-' + idx).innerText = '▶';
-        }
-      });
-    }
-  </script>
 </body>
 </html>`;
 };

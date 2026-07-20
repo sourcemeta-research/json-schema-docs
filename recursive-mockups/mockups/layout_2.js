@@ -1,24 +1,26 @@
 module.exports = function render(title, desc, schema) {
 
   const rows = [];
-  const visited = new Set();
+  const visited = new Map(); // Use Map to track paths of visited nodes
 
   function walk(node, parentPath = [], isRequired = false) {
     if (!node || typeof node !== 'object') return;
     
     if (visited.has(node)) {
+      const targetPath = visited.get(node);
       rows.push({
         path: parentPath.join('.'),
         name: parentPath[parentPath.length - 1],
         depth: parentPath.length,
         type: 'recursiveRef',
+        targetPath: targetPath, // Save target path for anchor navigation!
         required: isRequired,
-        description: 'Recursive reference back to parent definition.',
+        description: 'Recursive reference back to ' + targetPath + '.',
         constraints: {}
       });
       return;
     }
-    visited.add(node);
+    visited.set(node, parentPath.join('.'));
 
     let type = 'any';
     let description = '';
@@ -43,6 +45,14 @@ module.exports = function render(title, desc, schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
+
+      if (n.type && Array.isArray(n.type)) {
+        n.type.forEach(subSchema => {
+          if (typeof subSchema === 'object') {
+            extract(subSchema);
+          }
+        });
+      }
     }
 
     extract(node);
@@ -94,66 +104,25 @@ module.exports = function render(title, desc, schema) {
 
   walk(schema);
 
-  const columns = {
-    backlog: [],
-    todo: [],
-    inProgress: [],
-    done: []
-  };
-
-  rows.forEach((r, idx) => {
-    const hasConstraints = Object.keys(r.constraints).length > 0;
-    const isObjectOrArray = r.type.includes('object') || r.type.includes('array');
-    
-    let status = 'todo';
-    if (r.required) {
-      status = 'done';
-    } else if (isObjectOrArray) {
-      status = 'inProgress';
-    } else if (!hasConstraints) {
-      status = 'backlog';
-    }
-
-    const priorityIcon = r.required ? '🔴' : hasConstraints ? '🟡' : '⚪';
-    const cardHtml = `
-      <div class="linear-card" id="card-${idx}" onclick="focusLinearCard(${idx})" data-status="${status}">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-${idx + 101}</span>
-          <span class="card-priority">${priorityIcon}</span>
-        </div>
-        <div class="card-title">${r.path}</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">${r.type}</span>
-          <span class="tag-depth">L${r.depth}</span>
-        </div>
-      </div>
-    `;
-
-    columns[status].push(cardHtml);
-  });
-
-  let inspectorHtml = '';
+  let tableRowsHtml = '';
+  
   rows.forEach((r, idx) => {
     let constraintsHtml = '';
     const constraintEntries = Object.entries(r.constraints);
     if (constraintEntries.length > 0) {
-      constraintsHtml = '<div class="c-grid">';
+      constraintsHtml = '<div class="carbon-constraints">';
       constraintEntries.forEach(([key, val]) => {
         if (typeof val === 'object' && val !== null) {
           constraintsHtml += `
-            <div class="c-item nested" style="grid-column: 1 / -1;">
-              <span class="c-k">${key}:</span>
-              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">${JSON.stringify(val, null, 2)}</pre>
-              </div>
-            </div>
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">${key} [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">${JSON.stringify(val, null, 2)}</pre>
+            </details>
           `;
         } else {
           constraintsHtml += `
-            <div class="c-item">
-              <span class="c-k">${key}:</span>
-              <span class="c-v">${JSON.stringify(val)}</span>
+            <div class="carbon-tag">
+              <span class="t-k">${key}:</span> <span class="t-v">${JSON.stringify(val)}</span>
             </div>
           `;
         }
@@ -161,38 +130,30 @@ module.exports = function render(title, desc, schema) {
       constraintsHtml += '</div>';
     }
 
-    inspectorHtml += `
-      <div id="inspector-${idx}" class="linear-inspector ${idx === 0 ? 'active' : ''}">
-        <div class="ins-header">
-          <h3>SCH-${idx + 101}</h3>
-          <span class="ins-status-badge">${r.required ? 'Done' : 'Todo'}</span>
-        </div>
-        
-        <h2>${r.path}</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">${r.type.toUpperCase()}</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">${r.depth} Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">${r.description || 'No description provided.'}</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          ${constraintsHtml || '<span style="color:#666; font-style:italic;">None</span>'}
-        </div>
-      </div>
+    tableRowsHtml += `
+      <tr class="carbon-row" id="node-${r.path}" data-path="${r.path}">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">${r.path}</code>
+          ${r.description ? `
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">${r.description}</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">${JSON.stringify(r.constraints, null, 2)}</pre>
+            </div>
+          </details>` : ''}
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            ${r.type === 'recursiveRef' ? `recursiveRef to <a href="#node-${r.targetPath}" style="color: #0F62FE; font-weight: 600; text-decoration: underline;">${r.targetPath}</a>` : r.type}
+          </span>
+        </td>
+        <td class="carbon-cell-req">${r.required ? '<strong class="req-alert">REQUIRED</strong>' : '<span class="opt-alert">OPTIONAL</span>'}</td>
+        <td class="carbon-cell-validation">${constraintsHtml || '<span style="color:#8d8d8d;">None</span>'}</td>
+      </tr>
     `;
   });
 
@@ -200,224 +161,156 @@ module.exports = function render(title, desc, schema) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>${title} - Linear Board</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <title>${title} - Carbon Dark</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #080808; /* Linear Void Black */
-      color: #E2E8F0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .board-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      background-color: #161616;
+      color: #F4F4F4;
+      font-family: 'IBM Plex Sans', sans-serif;
       padding: 2rem;
-      overflow-x: auto;
     }
-    
-    .board-header {
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .board-header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: #FFF; }
-    
-    .board-columns {
-      display: flex;
-      gap: 1.25rem;
-      flex: 1;
-      min-width: 900px;
-    }
-    
-    .board-col {
-      flex: 1;
-      background-color: #121315; /* Linear Column Gray */
-      border: 1px solid #1F2023;
-      border-radius: 8px;
+
+    header { margin-bottom: 2rem; border-bottom: 1px solid #393939; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #F4F4F4; }
+    header .desc { font-size: 0.875rem; color: #C6C6C6; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #393939;
+      background-color: #262626;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      max-height: calc(100vh - 150px);
+      position: relative;
     }
-    .col-header {
-      padding: 1rem;
-      border-bottom: 1px solid #1F2023;
-      display: flex;
-      justify-content: space-between;
+
+    /* CSS-Only Batch Actions Bar */
+    .carbon-batch-actions {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
+      color: #FFFFFF;
       align-items: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #8E9196;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.875rem;
+      z-index: 10;
     }
-    .col-count { background-color: #1F2023; color: #FFF; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.7rem; }
-    
-    .cards-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.75rem;
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
+      display: flex;
     }
     
-    .linear-card {
-      background-color: #161719;
-      border: 1px solid #202226;
-      border-radius: 6px;
-      padding: 0.85rem;
-      margin-bottom: 0.5rem;
+    .batch-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-      transition: all 0.15s ease;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
-    .linear-card:hover { border-color: #3b3d42; background-color: #1a1c1f; }
-    .linear-card.active { border-color: #5E6AD2; box-shadow: 0 0 10px rgba(94, 106, 210, 0.25); }
+    .batch-btn:hover { background-color: #0353E9; }
 
-    .card-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-    .card-id { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #5E6AD2; }
-    .card-priority { font-size: 0.7rem; }
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #161616;
+      border-bottom: 1px solid #393939;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .search-input {
+      border: none;
+      background-color: #262626;
+      color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #78A9FF; }
 
-    .card-title {
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #161616;
+    }
+    .bx--data-table th {
+      background-color: #262626;
+      border-bottom: 1px solid #393939;
+      padding: 0.75rem 1rem;
+      text-align: left;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #FFF;
-      margin-bottom: 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
-      word-break: break-all;
+      color: #F4F4F4;
     }
-
-    .card-tags-row { display: flex; gap: 0.35rem; }
-    .tag-badge { background-color: #202226; color: #8E9196; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; font-family: monospace; }
-    .tag-depth { background-color: rgba(94, 106, 210, 0.1); color: #5E6AD2; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; }
-
-    .resizer { width: 4px; cursor: col-resize; background-color: #1F2023; z-index: 10; }
-    .resizer:hover { background-color: #5E6AD2; }
-
-    .inspector-pane {
-      width: 320px;
-      min-width: 250px;
-      max-width: 480px;
-      background-color: #0E0F11;
-      border-left: 1px solid #1F2023;
-      height: 100%;
-      overflow-y: auto;
-      padding: 2rem;
+    .bx--data-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #393939;
+      font-size: 0.85rem;
+      vertical-align: top;
+      color: #C6C6C6;
     }
+    .carbon-row:hover { background-color: #353535; }
     
-    .linear-inspector { display: none; }
-    .linear-inspector.active { display: block; }
+    .carbon-cell-checkbox { width: 40px; text-align: center; }
+    .carbon-cell-path { font-weight: 600; }
     
-    .ins-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .ins-header h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #5E6AD2; }
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #262626; color: #78A9FF; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #78A9FF; font-weight: 600; }
     
-    .ins-status-badge { font-size: 0.7rem; font-weight: 700; background-color: #202226; color: #FFF; padding: 0.2rem 0.5rem; border-radius: 4px; }
-    
-    .linear-inspector h2 { font-size: 1.25rem; font-weight: 700; color: #FFF; margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
-    
-    .ins-property-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.75rem; border-bottom: 1px solid #161719; padding-bottom: 0.5rem; }
-    .prop-lbl { color: #8E9196; }
-    .prop-val { color: #FFF; font-weight: 600; }
-    .prop-val.active-val { color: #5E6AD2; font-family: 'JetBrains Mono', monospace; }
+    .req-alert { color: #FF8389; font-size: 0.75rem; }
+    .opt-alert { color: #A8A8A8; font-size: 0.75rem; }
 
-    .ins-section { margin-top: 2rem; }
-    .ins-section h4 { font-size: 0.75rem; color: #8E9196; text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700; }
-    .ins-desc { font-size: 0.85rem; color: #C2C2C6; line-height: 1.5; }
-
-    .c-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-    .c-item { background-color: #121315; border: 1px solid #1F2023; padding: 0.5rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
-    .c-k { color: #8E9196; }
-    .c-v { color: #5E6AD2; font-weight: 600; }
-  </style>
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #1C243A;
+      border: 1px solid #354A74;
+      color: #78A9FF;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #A8A8A8; }
+    .t-v { font-weight: 600; }  </style>
 </head>
 <body>
 
-  <div class="board-pane">
-    <div class="board-header">
-      <h1>Project Board: ${title}</h1>
-      <span style="font-size: 0.8rem; color:#8E9196;">Active sprint settings</span>
+  <header>
+    <h1>${title} Specification</h1>
+    <p class="desc">${desc}</p>
+  </header>
+
+  <div class="carbon-table-container">
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
+      <div>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
+      </div>
     </div>
     
-    <div class="board-columns">
-      <div class="board-col">
-        <div class="col-header">
-          <span>Backlog</span>
-          <span class="col-count">${columns.backlog.length}</span>
-        </div>
-        <div class="cards-list">${columns.backlog.join('')}</div>
-      </div>
-      
-      <div class="board-col">
-        <div class="col-header">
-          <span>Todo</span>
-          <span class="col-count">${columns.todo.length}</span>
-        </div>
-        <div class="cards-list">${columns.todo.join('')}</div>
-      </div>
-
-      <div class="board-col">
-        <div class="col-header">
-          <span>In Progress</span>
-          <span class="col-count">${columns.inProgress.length}</span>
-        </div>
-        <div class="cards-list">${columns.inProgress.join('')}</div>
-      </div>
-
-      <div class="board-col">
-        <div class="col-header">
-          <span>Done</span>
-          <span class="col-count">${columns.done.length}</span>
-        </div>
-        <div class="cards-list">${columns.done.join('')}</div>
-      </div>
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th class="carbon-cell-checkbox"></th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRowsHtml}
+      </tbody>
+    </table>
   </div>
 
-  <div class="resizer" id="pane-resizer"></div>
-
-  <div class="inspector-pane" id="inspector-pane">
-    ${inspectorHtml}
-  </div>
-
-  <script>
-    document.querySelector('.linear-card')?.classList.add('active');
-
-    function focusLinearCard(idx) {
-      document.querySelectorAll('.linear-card').forEach(c => c.classList.remove('active'));
-      document.getElementById('card-' + idx).classList.add('active');
-
-      document.querySelectorAll('.linear-inspector').forEach(ins => ins.classList.remove('active'));
-      document.getElementById('inspector-' + idx).classList.add('active');
-    }
-
-    const insPane = document.getElementById('inspector-pane');
-    const resizer = document.getElementById('pane-resizer');
-    let isResizing = false;
-
-    resizer.addEventListener('mousedown', () => {
-      isResizing = true;
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing) return;
-      const newWidth = window.innerWidth - e.clientX;
-      if (newWidth > 250 && newWidth < 480) {
-        insPane.style.width = newWidth + 'px';
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      isResizing = false;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
-    });
-  </script>
 </body>
 </html>`;
 };

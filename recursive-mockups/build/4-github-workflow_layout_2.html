@@ -2,2334 +2,1095 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GitHub Actions Workflow Setup - Linear Board</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <title>GitHub Actions Workflow Setup - Carbon Dark</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #080808; /* Linear Void Black */
-      color: #E2E8F0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .board-pane {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+      background-color: #161616;
+      color: #F4F4F4;
+      font-family: 'IBM Plex Sans', sans-serif;
       padding: 2rem;
-      overflow-x: auto;
     }
-    
-    .board-header {
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .board-header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; color: #FFF; }
-    
-    .board-columns {
-      display: flex;
-      gap: 1.25rem;
-      flex: 1;
-      min-width: 900px;
-    }
-    
-    .board-col {
-      flex: 1;
-      background-color: #121315; /* Linear Column Gray */
-      border: 1px solid #1F2023;
-      border-radius: 8px;
+
+    header { margin-bottom: 2rem; border-bottom: 1px solid #393939; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #F4F4F4; }
+    header .desc { font-size: 0.875rem; color: #C6C6C6; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #393939;
+      background-color: #262626;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      max-height: calc(100vh - 150px);
+      position: relative;
     }
-    .col-header {
-      padding: 1rem;
-      border-bottom: 1px solid #1F2023;
-      display: flex;
-      justify-content: space-between;
+
+    /* CSS-Only Batch Actions Bar */
+    .carbon-batch-actions {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
+      color: #FFFFFF;
       align-items: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #8E9196;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.875rem;
+      z-index: 10;
     }
-    .col-count { background-color: #1F2023; color: #FFF; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.7rem; }
-    
-    .cards-list {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.75rem;
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
+      display: flex;
     }
     
-    .linear-card {
-      background-color: #161719;
-      border: 1px solid #202226;
-      border-radius: 6px;
-      padding: 0.85rem;
-      margin-bottom: 0.5rem;
+    .batch-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-      transition: all 0.15s ease;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
-    .linear-card:hover { border-color: #3b3d42; background-color: #1a1c1f; }
-    .linear-card.active { border-color: #5E6AD2; box-shadow: 0 0 10px rgba(94, 106, 210, 0.25); }
+    .batch-btn:hover { background-color: #0353E9; }
 
-    .card-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-    .card-id { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #5E6AD2; }
-    .card-priority { font-size: 0.7rem; }
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #161616;
+      border-bottom: 1px solid #393939;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .search-input {
+      border: none;
+      background-color: #262626;
+      color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #78A9FF; }
 
-    .card-title {
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #161616;
+    }
+    .bx--data-table th {
+      background-color: #262626;
+      border-bottom: 1px solid #393939;
+      padding: 0.75rem 1rem;
+      text-align: left;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #FFF;
-      margin-bottom: 0.75rem;
-      font-family: 'JetBrains Mono', monospace;
-      word-break: break-all;
+      color: #F4F4F4;
     }
-
-    .card-tags-row { display: flex; gap: 0.35rem; }
-    .tag-badge { background-color: #202226; color: #8E9196; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; font-family: monospace; }
-    .tag-depth { background-color: rgba(94, 106, 210, 0.1); color: #5E6AD2; font-size: 0.65rem; padding: 0.15rem 0.35rem; border-radius: 4px; }
-
-    .resizer { width: 4px; cursor: col-resize; background-color: #1F2023; z-index: 10; }
-    .resizer:hover { background-color: #5E6AD2; }
-
-    .inspector-pane {
-      width: 320px;
-      min-width: 250px;
-      max-width: 480px;
-      background-color: #0E0F11;
-      border-left: 1px solid #1F2023;
-      height: 100%;
-      overflow-y: auto;
-      padding: 2rem;
+    .bx--data-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #393939;
+      font-size: 0.85rem;
+      vertical-align: top;
+      color: #C6C6C6;
     }
+    .carbon-row:hover { background-color: #353535; }
     
-    .linear-inspector { display: none; }
-    .linear-inspector.active { display: block; }
+    .carbon-cell-checkbox { width: 40px; text-align: center; }
+    .carbon-cell-path { font-weight: 600; }
     
-    .ins-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .ins-header h3 { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #5E6AD2; }
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #262626; color: #78A9FF; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #78A9FF; font-weight: 600; }
     
-    .ins-status-badge { font-size: 0.7rem; font-weight: 700; background-color: #202226; color: #FFF; padding: 0.2rem 0.5rem; border-radius: 4px; }
-    
-    .linear-inspector h2 { font-size: 1.25rem; font-weight: 700; color: #FFF; margin-bottom: 2rem; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
-    
-    .ins-property-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.75rem; border-bottom: 1px solid #161719; padding-bottom: 0.5rem; }
-    .prop-lbl { color: #8E9196; }
-    .prop-val { color: #FFF; font-weight: 600; }
-    .prop-val.active-val { color: #5E6AD2; font-family: 'JetBrains Mono', monospace; }
+    .req-alert { color: #FF8389; font-size: 0.75rem; }
+    .opt-alert { color: #A8A8A8; font-size: 0.75rem; }
 
-    .ins-section { margin-top: 2rem; }
-    .ins-section h4 { font-size: 0.75rem; color: #8E9196; text-transform: uppercase; margin-bottom: 0.75rem; font-weight: 700; }
-    .ins-desc { font-size: 0.85rem; color: #C2C2C6; line-height: 1.5; }
-
-    .c-grid { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
-    .c-item { background-color: #121315; border: 1px solid #1F2023; padding: 0.5rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; }
-    .c-k { color: #8E9196; }
-    .c-v { color: #5E6AD2; font-weight: 600; }
-  </style>
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #1C243A;
+      border: 1px solid #354A74;
+      color: #78A9FF;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #A8A8A8; }
+    .t-v { font-weight: 600; }  </style>
 </head>
 <body>
 
-  <div class="board-pane">
-    <div class="board-header">
-      <h1>Project Board: GitHub Actions Workflow Setup</h1>
-      <span style="font-size: 0.8rem; color:#8E9196;">Active sprint settings</span>
+  <header>
+    <h1>GitHub Actions Workflow Setup Specification</h1>
+    <p class="desc">Complete CI/CD workflow automation pipeline settings.</p>
+  </header>
+
+  <div class="carbon-table-container">
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
+      <div>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
+      </div>
     </div>
     
-    <div class="board-columns">
-      <div class="board-col">
-        <div class="col-header">
-          <span>Backlog</span>
-          <span class="col-count">8</span>
-        </div>
-        <div class="cards-list">
-      <div class="linear-card" id="card-7" onclick="focusLinearCard(7)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-108</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">on.push.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-11" onclick="focusLinearCard(11)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-112</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">on.pull_request.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-15" onclick="focusLinearCard(15)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-116</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">on.schedule.*.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-16" onclick="focusLinearCard(16)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-117</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">on.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-17" onclick="focusLinearCard(17)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-118</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">on.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-38" onclick="focusLinearCard(38)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-139</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-39" onclick="focusLinearCard(39)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-140</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">jobs.*.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-40" onclick="focusLinearCard(40)" data-status="backlog">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-141</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L1</span>
-        </div>
-      </div>
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
-      </div>
-      
-      <div class="board-col">
-        <div class="col-header">
-          <span>Todo</span>
-          <span class="col-count">13</span>
-        </div>
-        <div class="cards-list">
-      <div class="linear-card" id="card-4" onclick="focusLinearCard(4)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-105</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.push.branches.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-6" onclick="focusLinearCard(6)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-107</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.push.tags.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-10" onclick="focusLinearCard(10)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-111</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.pull_request.branches.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-14" onclick="focusLinearCard(14)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-115</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.schedule.*.cron</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-19" onclick="focusLinearCard(19)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-120</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">env.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-22" onclick="focusLinearCard(22)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-123</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.name</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-25" onclick="focusLinearCard(25)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-126</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.needs.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-27" onclick="focusLinearCard(27)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-128</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.env.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-30" onclick="focusLinearCard(30)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-131</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.name</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-31" onclick="focusLinearCard(31)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-132</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.uses</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-33" onclick="focusLinearCard(33)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-134</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.with.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L6</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-36" onclick="focusLinearCard(36)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-137</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.env.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L6</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-37" onclick="focusLinearCard(37)" data-status="todo">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-138</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.continue-on-error</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">any</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    </div>
-      </div>
 
-      <div class="board-col">
-        <div class="col-header">
-          <span>In Progress</span>
-          <span class="col-count">16</span>
-        </div>
-        <div class="cards-list">
-      <div class="linear-card" id="card-1" onclick="focusLinearCard(1)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-102</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L1</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-2" onclick="focusLinearCard(2)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-103</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.push</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-3" onclick="focusLinearCard(3)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-104</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.push.branches</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">array</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-5" onclick="focusLinearCard(5)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-106</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.push.tags</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">array</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-8" onclick="focusLinearCard(8)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-109</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.pull_request</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-9" onclick="focusLinearCard(9)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-110</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.pull_request.branches</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">array</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-12" onclick="focusLinearCard(12)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-113</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">on.schedule</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">array</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-13" onclick="focusLinearCard(13)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-114</span>
-          <span class="card-priority">⚪</span>
-        </div>
-        <div class="card-title">on.schedule.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-18" onclick="focusLinearCard(18)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-119</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">env</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L1</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-20" onclick="focusLinearCard(20)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-121</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L1</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-21" onclick="focusLinearCard(21)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-122</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L2</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-24" onclick="focusLinearCard(24)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-125</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.needs</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">array</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-26" onclick="focusLinearCard(26)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-127</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.env</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-29" onclick="focusLinearCard(29)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-130</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L4</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-32" onclick="focusLinearCard(32)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-133</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.with</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-35" onclick="focusLinearCard(35)" data-status="inProgress">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-136</span>
-          <span class="card-priority">🟡</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.env</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">object</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    </div>
-      </div>
-
-      <div class="board-col">
-        <div class="col-header">
-          <span>Done</span>
-          <span class="col-count">4</span>
-        </div>
-        <div class="cards-list">
-      <div class="linear-card" id="card-0" onclick="focusLinearCard(0)" data-status="done">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-101</span>
-          <span class="card-priority">🔴</span>
-        </div>
-        <div class="card-title">name</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L1</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-23" onclick="focusLinearCard(23)" data-status="done">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-124</span>
-          <span class="card-priority">🔴</span>
-        </div>
-        <div class="card-title">jobs.*.runs-on</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-28" onclick="focusLinearCard(28)" data-status="done">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-129</span>
-          <span class="card-priority">🔴</span>
-        </div>
-        <div class="card-title">jobs.*.steps</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">array</span>
-          <span class="tag-depth">L3</span>
-        </div>
-      </div>
-    
-      <div class="linear-card" id="card-34" onclick="focusLinearCard(34)" data-status="done">
-        <div class="card-meta-row">
-          <span class="card-id">SCH-135</span>
-          <span class="card-priority">🔴</span>
-        </div>
-        <div class="card-title">jobs.*.steps.*.run</div>
-        <div class="card-tags-row">
-          <span class="tag-badge">string</span>
-          <span class="tag-depth">L5</span>
-        </div>
-      </div>
-    </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="resizer" id="pane-resizer"></div>
-
-  <div class="inspector-pane" id="inspector-pane">
-    
-      <div id="inspector-0" class="linear-inspector active">
-        <div class="ins-header">
-          <h3>SCH-101</h3>
-          <span class="ins-status-badge">Done</span>
-        </div>
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th class="carbon-cell-checkbox"></th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
         
-        <h2>name</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">1 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">true</span>
+      <tr class="carbon-row" id="node-name" data-path="name">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-0">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">name</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">true</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-1" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-102</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">1 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on" data-path="on">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-1">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-2" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-103</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.push</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.push" data-path="on.push">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-2">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.push</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-3" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-104</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.push.branches</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ARRAY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.push.branches" data-path="on.push.branches">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-3">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.push.branches</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-4" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-105</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.push.branches.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-on.push.branches.*" data-path="on.push.branches.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-4">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.push.branches.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-5" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-106</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.push.tags</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ARRAY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.push.tags" data-path="on.push.tags">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-5">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.push.tags</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-6" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-107</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.push.tags.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-on.push.tags.*" data-path="on.push.tags.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-6">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.push.tags.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-7" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-108</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.push.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-on.push.*" data-path="on.push.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-7">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.push.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-8" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-109</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.pull_request</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.pull_request" data-path="on.pull_request">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-8">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.pull_request</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-9" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-110</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.pull_request.branches</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ARRAY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.pull_request.branches" data-path="on.pull_request.branches">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-9">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.pull_request.branches</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-10" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-111</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.pull_request.branches.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-on.pull_request.branches.*" data-path="on.pull_request.branches.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-10">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.pull_request.branches.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-11" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-112</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.pull_request.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-on.pull_request.*" data-path="on.pull_request.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-11">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.pull_request.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-12" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-113</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.schedule</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ARRAY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.schedule" data-path="on.schedule">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-12">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.schedule</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-13" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-114</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.schedule.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-on.schedule.*" data-path="on.schedule.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-13">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.schedule.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-14" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-115</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.schedule.*.cron</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-on.schedule.*.cron" data-path="on.schedule.*.cron">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-14">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.schedule.*.cron</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-15" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-116</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.schedule.*.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-on.schedule.*.*" data-path="on.schedule.*.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-15">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.schedule.*.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-16" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-117</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-on.*" data-path="on.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-16">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-17" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-118</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>on.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-on.*" data-path="on.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-17">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">on.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-18" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-119</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>env</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">1 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-env" data-path="env">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-18">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">env</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-19" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-120</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>env.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-env.*" data-path="env.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-19">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">env.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-20" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-121</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">1 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs" data-path="jobs">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-20">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-21" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-122</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">2 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item nested" style="grid-column: 1 / -1;">
-              <span class="c-k">required:</span>
-              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+      <tr class="carbon-row" id="node-jobs.*" data-path="jobs.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-21">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "runs-on",
   "steps"
 ]</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </details>
+          </div></td>
+      </tr>
     
-      <div id="inspector-22" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-123</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.name</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.name" data-path="jobs.*.name">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-22">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.name</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-23" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-124</h3>
-          <span class="ins-status-badge">Done</span>
-        </div>
-        
-        <h2>jobs.*.runs-on</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.runs-on" data-path="jobs.*.runs-on">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-23">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.runs-on</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">default:</span>
-              <span class="c-v">"ubuntu-latest"</span>
+            <div class="carbon-tag">
+              <span class="t-k">default:</span> <span class="t-v">"ubuntu-latest"</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-24" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-125</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.needs</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ARRAY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.needs" data-path="jobs.*.needs">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-24">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.needs</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-25" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-126</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.needs.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-jobs.*.needs.*" data-path="jobs.*.needs.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-25">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.needs.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-26" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-127</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.env</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.env" data-path="jobs.*.env">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-26">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.env</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-27" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-128</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.env.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-jobs.*.env.*" data-path="jobs.*.env.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-27">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.env.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-28" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-129</h3>
-          <span class="ins-status-badge">Done</span>
-        </div>
-        
-        <h2>jobs.*.steps</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ARRAY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps" data-path="jobs.*.steps">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-28">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minItems:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">uniqueItems:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-29" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-130</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">4 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item nested" style="grid-column: 1 / -1;">
-              <span class="c-k">required:</span>
-              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+      <tr class="carbon-row" id="node-jobs.*.steps.*" data-path="jobs.*.steps.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-29">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "run"
 ]</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </details>
+          </div></td>
+      </tr>
     
-      <div id="inspector-30" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-131</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.name</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.name" data-path="jobs.*.steps.*.name">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-30">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.name</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-31" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-132</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.uses</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.uses" data-path="jobs.*.steps.*.uses">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-31">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.uses</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-32" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-133</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.with</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.with" data-path="jobs.*.steps.*.with">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-32">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.with</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-33" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-134</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.with.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">6 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.with.*" data-path="jobs.*.steps.*.with.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-33">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.with.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-34" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-135</h3>
-          <span class="ins-status-badge">Done</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.run</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.run" data-path="jobs.*.steps.*.run">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-34">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.run</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-35" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-136</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.env</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">OBJECT</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.env" data-path="jobs.*.steps.*.env">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-35">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.env</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-36" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-137</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.env.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">STRING</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">6 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">minLength:</span>
-              <span class="c-v">0</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.env.*" data-path="jobs.*.steps.*.env.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-36">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.env.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="inspector-37" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-138</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.continue-on-error</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <div class="c-grid">
-            <div class="c-item">
-              <span class="c-k">required:</span>
-              <span class="c-v">false</span>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.continue-on-error" data-path="jobs.*.steps.*.continue-on-error">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-37">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.continue-on-error</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item">
-              <span class="c-k">default:</span>
-              <span class="c-v">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">default:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="c-item nested" style="grid-column: 1 / -1;">
-              <span class="c-k">enum:</span>
-              <span class="nested-toggle" style="color: #5E6AD2; cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; margin-top: 5px;">
-                <pre style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: #080808; border-left: 2px solid #5E6AD2; padding: 5px; color: #E2E8F0; overflow-x: auto;">[
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">enum [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   false,
   true
 ]</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </details>
+          </div></td>
+      </tr>
     
-      <div id="inspector-38" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-139</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.steps.*.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">5 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-jobs.*.steps.*.*" data-path="jobs.*.steps.*.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-38">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.steps.*.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-39" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-140</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>jobs.*.*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">3 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-jobs.*.*" data-path="jobs.*.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-39">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">jobs.*.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="inspector-40" class="linear-inspector ">
-        <div class="ins-header">
-          <h3>SCH-141</h3>
-          <span class="ins-status-badge">Todo</span>
-        </div>
-        
-        <h2>*</h2>
-        
-        <div class="ins-property-row">
-          <span class="prop-lbl">Assignee</span>
-          <span class="prop-val">Compiler Bot</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Type</span>
-          <span class="prop-val active-val">ANY</span>
-        </div>
-        <div class="ins-property-row">
-          <span class="prop-lbl">Depth</span>
-          <span class="prop-val">1 Levels</span>
-        </div>
-
-        <div class="ins-section">
-          <h4>Description</h4>
-          <p class="ins-desc">No description provided.</p>
-        </div>
-
-        <div class="ins-section">
-          <h4>Validation Rules</h4>
-          <span style="color:#666; font-style:italic;">None</span>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-*" data-path="*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-40">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
+      </tbody>
+    </table>
   </div>
 
-  <script>
-    document.querySelector('.linear-card')?.classList.add('active');
-
-    function focusLinearCard(idx) {
-      document.querySelectorAll('.linear-card').forEach(c => c.classList.remove('active'));
-      document.getElementById('card-' + idx).classList.add('active');
-
-      document.querySelectorAll('.linear-inspector').forEach(ins => ins.classList.remove('active'));
-      document.getElementById('inspector-' + idx).classList.add('active');
-    }
-
-    const insPane = document.getElementById('inspector-pane');
-    const resizer = document.getElementById('pane-resizer');
-    let isResizing = false;
-
-    resizer.addEventListener('mousedown', () => {
-      isResizing = true;
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing) return;
-      const newWidth = window.innerWidth - e.clientX;
-      if (newWidth > 250 && newWidth < 480) {
-        insPane.style.width = newWidth + 'px';
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      isResizing = false;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
-    });
-  </script>
 </body>
 </html>

@@ -11,7 +11,7 @@ if (!fs.existsSync(BUILD_DIR)) {
 
 // Load recursive layouts
 const layouts = {};
-for (let i = 1; i <= 20; i++) {
+for (let i = 1; i <= 5; i++) {
   const fileKey = `layout_${i}`;
   const filePath = path.join(MOCKUPS_DIR, `${fileKey}.js`);
   if (fs.existsSync(filePath)) {

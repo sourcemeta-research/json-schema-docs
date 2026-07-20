@@ -129,7 +129,7 @@ docsFiles.forEach(file => {
     const rows = getFlatRows(schema);
 
     // Scan all 20 layout outputs for this schema
-    for (let layoutIdx = 1; layoutIdx <= 20; layoutIdx++) {
+    for (let layoutIdx = 1; layoutIdx <= 5; layoutIdx++) {
       const layoutName = `layout_${layoutIdx}`;
       const buildFile = path.join(BUILD_DIR, `${baseName}_${layoutName}.html`);
       

@@ -2,1885 +2,1012 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OpenAPI / Swagger Contract - Apple Developer Reference</title>
+  <title>OpenAPI / Swagger Contract - Carbon Compact</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
+      padding: 1rem;
       background-color: #FFFFFF;
-      color: #1D1D1F;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      height: 100vh;
-      overflow: hidden;
+      color: #161616;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2rem;
     }
 
-    .apple-sidebar {
-      width: 260px;
-      min-width: 180px;
-      max-width: 450px;
-      background-color: #F5F5F7;
-      border-right: 1px solid #D2D2D7;
+    header { margin-bottom: 1rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #E0E0E0;
+      background-color: #F4F4F4;
       display: flex;
       flex-direction: column;
-      height: 100%;
+      position: relative;
     }
-    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #D2D2D7; }
-    .sidebar-header h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #86868B; }
-    
-    .nav-list-apple { list-style: none; overflow-y: auto; flex: 1; padding: 0.5rem; }
-    .nav-item-apple {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
-      color: #1D1D1F;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border-radius: 6px;
-      margin-bottom: 0.15rem;
-    }
-    .nav-item-apple:hover { background-color: rgba(0,0,0,0.04); }
-    .nav-item-apple.active {
-      background-color: #0071E3; /* Apple Blue */
-      color: #FFFFFF;
-      font-weight: 600;
-    }
-    .nav-item-apple.active .icon-cube { color: #FFFFFF; }
-    .icon-cube { color: #86868B; font-size: 0.7rem; }
-    .nav-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 170px; font-family: monospace; }
 
-    .resizer {
-      width: 4px;
-      cursor: col-resize;
-      background-color: #D2D2D7;
+    /* CSS-Only Batch Actions Bar */
+    .carbon-batch-actions {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 48px;
+      background-color: #0F62FE;
+      color: #FFFFFF;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      font-size: 0.875rem;
       z-index: 10;
     }
-    .resizer:hover { background-color: #0071E3; }
-
-    .doc-pane {
-      flex: 1;
-      overflow-y: auto;
-      background-color: #FFFFFF;
-      padding: 3rem 4rem;
-      height: 100%;
-    }
-    
-    .apple-breadcrumbs {
-      font-size: 0.75rem;
-      color: #86868B;
-      margin-bottom: 2rem;
+    body:has(.bx--checkbox:checked) .carbon-batch-actions {
       display: flex;
-      gap: 0.5rem;
     }
-    .apple-breadcrumbs span { cursor: pointer; }
-    .apple-breadcrumbs span:hover { color: #0071E3; }
-
-    .apple-doc-content { display: none; max-width: 700px; }
-    .apple-doc-content.active { display: block; }
     
-    .meta-label { font-size: 0.7rem; font-weight: 700; color: #86868B; letter-spacing: 0.05em; text-transform: uppercase; }
-    .doc-title { font-size: 2.2rem; font-weight: 700; color: #1D1D1F; margin-top: 0.25rem; margin-bottom: 1.5rem; letter-spacing: -0.03em; word-break: break-all; font-family: monospace; }
-
-    .declaration-block { margin-bottom: 2.5rem; }
-    .declaration-block h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; }
-    .declaration-block pre {
-      background-color: #F5F5F7;
-      border: 1px solid #D2D2D7;
-      padding: 1.25rem 1.5rem;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 0.85rem;
-      overflow-x: auto;
+    .batch-btn {
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
     }
-    .decl-key { color: #B31312; }
-    .decl-name { color: #000; font-weight: bold; }
-    .decl-type { color: #0071E3; }
-    .decl-val { color: #86868B; }
+    .batch-btn:hover { background-color: #0353E9; }
 
-    .doc-section { margin-bottom: 2.5rem; }
-    .doc-section h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; border-bottom: 1px solid #D2D2D7; padding-bottom: 0.5rem; }
-    .desc-text { font-size: 0.95rem; color: #1D1D1F; line-height: 1.5; }
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .search-input {
+      border: none;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #0F62FE; }
 
-    .apple-constraints-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .constraint-row { display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed #E2E2E2; padding: 0.25rem 0; font-family: monospace; }
-    .c-key { color: #86868B; }
-    .c-val { color: #0071E3; font-weight: 600; }
-
-    .attrib-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .attrib-table td { border-bottom: 1px solid #E2E2E2; padding: 0.5rem 0; }
-    .attrib-table tr td:first-child { width: 30%; color: #86868B; }
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
+    .bx--data-table th {
+      background-color: #F4F4F4;
+      border-bottom: 1px solid #E0E0E0;
+      padding: 0.35rem 0.6rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #161616;
+    }
+    .bx--data-table td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid #E0E0E0;
+      font-size: 0.75rem;
+      vertical-align: top;
+    }
+    .carbon-row:hover { background-color: #E5E5E5; }
     
-    .none-text { font-size: 0.85rem; color: #86868B; font-style: italic; }
+    .carbon-cell-checkbox { width: 40px; text-align: center; }
+    .carbon-cell-path { font-weight: 600; }
+    
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #0F62FE; font-weight: 600; }
+    
+    .req-alert { color: #DA1E28; font-size: 0.75rem; }
+    .opt-alert { color: #525252; font-size: 0.75rem; }
+
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #E8F0FE;
+      border: 1px solid #C2DBFF;
+      color: #0F62FE;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #525252; }
+    .t-v { font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <div class="apple-sidebar" id="apple-sidebar">
-    <div class="sidebar-header">
-      <h3>API Reference</h3>
-    </div>
-    <ul class="nav-list-apple">
-      
-      <li class="nav-item-apple" id="apple-nav-0" onclick="showAppleDoc(0)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">swagger</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-1" onclick="showAppleDoc(1)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-2" onclick="showAppleDoc(2)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.title</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-3" onclick="showAppleDoc(3)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.version</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-4" onclick="showAppleDoc(4)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.description</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-5" onclick="showAppleDoc(5)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.termsOfService</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-6" onclick="showAppleDoc(6)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.contact</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-7" onclick="showAppleDoc(7)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.contact.name</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-8" onclick="showAppleDoc(8)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.contact.email</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-9" onclick="showAppleDoc(9)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.contact.url</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-10" onclick="showAppleDoc(10)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.contact.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-11" onclick="showAppleDoc(11)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">info.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-12" onclick="showAppleDoc(12)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">host</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-13" onclick="showAppleDoc(13)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">basePath</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-14" onclick="showAppleDoc(14)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">schemes</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-15" onclick="showAppleDoc(15)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">schemes.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-16" onclick="showAppleDoc(16)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">consumes</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-17" onclick="showAppleDoc(17)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">consumes.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-18" onclick="showAppleDoc(18)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">produces</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-19" onclick="showAppleDoc(19)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">produces.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-20" onclick="showAppleDoc(20)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-21" onclick="showAppleDoc(21)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-22" onclick="showAppleDoc(22)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-23" onclick="showAppleDoc(23)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.summary</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-24" onclick="showAppleDoc(24)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.description</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-25" onclick="showAppleDoc(25)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.operationId</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-26" onclick="showAppleDoc(26)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-27" onclick="showAppleDoc(27)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-28" onclick="showAppleDoc(28)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*.name</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-29" onclick="showAppleDoc(29)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*.in</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-30" onclick="showAppleDoc(30)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*.description</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-31" onclick="showAppleDoc(31)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*.required</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-32" onclick="showAppleDoc(32)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*.type</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-33" onclick="showAppleDoc(33)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.parameters.*.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-34" onclick="showAppleDoc(34)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">paths.*.*.*</span>
-      </li>
-    
-      <li class="nav-item-apple" id="apple-nav-35" onclick="showAppleDoc(35)">
-        <span class="icon-cube">■</span>
-        <span class="nav-name">*</span>
-      </li>
-    
-    </ul>
-  </div>
+  <header>
+    <h1>OpenAPI / Swagger Contract Specification</h1>
+    <p class="desc">Comprehensive structure defining API paths, security, and objects.</p>
+  </header>
 
-  <div class="resizer" id="sidebar-resizer"></div>
-
-  <div class="doc-pane">
-    <div class="apple-breadcrumbs">
-      <span>Developer</span> &gt; <span>Documentation</span> &gt; <span>OpenAPI / Swagger Contract</span> &gt; <span style="color:#1D1D1F; font-weight:600;">API Reference</span>
-    </div>
-    
-    <div class="docs-list">
-      
-      <div id="apple-doc-0" class="apple-doc-content active">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">swagger</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">swagger</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">true</span>
-            </div>
-          
-            <div class="constraint-row">
-              <span class="c-key">default:</span>
-              <span class="c-val">"2.0"</span>
-            </div>
-          
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>YES</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
+  <div class="carbon-table-container">
+    <div class="carbon-batch-actions">
+      <span>Dynamic Batch Selected</span>
+      <div>
+        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
       </div>
+    </div>
     
-      <div id="apple-doc-1" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info</h1>
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
+    </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th class="carbon-cell-checkbox"></th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
         
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">info</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row nested" style="flex-wrap: wrap;">
-              <span class="c-key">required:</span>
-              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F5F5F7; border-left: 2px solid var(--accent); padding: 5px; color: #1D1D1F; overflow-x: auto;">[
+      <tr class="carbon-row" id="node-swagger" data-path="swagger">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-0">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">swagger</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">true</span>
+            </div>
+          
+            <div class="carbon-tag">
+              <span class="t-k">default:</span> <span class="t-v">"2.0"</span>
+            </div>
+          
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
+            </div>
+          </div></td>
+      </tr>
+    
+      <tr class="carbon-row" id="node-info" data-path="info">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-1">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "title",
   "version"
 ]</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </details>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-2" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.title</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">title</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.title" data-path="info.title">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-2">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.title</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>YES</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-3" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.version</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">version</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.version" data-path="info.version">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-3">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.version</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>YES</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-4" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.description</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">description</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.description" data-path="info.description">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-4">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.description</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-5" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.termsOfService</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">termsOfService</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.termsOfService" data-path="info.termsOfService">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-5">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.termsOfService</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-6" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.contact</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">contact</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.contact" data-path="info.contact">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-6">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.contact</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-7" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.contact.name</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">name</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.contact.name" data-path="info.contact.name">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-7">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.contact.name</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 3</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-8" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.contact.email</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">email</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.contact.email" data-path="info.contact.email">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-8">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.contact.email</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 3</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-9" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.contact.url</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">url</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-info.contact.url" data-path="info.contact.url">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-9">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.contact.url</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 3</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-10" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.contact.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 3</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-info.contact.*" data-path="info.contact.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-10">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.contact.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="apple-doc-11" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">info.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-info.*" data-path="info.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-11">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">info.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="apple-doc-12" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">host</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">host</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-host" data-path="host">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-12">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">host</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-13" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">basePath</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">basePath</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-basePath" data-path="basePath">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-13">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">basePath</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">default:</span>
-              <span class="c-val">"/"</span>
+            <div class="carbon-tag">
+              <span class="t-k">default:</span> <span class="t-v">"/"</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-14" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">schemes</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">schemes</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-schemes" data-path="schemes">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-14">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">schemes</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minItems:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">uniqueItems:</span>
-              <span class="c-val">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-15" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">schemes.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+      <tr class="carbon-row" id="node-schemes.*" data-path="schemes.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-15">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">schemes.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-16" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">consumes</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">consumes</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-consumes" data-path="consumes">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-16">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">consumes</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minItems:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">uniqueItems:</span>
-              <span class="c-val">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-17" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">consumes.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+      <tr class="carbon-row" id="node-consumes.*" data-path="consumes.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-17">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">consumes.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-18" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">produces</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">produces</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-produces" data-path="produces">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-18">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">produces</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minItems:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">uniqueItems:</span>
-              <span class="c-val">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-19" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">produces.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+      <tr class="carbon-row" id="node-produces.*" data-path="produces.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-19">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">produces.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-20" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">paths</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths" data-path="paths">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-20">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-21" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 2</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-paths.*" data-path="paths.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-21">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="apple-doc-22" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 3</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-paths.*.*" data-path="paths.*.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-22">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="apple-doc-23" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.summary</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">summary</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.summary" data-path="paths.*.*.summary">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-23">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.summary</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 4</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-24" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.description</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">description</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.description" data-path="paths.*.*.description">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-24">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.description</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 4</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-25" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.operationId</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">operationId</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.operationId" data-path="paths.*.*.operationId">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-25">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.operationId</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 4</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-26" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">parameters</span>: <span class="decl-type">array</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.parameters" data-path="paths.*.*.parameters">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-26">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            array
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minItems:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minItems:</span> <span class="t-v">0</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">uniqueItems:</span>
-              <span class="c-val">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 4</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-27" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">object</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row nested" style="flex-wrap: wrap;">
-              <span class="c-key">required:</span>
-              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F5F5F7; border-left: 2px solid var(--accent); padding: 5px; color: #1D1D1F; overflow-x: auto;">[
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*" data-path="paths.*.*.parameters.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-27">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "name",
   "in"
 ]</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 5</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </details>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-28" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*.name</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">name</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*.name" data-path="paths.*.*.parameters.*.name">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-28">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*.name</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>YES</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 6</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-29" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*.in</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">in</span>: <span class="decl-type">string</span> <span class="decl-val">= required</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*.in" data-path="paths.*.*.parameters.*.in">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-29">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*.in</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>YES</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 6</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-30" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*.description</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">description</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*.description" data-path="paths.*.*.parameters.*.description">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-30">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*.description</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 6</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-31" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*.required</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">required</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*.required" data-path="paths.*.*.parameters.*.required">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-31">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*.required</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">default:</span>
-              <span class="c-val">false</span>
+            <div class="carbon-tag">
+              <span class="t-k">default:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row nested" style="flex-wrap: wrap;">
-              <span class="c-key">enum:</span>
-              <span class="nested-toggle" style="color: var(--accent); cursor: pointer; font-weight: bold; margin-left: 10px;" onclick="const el = this.nextElementSibling; el.style.display = el.style.display === 'none' ? 'block' : 'none'; this.innerText = el.style.display === 'none' ? '▶ expand' : '▼ collapse';">▶ expand</span>
-              <div class="nested-detail-box" style="display:none; width: 100%; margin-top: 5px;">
-                <pre style="font-family: monospace; font-size: 0.75rem; background: #F5F5F7; border-left: 2px solid var(--accent); padding: 5px; color: #1D1D1F; overflow-x: auto;">[
+            <details class="carbon-nested-details" style="margin-bottom: 4px;">
+              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">enum [+ expand]</summary>
+              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   false,
   true
 ]</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 6</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+            </details>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-32" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*.type</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">type</span>: <span class="decl-type">string</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <div class="apple-constraints-list">
-            <div class="constraint-row">
-              <span class="c-key">required:</span>
-              <span class="c-val">false</span>
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*.type" data-path="paths.*.*.parameters.*.type">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-32">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*.type</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            string
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+            <div class="carbon-tag">
+              <span class="t-k">required:</span> <span class="t-v">false</span>
             </div>
           
-            <div class="constraint-row">
-              <span class="c-key">minLength:</span>
-              <span class="c-val">0</span>
+            <div class="carbon-tag">
+              <span class="t-k">minLength:</span> <span class="t-v">0</span>
             </div>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 6</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+          </div></td>
+      </tr>
     
-      <div id="apple-doc-33" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.parameters.*.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 6</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-paths.*.*.parameters.*.*" data-path="paths.*.*.parameters.*.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-33">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.parameters.*.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="apple-doc-34" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">paths.*.*.*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 4</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-paths.*.*.*" data-path="paths.*.*.*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-34">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paths.*.*.*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-      <div id="apple-doc-35" class="apple-doc-content ">
-        <span class="meta-label">PROPERTY</span>
-        <h1 class="doc-title">*</h1>
-        
-        <div class="declaration-block">
-          <h3>Declaration</h3>
-          <pre><code><span class="decl-key">let</span> <span class="decl-name">*</span>: <span class="decl-type">any</span> <span class="decl-val">= optional</span></code></pre>
-        </div>
-
-        <div class="doc-section">
-          <h3>Discussion</h3>
-          <p class="desc-text">No supplementary comments accompany this property.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Validation Constraints</h3>
-          <p class="none-text">No additional constraints defined.</p>
-        </div>
-
-        <div class="doc-section">
-          <h3>Attributes</h3>
-          <table class="attrib-table">
-            <tr>
-              <td>Required</td>
-              <td><strong>NO</strong></td>
-            </tr>
-            <tr>
-              <td>Depth Index</td>
-              <td><code>Level 1</code></td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <tr class="carbon-row" id="node-*" data-path="*">
+        <td class="carbon-cell-checkbox">
+          <input type="checkbox" class="bx--checkbox" id="checkbox-35">
+        </td>
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
     
-    </div>
+      </tbody>
+    </table>
   </div>
 
-  <script>
-    function showAppleDoc(idx) {
-      document.querySelectorAll('.nav-item-apple').forEach(item => item.classList.remove('active'));
-      document.querySelectorAll('.apple-doc-content').forEach(doc => doc.classList.remove('active'));
-
-      document.getElementById('apple-nav-' + idx).classList.add('active');
-      document.getElementById('apple-doc-' + idx).classList.add('active');
-    }
-
-    showAppleDoc(0);
-
-    const sidebar = document.getElementById('apple-sidebar');
-    const resizer = document.getElementById('sidebar-resizer');
-    let isResizing = false;
-
-    resizer.addEventListener('mousedown', () => {
-      isResizing = true;
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isResizing) return;
-      if (e.clientX > 180 && e.clientX < 450) {
-        sidebar.style.width = e.clientX + 'px';
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      isResizing = false;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
-    });
-  </script>
 </body>
 </html>
