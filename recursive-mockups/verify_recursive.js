@@ -34,28 +34,32 @@ function getFlatRows(schema) {
     let additionalProperties = null;
     let items = null;
 
+    function variantTypeLabel(v) {
+      if (!v || typeof v !== 'object') return 'any';
+      if (Array.isArray(v.type)) return v.type.map(variantTypeLabel).join(' | ');
+      return v.type || 'any';
+    }
+
     function extract(n) {
       if (!n || typeof n !== 'object') return;
-      type = n.type || type;
+      if (n.type && Array.isArray(n.type)) {
+        // Draft 3 union type: alternatives, not a merge (matches the fix in shared-renderer.js).
+        type = n.type.filter(v => typeof v === 'object').map(variantTypeLabel).join(' | ');
+      } else if (n.type) {
+        type = n.type;
+      }
       description = n.description || description || '';
-      
+
       for (const [key, val] of Object.entries(n)) {
         if (!['type', 'description', 'properties', 'patternProperties', 'additionalProperties', 'items', 'extends'].includes(key)) {
           constraints[key] = val;
         }
       }
-      
+
       if (n.properties) Object.assign(properties, n.properties);
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
-      if (n.type && Array.isArray(n.type)) {
-        n.type.forEach(subSchema => {
-          if (typeof subSchema === 'object') {
-            extract(subSchema);
-          }
-        });
-      }
     }
 
     extract(node);

@@ -22,36 +22,7 @@
       background-color: #F4F4F4;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
-
-    /* CSS-Only Batch Actions Bar */
-    .carbon-batch-actions {
-      display: none;
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 48px;
-      background-color: #0F62FE;
-      color: #FFFFFF;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-      font-size: 0.875rem;
-      z-index: 10;
-    }
-    body:has(.bx--checkbox:checked) .carbon-batch-actions {
-      display: flex;
-    }
-
-    .batch-btn {
-      background: none;
-      border: none;
-      color: #FFFFFF;
-      cursor: pointer;
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-    .batch-btn:hover { background-color: #0353E9; }
 
     .carbon-toolbar {
       height: 48px;
@@ -94,7 +65,6 @@
     }
     .carbon-row:hover { background-color: #E5E5E5; }
 
-    .carbon-cell-checkbox { width: 40px; text-align: center; }
     .carbon-cell-path { font-weight: 600; }
 
     code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
@@ -125,13 +95,6 @@
   </header>
 
   <div class="carbon-table-container">
-    <div class="carbon-batch-actions">
-      <span>Dynamic Batch Selected</span>
-      <div>
-        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
-      </div>
-    </div>
-
     <div class="carbon-toolbar">
       <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
@@ -139,7 +102,6 @@
     <table class="bx--data-table">
       <thead>
         <tr>
-          <th class="carbon-cell-checkbox"></th>
           <th>Name</th>
           <th>Type</th>
           <th>Status</th>
@@ -149,9 +111,6 @@
       <tbody>
         
       <tr class="carbon-row" id="node-name" data-path="name">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-0">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">name</code>
           
@@ -174,9 +133,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-short_name" data-path="short_name">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-1">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">short_name</code>
           
@@ -199,9 +155,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-description" data-path="description">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-2">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">description</code>
           
@@ -224,9 +177,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-start_url" data-path="start_url">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-3">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">start_url</code>
           
@@ -253,9 +203,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-display" data-path="display">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-4">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">display</code>
           
@@ -282,9 +229,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-orientation" data-path="orientation">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-5">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">orientation</code>
           
@@ -311,9 +255,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-background_color" data-path="background_color">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-6">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">background_color</code>
           
@@ -340,9 +281,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-theme_color" data-path="theme_color">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-7">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">theme_color</code>
           
@@ -365,9 +303,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-lang" data-path="lang">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-8">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">lang</code>
           
@@ -394,9 +329,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-dir" data-path="dir">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-9">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">dir</code>
           
@@ -423,9 +355,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-scope" data-path="scope">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-10">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">scope</code>
           
@@ -448,9 +377,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-prefer_related_applications" data-path="prefer_related_applications">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-11">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">prefer_related_applications</code>
           
@@ -481,9 +407,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-categories" data-path="categories">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-12">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">categories</code>
           
@@ -510,9 +433,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-categories.*" data-path="categories.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-13">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">categories.*</code>
           
@@ -531,9 +451,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons" data-path="icons">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-14">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons</code>
           
@@ -560,9 +477,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons.*" data-path="icons.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-15">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*</code>
           
@@ -585,9 +499,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons.*.src" data-path="icons.*.src">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-16">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.src</code>
           
@@ -610,9 +521,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons.*.sizes" data-path="icons.*.sizes">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-17">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.sizes</code>
           
@@ -635,9 +543,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons.*.type" data-path="icons.*.type">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-18">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.type</code>
           
@@ -664,9 +569,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons.*.purpose" data-path="icons.*.purpose">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-19">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.purpose</code>
           
@@ -693,9 +595,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-icons.*.*" data-path="icons.*.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-20">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">icons.*.*</code>
           
@@ -710,9 +609,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts" data-path="shortcuts">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-21">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts</code>
           
@@ -739,9 +635,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*" data-path="shortcuts.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-22">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*</code>
           
@@ -764,9 +657,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.name" data-path="shortcuts.*.name">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-23">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.name</code>
           
@@ -789,9 +679,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.short_name" data-path="shortcuts.*.short_name">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-24">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.short_name</code>
           
@@ -814,9 +701,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.url" data-path="shortcuts.*.url">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-25">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.url</code>
           
@@ -839,9 +723,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.icons" data-path="shortcuts.*.icons">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-26">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons</code>
           
@@ -868,9 +749,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.icons.*" data-path="shortcuts.*.icons.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-27">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*</code>
           
@@ -885,9 +763,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.icons.*.src" data-path="shortcuts.*.icons.*.src">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-28">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*.src</code>
           
@@ -910,9 +785,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.icons.*.sizes" data-path="shortcuts.*.icons.*.sizes">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-29">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*.sizes</code>
           
@@ -935,9 +807,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.icons.*.*" data-path="shortcuts.*.icons.*.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-30">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.icons.*.*</code>
           
@@ -952,9 +821,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-shortcuts.*.*" data-path="shortcuts.*.*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-31">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shortcuts.*.*</code>
           
@@ -969,9 +835,6 @@
       </tr>
     
       <tr class="carbon-row" id="node-*" data-path="*">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-32">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">*</code>
           

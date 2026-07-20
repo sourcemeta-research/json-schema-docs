@@ -2,6 +2,12 @@
 // Each layout_N.js supplies only its own CSS skin and calls these functions to build
 // the table body, so a fix here doesn't need to be hand-copied into 5 files.
 
+function variantTypeLabel(v) {
+  if (!v || typeof v !== 'object') return 'any';
+  if (Array.isArray(v.type)) return v.type.map(variantTypeLabel).join(' | ');
+  return v.type || 'any';
+}
+
 function buildRows(schema) {
   const rows = [];
   const visited = new Map();
@@ -32,10 +38,22 @@ function buildRows(schema) {
     let patternProperties = {};
     let additionalProperties = null;
     let items = null;
+    let typeVariants = null;
 
     function extract(n) {
       if (!n || typeof n !== 'object') return;
-      type = n.type || type;
+
+      if (n.type && Array.isArray(n.type)) {
+        // Draft 3 union type: these are alternatives, not something to merge.
+        // Each variant keeps its own properties instead of being flattened onto
+        // this node (the old behavior made e.g. "bugs: string | object" look like
+        // it always had .url/.email, even in the plain-string case).
+        typeVariants = n.type.filter(v => typeof v === 'object');
+        type = typeVariants.map(variantTypeLabel).join(' | ');
+      } else if (n.type) {
+        type = n.type;
+      }
+
       description = n.description || description || '';
 
       for (const [key, val] of Object.entries(n)) {
@@ -48,20 +66,16 @@ function buildRows(schema) {
       if (n.patternProperties) Object.assign(patternProperties, n.patternProperties);
       if (n.additionalProperties !== undefined) additionalProperties = n.additionalProperties;
       if (n.items) items = n.items;
-
-      if (n.type && Array.isArray(n.type)) {
-        n.type.forEach(subSchema => {
-          if (typeof subSchema === 'object') {
-            extract(subSchema);
-          }
-        });
-      }
     }
 
     extract(node);
 
     if (node.extends && Array.isArray(node.extends)) {
       node.extends.forEach(ext => extract(ext));
+    }
+
+    if (typeVariants) {
+      constraints.typeVariants = typeVariants;
     }
 
     if (parentPath.length > 0) {
@@ -112,7 +126,7 @@ function buildRows(schema) {
 function renderRowsHtml(rows) {
   let tableRowsHtml = '';
 
-  rows.forEach((r, idx) => {
+  rows.forEach(r => {
     let constraintsHtml = '';
     const constraintEntries = Object.entries(r.constraints);
     if (constraintEntries.length > 0) {
@@ -138,9 +152,6 @@ function renderRowsHtml(rows) {
 
     tableRowsHtml += `
       <tr class="carbon-row" id="node-${r.path}" data-path="${r.path}">
-        <td class="carbon-cell-checkbox">
-          <input type="checkbox" class="bx--checkbox" id="checkbox-${idx}">
-        </td>
         <td class="carbon-cell-path">
           <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">${r.path}</code>
           ${r.description ? `
@@ -166,4 +177,4 @@ function renderRowsHtml(rows) {
   return tableRowsHtml;
 }
 
-module.exports = { buildRows, renderRowsHtml };
+module.exports = { buildRows, renderRowsHtml, variantTypeLabel };

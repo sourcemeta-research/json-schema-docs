@@ -28,36 +28,7 @@ module.exports = function render(title, desc, schema) {
       background-color: #FFFFFF;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
-
-    /* CSS-Only Batch Actions Bar */
-    .carbon-batch-actions {
-      display: none;
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 48px;
-      background-color: #0F62FE;
-      color: #FFFFFF;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-      font-size: 0.875rem;
-      z-index: 10;
-    }
-    body:has(.bx--checkbox:checked) .carbon-batch-actions {
-      display: flex;
-    }
-
-    .batch-btn {
-      background: none;
-      border: none;
-      color: #FFFFFF;
-      cursor: pointer;
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-    .batch-btn:hover { background-color: #0353E9; }
 
     .carbon-toolbar {
       height: 48px;
@@ -101,7 +72,6 @@ module.exports = function render(title, desc, schema) {
     }
     .carbon-row:hover { background-color: #F4F4F4; }
 
-    .carbon-cell-checkbox { width: 40px; text-align: center; }
     .carbon-cell-path { font-weight: 600; }
 
     code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
@@ -132,13 +102,6 @@ module.exports = function render(title, desc, schema) {
   </header>
 
   <div class="carbon-table-container">
-    <div class="carbon-batch-actions">
-      <span>Dynamic Batch Selected</span>
-      <div>
-        <button class="batch-btn" onclick="alert('Export completed')">Export Selected</button>
-      </div>
-    </div>
-
     <div class="carbon-toolbar">
       <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
     </div>
@@ -146,7 +109,6 @@ module.exports = function render(title, desc, schema) {
     <table class="bx--data-table">
       <thead>
         <tr>
-          <th class="carbon-cell-checkbox"></th>
           <th>Name</th>
           <th>Type</th>
           <th>Status</th>
