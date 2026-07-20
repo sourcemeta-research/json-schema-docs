@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conditional (if/then/else) Test Fixture - Carbon Compact</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      padding: 1rem;
+      background-color: #FFFFFF;
+      color: #161616;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2rem;
+    }
+
+    header { margin-bottom: 1rem; border-bottom: 1px solid #E0E0E0; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #161616; }
+    header .desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #E0E0E0;
+      background-color: #F4F4F4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E0E0E0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .search-input {
+      border: none;
+      background-color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #0F62FE; }
+
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #FFFFFF;
+    }
+    .bx--data-table th {
+      background-color: #F4F4F4;
+      border-bottom: 1px solid #E0E0E0;
+      padding: 0.35rem 0.6rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #161616;
+    }
+    .bx--data-table td {
+      padding: 0.35rem 0.6rem;
+      border-bottom: 1px solid #E0E0E0;
+      font-size: 0.75rem;
+      vertical-align: top;
+    }
+    .carbon-row:hover { background-color: #E5E5E5; }
+
+    .carbon-cell-path { font-weight: 600; }
+
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #F4F4F4; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #0F62FE; font-weight: 600; }
+
+    .req-alert { color: #DA1E28; font-size: 0.75rem; }
+    .opt-alert { color: #525252; font-size: 0.75rem; }
+
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #E8F0FE;
+      border: 1px solid #C2DBFF;
+      color: #0F62FE;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #525252; }
+    .t-v { font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Conditional (if/then/else) Test Fixture Specification</h1>
+    <p class="desc">Synthetic 2020-12-style schema (not Draft 3, not real canonicalizer output) used only to exercise if/then/else conditional rendering in the recursive Carbon layouts.</p>
+  </header>
+
+  <div class="carbon-table-container">
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
+    </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr class="carbon-row" id="node-paymentMethod" data-path="paymentMethod">
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">paymentMethod</code>
+          
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">Payment method configuration. Required fields differ depending on the chosen type.</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">{
+  "if": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "extends": [
+          {
+            "type": "string",
+            "enum": [
+              "card"
+            ]
+          }
+        ],
+        "required": true
+      }
+    },
+    "patternProperties": {},
+    "additionalProperties": {}
+  },
+  "then": {
+    "type": "object",
+    "properties": {
+      "cardNumber": {
+        "extends": [
+          {
+            "type": "string",
+            "minLength": 0
+          }
+        ],
+        "required": true
+      },
+      "cvv": {
+        "extends": [
+          {
+            "type": "string",
+            "minLength": 0
+          }
+        ],
+        "required": true
+      }
+    },
+    "patternProperties": {},
+    "additionalProperties": {}
+  },
+  "else": {
+    "type": "object",
+    "properties": {
+      "walletId": {
+        "extends": [
+          {
+            "type": "string",
+            "minLength": 0
+          }
+        ],
+        "required": true
+      }
+    },
+    "patternProperties": {},
+    "additionalProperties": {}
+  },
+  "required": false
+}</pre>
+            </div>
+          </details>
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+        <details class="carbon-nested-details" style="margin-bottom: 4px; width: 100%;">
+          <summary style="cursor: pointer; color: #8A3FFC; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">if (Condition) [+ expand]</summary>
+          <div style="padding: 8px; border-left: 2px solid #8A3FFC; background: #F6F2FF; margin-top: 2px;">
+            <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:0.75rem; border:1px solid #E0E0E0; background:#FFF;"><thead style="background:#F4F4F4;"><tr><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Path</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Type</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Details</th></tr></thead><tbody><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>type</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: true, enum: ["card"]</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr></tbody></table>
+          </div>
+        </details>
+      
+        <details class="carbon-nested-details" style="margin-bottom: 4px; width: 100%;">
+          <summary style="cursor: pointer; color: #8A3FFC; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">then (Applies When True) [+ expand]</summary>
+          <div style="padding: 8px; border-left: 2px solid #8A3FFC; background: #F6F2FF; margin-top: 2px;">
+            <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:0.75rem; border:1px solid #E0E0E0; background:#FFF;"><thead style="background:#F4F4F4;"><tr><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Path</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Type</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Details</th></tr></thead><tbody><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>cardNumber</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: true, minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>cvv</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: true, minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr></tbody></table>
+          </div>
+        </details>
+      
+        <details class="carbon-nested-details" style="margin-bottom: 4px; width: 100%;">
+          <summary style="cursor: pointer; color: #8A3FFC; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">else (Applies When False) [+ expand]</summary>
+          <div style="padding: 8px; border-left: 2px solid #8A3FFC; background: #F6F2FF; margin-top: 2px;">
+            <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:0.75rem; border:1px solid #E0E0E0; background:#FFF;"><thead style="background:#F4F4F4;"><tr><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Path</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Type</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Details</th></tr></thead><tbody><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>walletId</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: true, minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr></tbody></table>
+          </div>
+        </details>
+      
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
+      </tr>
+    
+      <tr class="carbon-row" id="node-*" data-path="*">
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
+    
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

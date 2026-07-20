@@ -123,14 +123,14 @@
         </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">true</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">true</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-on" data-path="on">
@@ -145,125 +145,144 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <details class="carbon-nested-details" style="margin-bottom: 4px;">
-              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">typeVariants [+ expand]</summary>
-              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
-  {
-    "type": "string",
-    "minLength": 0
-  },
-  {
-    "type": "array",
-    "minItems": 0,
-    "uniqueItems": false,
-    "items": {}
-  },
-  {
-    "type": "object",
-    "properties": {
-      "push": {
-        "extends": [
-          {
-            "type": "object",
-            "properties": {
-              "branches": {
-                "extends": [
-                  {
-                    "type": "array",
-                    "minItems": 0,
-                    "uniqueItems": false,
-                    "items": {
-                      "type": "string",
-                      "minLength": 0
-                    }
-                  }
-                ],
-                "required": false
-              },
-              "tags": {
-                "extends": [
-                  {
-                    "type": "array",
-                    "minItems": 0,
-                    "uniqueItems": false,
-                    "items": {
-                      "type": "string",
-                      "minLength": 0
-                    }
-                  }
-                ],
-                "required": false
-              }
-            },
-            "patternProperties": {},
-            "additionalProperties": {}
-          }
-        ],
-        "required": false
-      },
-      "pull_request": {
-        "extends": [
-          {
-            "type": "object",
-            "properties": {
-              "branches": {
-                "extends": [
-                  {
-                    "type": "array",
-                    "minItems": 0,
-                    "uniqueItems": false,
-                    "items": {
-                      "type": "string",
-                      "minLength": 0
-                    }
-                  }
-                ],
-                "required": false
-              }
-            },
-            "patternProperties": {},
-            "additionalProperties": {}
-          }
-        ],
-        "required": false
-      },
-      "schedule": {
-        "extends": [
-          {
-            "type": "array",
-            "minItems": 0,
-            "uniqueItems": false,
-            "items": {
-              "type": "object",
-              "properties": {
-                "cron": {
-                  "extends": [
-                    {
-                      "type": "string",
-                      "minLength": 0
-                    }
-                  ],
-                  "required": false
-                }
-              },
-              "patternProperties": {},
-              "additionalProperties": {}
-            }
-          }
-        ],
-        "required": false
-      }
-    },
-    "patternProperties": {},
-    "additionalProperties": {}
-  }
-]</pre>
-            </details>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <details class="carbon-nested-details" style="margin-bottom: 4px; width: 100%;">
+          <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">type variants [3 branches] [+ expand]</summary>
+          <div style="padding: 8px; border-left: 2px solid #0F62FE; background: #FAF9FC; margin-top: 2px;">
+      
+          <div style="margin-bottom: 8px; border-bottom: 1px dashed #E0E0E0; padding-bottom: 8px;">
+            <strong style="font-size: 0.7rem; color: #525252; display: block; margin-bottom: 2px;">Variant 1:</strong>
+            <pre style="font-size:0.7rem; background:#F4F4F4; padding:4px; margin:0; border:1px solid #E0E0E0;">{
+  "type": "string",
+  "minLength": 0
+}</pre>
+          </div>
+        
+          <div style="margin-bottom: 8px; border-bottom: 1px dashed #E0E0E0; padding-bottom: 8px;">
+            <strong style="font-size: 0.7rem; color: #525252; display: block; margin-bottom: 2px;">Variant 2:</strong>
+            <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:0.75rem; border:1px solid #E0E0E0; background:#FFF;"><thead style="background:#F4F4F4;"><tr><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Path</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Type</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Details</th></tr></thead><tbody><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr></tbody></table>
+          </div>
+        
+          <div style="margin-bottom: 8px; border-bottom: 1px dashed #E0E0E0; padding-bottom: 8px;">
+            <strong style="font-size: 0.7rem; color: #525252; display: block; margin-bottom: 2px;">Variant 3:</strong>
+            <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:0.75rem; border:1px solid #E0E0E0; background:#FFF;"><thead style="background:#F4F4F4;"><tr><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Path</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Type</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Details</th></tr></thead><tbody><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>push</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">object</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>push.branches</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">array</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false, minItems: 0, uniqueItems: false</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>push.branches.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>push.tags</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">array</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false, minItems: 0, uniqueItems: false</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>push.tags.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>push.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>pull_request</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">object</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>pull_request.branches</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">array</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false, minItems: 0, uniqueItems: false</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>pull_request.branches.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>pull_request.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>schedule</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">array</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false, minItems: 0, uniqueItems: false</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>schedule.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">object</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>schedule.*.cron</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>required: false, minLength: 0</code>
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>schedule.*.*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">any</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        
+      </td>
+    </tr></tbody></table>
+          </div>
+        </div></details></div></td>
       </tr>
     
       <tr class="carbon-row" id="node-env" data-path="env">
@@ -278,10 +297,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-env.*" data-path="env.*">
@@ -296,10 +315,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs" data-path="jobs">
@@ -314,10 +333,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*" data-path="jobs.*">
@@ -332,14 +351,14 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <details class="carbon-nested-details" style="margin-bottom: 4px;">
-              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
-              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
+        <details class="carbon-nested-details" style="margin-bottom: 4px;">
+          <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+          <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "runs-on",
   "steps"
 ]</pre>
-            </details>
-          </div></td>
+        </details>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.name" data-path="jobs.*.name">
@@ -354,14 +373,14 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.runs-on" data-path="jobs.*.runs-on">
@@ -376,18 +395,18 @@
         </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">default:</span> <span class="t-v">"ubuntu-latest"</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">default:</span> <span class="t-v">"ubuntu-latest"</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.needs" data-path="jobs.*.needs">
@@ -402,29 +421,34 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <details class="carbon-nested-details" style="margin-bottom: 4px;">
-              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">typeVariants [+ expand]</summary>
-              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
-  {
-    "type": "string",
-    "minLength": 0
-  },
-  {
-    "type": "array",
-    "minItems": 0,
-    "uniqueItems": false,
-    "items": {
-      "type": "string",
-      "minLength": 0
-    }
-  }
-]</pre>
-            </details>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <details class="carbon-nested-details" style="margin-bottom: 4px; width: 100%;">
+          <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">type variants [2 branches] [+ expand]</summary>
+          <div style="padding: 8px; border-left: 2px solid #0F62FE; background: #FAF9FC; margin-top: 2px;">
+      
+          <div style="margin-bottom: 8px; border-bottom: 1px dashed #E0E0E0; padding-bottom: 8px;">
+            <strong style="font-size: 0.7rem; color: #525252; display: block; margin-bottom: 2px;">Variant 1:</strong>
+            <pre style="font-size:0.7rem; background:#F4F4F4; padding:4px; margin:0; border:1px solid #E0E0E0;">{
+  "type": "string",
+  "minLength": 0
+}</pre>
+          </div>
+        
+          <div style="margin-bottom: 8px; border-bottom: 1px dashed #E0E0E0; padding-bottom: 8px;">
+            <strong style="font-size: 0.7rem; color: #525252; display: block; margin-bottom: 2px;">Variant 2:</strong>
+            <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:0.75rem; border:1px solid #E0E0E0; background:#FFF;"><thead style="background:#F4F4F4;"><tr><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Path</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Type</th><th style="padding:4px; border:1px solid #E0E0E0; text-align:left;">Details</th></tr></thead><tbody><tr>
+      <td style="padding:4px; border:1px solid #E0E0E0;"><code>*</code></td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#0F62FE; font-weight:600;">string</td>
+      <td style="padding:4px; border:1px solid #E0E0E0; color:#525252;">
+        
+        <code>minLength: 0</code>
+      </td>
+    </tr></tbody></table>
+          </div>
+        </div></details></div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.env" data-path="jobs.*.env">
@@ -439,10 +463,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.env.*" data-path="jobs.*.env.*">
@@ -457,10 +481,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps" data-path="jobs.*.steps">
@@ -475,18 +499,18 @@
         </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minItems:</span> <span class="t-v">0</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minItems:</span> <span class="t-v">0</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">uniqueItems:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*" data-path="jobs.*.steps.*">
@@ -501,13 +525,13 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <details class="carbon-nested-details" style="margin-bottom: 4px;">
-              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
-              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
+        <details class="carbon-nested-details" style="margin-bottom: 4px;">
+          <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">required [+ expand]</summary>
+          <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   "run"
 ]</pre>
-            </details>
-          </div></td>
+        </details>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.name" data-path="jobs.*.steps.*.name">
@@ -522,14 +546,14 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.uses" data-path="jobs.*.steps.*.uses">
@@ -544,14 +568,14 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.with" data-path="jobs.*.steps.*.with">
@@ -566,10 +590,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.with.*" data-path="jobs.*.steps.*.with.*">
@@ -584,10 +608,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.run" data-path="jobs.*.steps.*.run">
@@ -602,14 +626,14 @@
         </td>
         <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.env" data-path="jobs.*.steps.*.env">
@@ -624,10 +648,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.env.*" data-path="jobs.*.steps.*.env.*">
@@ -642,10 +666,10 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">minLength:</span> <span class="t-v">0</span>
-            </div>
-          </div></td>
+        <div class="carbon-tag">
+          <span class="t-k">minLength:</span> <span class="t-v">0</span>
+        </div>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.continue-on-error" data-path="jobs.*.steps.*.continue-on-error">
@@ -660,22 +684,22 @@
         </td>
         <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
         <td class="carbon-cell-validation"><div class="carbon-constraints">
-            <div class="carbon-tag">
-              <span class="t-k">required:</span> <span class="t-v">false</span>
-            </div>
-          
-            <div class="carbon-tag">
-              <span class="t-k">default:</span> <span class="t-v">false</span>
-            </div>
-          
-            <details class="carbon-nested-details" style="margin-bottom: 4px;">
-              <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">enum [+ expand]</summary>
-              <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">default:</span> <span class="t-v">false</span>
+        </div>
+      
+        <details class="carbon-nested-details" style="margin-bottom: 4px;">
+          <summary style="cursor: pointer; color: #0F62FE; font-size: 0.75rem; font-weight: 600; outline: none; list-style: none;">enum [+ expand]</summary>
+          <pre style="font-family: monospace; font-size: 0.7rem; background: #F4F4F4; border-left: 2px solid #0F62FE; padding: 5px; color: #161616; overflow-x: auto; margin-top: 2px;">[
   false,
   true
 ]</pre>
-            </details>
-          </div></td>
+        </details>
+      </div></td>
       </tr>
     
       <tr class="carbon-row" id="node-jobs.*.steps.*.*" data-path="jobs.*.steps.*.*">

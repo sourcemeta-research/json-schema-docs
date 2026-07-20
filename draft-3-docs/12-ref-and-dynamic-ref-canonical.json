@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Reference And Dynamic Reference Test Fixture",
+  "description": "Synthetic 2020-12-style schema (not Draft 3, not real canonicalizer output) used only to exercise $ref (external reference) and $dynamicRef/$dynamicAnchor rendering in the recursive Carbon layouts.",
+  "$dynamicAnchor": "node",
+  "type": "object",
+  "properties": {
+    "billingAddress": {
+      "type": "object",
+      "description": "Billing address, defined in an external shared schema.",
+      "$ref": "https://example.com/schemas/common/address.json",
+      "required": true
+    },
+    "shippingAddress": {
+      "type": "object",
+      "description": "Optional shipping address, same external shared schema as billing.",
+      "$ref": "https://example.com/schemas/common/address.json",
+      "required": false
+    },
+    "extensionPoint": {
+      "type": "object",
+      "description": "Allows a derived schema to plug in additional validation via a dynamic reference back to this schema's own dynamic anchor.",
+      "$dynamicRef": "#node",
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

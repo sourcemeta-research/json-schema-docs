@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "Complex Constructs Test Fixture",
+  "description": "Synthetic schema used only to exercise the nested-table rendering (oneOf/anyOf/allOf/not) and custom annotation-keyword tagging (x- prefixed keys) in the recursive Carbon layouts. Not a real-world Draft 3 canonicalizer output.",
+  "type": "object",
+  "properties": {
+    "rolloutStrategy": {
+      "type": "object",
+      "description": "Defines how a feature is rolled out to users. Exercises oneOf branching.",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "percentage": {
+              "extends": [ { "type": "number", "minimum": 0, "maximum": 100 } ],
+              "required": true
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "userIds": {
+              "extends": [ { "type": "array", "items": { "type": "string", "minLength": 0 } } ],
+              "required": true
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      ],
+      "x-annotation-owner": "platform-team",
+      "required": true
+    },
+    "environment": {
+      "type": "string",
+      "description": "Target deploy environment. Exercises anyOf branching.",
+      "anyOf": [
+        { "type": "string", "enum": [ "production" ] },
+        { "type": "string", "enum": [ "staging", "canary" ] }
+      ],
+      "x-since-version": "2.4.0",
+      "required": false
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Combined validation rules. Exercises allOf and not.",
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "minVersion": {
+              "extends": [ { "type": "string", "minLength": 0 } ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        },
+        {
+          "type": "object",
+          "properties": {
+            "maxVersion": {
+              "extends": [ { "type": "string", "minLength": 0 } ],
+              "required": false
+            }
+          },
+          "patternProperties": {},
+          "additionalProperties": {}
+        }
+      ],
+      "not": {
+        "type": "object",
+        "properties": {
+          "deprecated": {
+            "extends": [ { "type": "boolean" } ],
+            "required": false
+          }
+        },
+        "patternProperties": {},
+        "additionalProperties": {}
+      },
+      "x-annotation-owner": "platform-team",
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}

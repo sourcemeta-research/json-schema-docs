@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reference And Dynamic Reference Test Fixture - Carbon Dark</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #161616;
+      color: #F4F4F4;
+      font-family: 'IBM Plex Sans', sans-serif;
+      padding: 2rem;
+    }
+
+    header { margin-bottom: 2rem; border-bottom: 1px solid #393939; padding-bottom: 1rem; }
+    header h1 { font-size: 1.5rem; font-weight: 300; color: #F4F4F4; }
+    header .desc { font-size: 0.875rem; color: #C6C6C6; margin-top: 0.25rem; }
+
+    .carbon-table-container {
+      border: 1px solid #393939;
+      background-color: #262626;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .carbon-toolbar {
+      height: 48px;
+      background-color: #161616;
+      border-bottom: 1px solid #393939;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+    }
+    .search-input {
+      border: none;
+      background-color: #262626;
+      color: #F4F4F4;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      width: 280px;
+      outline: none;
+    }
+    .search-input:focus { border-bottom: 2px solid #78A9FF; }
+
+    .bx--data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #161616;
+    }
+    .bx--data-table th {
+      background-color: #262626;
+      border-bottom: 1px solid #393939;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #F4F4F4;
+    }
+    .bx--data-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #393939;
+      font-size: 0.85rem;
+      vertical-align: top;
+      color: #C6C6C6;
+    }
+    .carbon-row:hover { background-color: #353535; }
+
+    .carbon-cell-path { font-weight: 600; }
+
+    code { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background-color: #262626; color: #78A9FF; padding: 0.15rem 0.35rem; }
+    .type-mono { font-family: 'IBM Plex Mono', monospace; color: #78A9FF; font-weight: 600; }
+
+    .req-alert { color: #FF8389; font-size: 0.75rem; }
+    .opt-alert { color: #A8A8A8; font-size: 0.75rem; }
+
+    .carbon-constraints { display: flex; flex-direction: column; gap: 0.25rem; }
+    .carbon-tag {
+      background-color: #1C243A;
+      border: 1px solid #354A74;
+      color: #78A9FF;
+      padding: 0.15rem 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .t-k { color: #A8A8A8; }
+    .t-v { font-weight: 600; }  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Reference And Dynamic Reference Test Fixture Specification</h1>
+    <p class="desc">Synthetic 2020-12-style schema (not Draft 3, not real canonicalizer output) used only to exercise $ref (external reference) and $dynamicRef/$dynamicAnchor rendering in the recursive Carbon layouts.</p>
+  </header>
+
+  <div class="carbon-table-container">
+    <div class="carbon-toolbar">
+      <span style="font-family: monospace; font-size:0.75rem; color:#525252;">Data Grid Spec</span>
+    </div>
+
+    <table class="bx--data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Validation Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr class="carbon-row" id="node-billingAddress" data-path="billingAddress">
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">billingAddress</code>
+          
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">Billing address, defined in an external shared schema.</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">{
+  "$ref": "https://example.com/schemas/common/address.json",
+  "required": true
+}</pre>
+            </div>
+          </details>
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><strong class="req-alert">REQUIRED</strong></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+        <div class="carbon-tag" style="background-color: #FFF1E0; border-color: #FFD9A8; color: #8A4B00;">
+          <span class="t-k">$ref:</span> <span class="t-v" style="font-weight: 600;"><a href="https://example.com/schemas/common/address.json" style="color:#8A4B00; text-decoration: underline;">https://example.com/schemas/common/address.json</a></span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">true</span>
+        </div>
+      </div></td>
+      </tr>
+    
+      <tr class="carbon-row" id="node-shippingAddress" data-path="shippingAddress">
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">shippingAddress</code>
+          
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">Optional shipping address, same external shared schema as billing.</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">{
+  "$ref": "https://example.com/schemas/common/address.json",
+  "required": false
+}</pre>
+            </div>
+          </details>
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+        <div class="carbon-tag" style="background-color: #FFF1E0; border-color: #FFD9A8; color: #8A4B00;">
+          <span class="t-k">$ref:</span> <span class="t-v" style="font-weight: 600;"><a href="https://example.com/schemas/common/address.json" style="color:#8A4B00; text-decoration: underline;">https://example.com/schemas/common/address.json</a></span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
+      </tr>
+    
+      <tr class="carbon-row" id="node-extensionPoint" data-path="extensionPoint">
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">extensionPoint</code>
+          
+          <details class="carbon-description-details" style="margin-top: 4px; font-size: 0.8rem; color: #525252;">
+            <summary style="cursor: pointer; outline: none; color: #0F62FE; font-weight: 500; list-style: none;">Description &amp; Details</summary>
+            <div style="padding: 8px; margin-top: 4px; background: #F4F4F4; border-left: 2px solid #0F62FE;">
+              <p style="margin-bottom: 8px; line-height: 1.4;">Allows a derived schema to plug in additional validation via a dynamic reference back to this schema's own dynamic anchor.</p>
+              <pre style="font-size: 0.7rem; font-family: monospace; overflow-x: auto; padding: 4px; background: #EAEAEA;">{
+  "$dynamicRef": "#node",
+  "required": false
+}</pre>
+            </div>
+          </details>
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            object
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><div class="carbon-constraints">
+        <div class="carbon-tag" style="background-color: #E8DAFF; border-color: #D4BBFF; color: #6929C4;">
+          <span class="t-k">$dynamicRef:</span> <span class="t-v" style="font-weight: 600;">#node</span>
+        </div>
+      
+        <div class="carbon-tag">
+          <span class="t-k">required:</span> <span class="t-v">false</span>
+        </div>
+      </div></td>
+      </tr>
+    
+      <tr class="carbon-row" id="node-*" data-path="*">
+        <td class="carbon-cell-path">
+          <code style="font-weight: 700; color: #161616; font-size: 0.8rem;">*</code>
+          
+        </td>
+        <td class="carbon-cell-type">
+          <span class="type-mono">
+            any
+          </span>
+        </td>
+        <td class="carbon-cell-req"><span class="opt-alert">OPTIONAL</span></td>
+        <td class="carbon-cell-validation"><span style="color:#8d8d8d;">None</span></td>
+      </tr>
+    
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

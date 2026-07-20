@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Conditional (if/then/else) Test Fixture",
+  "description": "Synthetic 2020-12-style schema (not Draft 3, not real canonicalizer output) used only to exercise if/then/else conditional rendering in the recursive Carbon layouts.",
+  "type": "object",
+  "properties": {
+    "paymentMethod": {
+      "type": "object",
+      "description": "Payment method configuration. Required fields differ depending on the chosen type.",
+      "if": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "extends": [ { "type": "string", "enum": [ "card" ] } ],
+            "required": true
+          }
+        },
+        "patternProperties": {},
+        "additionalProperties": {}
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "cardNumber": {
+            "extends": [ { "type": "string", "minLength": 0 } ],
+            "required": true
+          },
+          "cvv": {
+            "extends": [ { "type": "string", "minLength": 0 } ],
+            "required": true
+          }
+        },
+        "patternProperties": {},
+        "additionalProperties": {}
+      },
+      "else": {
+        "type": "object",
+        "properties": {
+          "walletId": {
+            "extends": [ { "type": "string", "minLength": 0 } ],
+            "required": true
+          }
+        },
+        "patternProperties": {},
+        "additionalProperties": {}
+      },
+      "required": false
+    }
+  },
+  "patternProperties": {},
+  "additionalProperties": {}
+}
