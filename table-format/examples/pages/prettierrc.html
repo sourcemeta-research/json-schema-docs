@@ -1,0 +1,289 @@
+<!doctype html><meta charset="utf-8"><title>Schema for .prettierrc</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>Schema for .prettierrc</h1>
+
+<div class="counts">
+    
+    <span class="c opt"><b>32</b> you can leave out</span>
+    <span class="c cond"><b>1</b> that only apply in certain cases</span>
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-optionsDefinition">
+      <h4>optionsDefinition</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">arrowParens</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means always</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Include parentheses around a sole arrow function parameter.</td>
+  </tr><tr>
+    <td><span class="nm">bracketSameLine</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Put &gt; of opening tags on the last line instead of on a new line.</td>
+  </tr><tr>
+    <td><span class="nm">bracketSpacing</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Print spaces between brackets.</td>
+  </tr><tr>
+    <td><span class="nm">checkIgnorePragma</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Check whether the file's first docblock comment contains '@noprettier' or '@noformat' to determine if it should be formatted.</td>
+  </tr><tr>
+    <td><span class="nm">cursorOffset</span></td>
+    <td><span class="ty">a whole number</span><div class="notes"><span>left out means -1</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Print (to stderr) where a cursor at the given position would move to after formatting.</td>
+  </tr><tr>
+    <td><span class="nm">embeddedLanguageFormatting</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means auto</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Control how Prettier formats quoted code embedded in the file.</td>
+  </tr><tr>
+    <td><span class="nm">endOfLine</span></td>
+    <td><span class="ty">one of 4 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means lf</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Which end of line characters to apply.</td>
+  </tr><tr>
+    <td><span class="nm">experimentalOperatorPosition</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means end</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Where to print operators when binary expressions wrap lines.</td>
+  </tr><tr>
+    <td><span class="nm">experimentalTernaries</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use curious ternaries, with the question mark after the condition.</td>
+  </tr><tr>
+    <td><span class="nm">filepath</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify the input filepath. This will be used to do parser inference.</td>
+  </tr><tr>
+    <td><span class="nm">htmlWhitespaceSensitivity</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means css</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">How to handle whitespaces in HTML.</td>
+  </tr><tr>
+    <td><span class="nm">insertPragma</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Insert @format pragma into file's first docblock comment.</td>
+  </tr><tr>
+    <td><span class="nm">jsxSingleQuote</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use single quotes in JSX.</td>
+  </tr><tr>
+    <td><span class="nm">objectWrap</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means preserve</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">How to wrap object literals.</td>
+  </tr><tr>
+    <td><span class="nm">parser</span></td>
+    <td><span class="ty">one of 26 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">text</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Which parser to use.</td>
+  </tr><tr>
+    <td><span class="nm">plugins</span></td>
+    <td><span class="ty">a list, each one a text</span><div class="notes"><span>left out means an empty list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Add a plugin. Multiple plugins can be passed as separate `--plugin`s.</td>
+  </tr><tr>
+    <td><span class="nm">printWidth</span></td>
+    <td><span class="ty">a whole number</span><div class="notes"><span>left out means 80</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The line length where Prettier will try wrap.</td>
+  </tr><tr>
+    <td><span class="nm">proseWrap</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means preserve</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">How to wrap prose.</td>
+  </tr><tr>
+    <td><span class="nm">quoteProps</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means as-needed</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Change when properties in objects are quoted.</td>
+  </tr><tr>
+    <td><span class="nm">rangeEnd</span></td>
+    <td><span class="ty">a whole number</span><div class="notes"><span>left out means nothing</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Format code ending at a given character offset (exclusive).
+The range will extend forwards to the end of the selected statement.</td>
+  </tr><tr>
+    <td><span class="nm">rangeStart</span></td>
+    <td><span class="ty">a whole number</span><div class="notes"><span>left out means 0</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Format code starting at a given character offset.
+The range will extend backwards to the start of the first line containing the selected statement.</td>
+  </tr><tr>
+    <td><span class="nm">requirePragma</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Require either '@prettier' or '@format' to be present in the file's first docblock comment in order for it to be formatted.</td>
+  </tr><tr>
+    <td><span class="nm">semi</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Print semicolons.</td>
+  </tr><tr>
+    <td><span class="nm">singleAttributePerLine</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Enforce single attribute per line in HTML, Vue and JSX.</td>
+  </tr><tr>
+    <td><span class="nm">singleQuote</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use single quotes instead of double quotes.</td>
+  </tr><tr>
+    <td><span class="nm">tabWidth</span></td>
+    <td><span class="ty">a whole number</span><div class="notes"><span>left out means 2</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Number of spaces per indentation level.</td>
+  </tr><tr>
+    <td><span class="nm">trailingComma</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span></div><div class="notes"><span>left out means all</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Print trailing commas wherever possible when multi-line.</td>
+  </tr><tr>
+    <td><span class="nm">useTabs</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indent with tabs instead of spaces.</td>
+  </tr><tr>
+    <td><span class="nm">vueIndentScriptAndStyle</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indent script and style tags in Vue files.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-overridesDefinition">
+      <h4>overridesDefinition</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">overrides</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Provide a list of patterns to override prettier configuration.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of overrides</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">files</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in overrides</span></td>
+    <td class="de">Include these files in this override.</td>
+  </tr><tr>
+    <td><span class="nm">excludeFiles</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Exclude these files from this override.</td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>and follows <a class="link" href="#shape-definitions-optionsDefinition">an optionsDefinition</a> as well</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The options to apply for this override.</td>
+  </tr></table></details></td></tr></table>
+    </div>
+  </div></section>
+
+</div>

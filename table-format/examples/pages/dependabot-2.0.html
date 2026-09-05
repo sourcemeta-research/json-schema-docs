@@ -1,0 +1,1303 @@
+<!doctype html><meta charset="utf-8"><title>GitHub Dependabot v2 config</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>GitHub Dependabot v2 config</h1>
+
+<div class="counts">
+    <span class="c req"><b>7</b> you must always fill in</span>
+    <span class="c opt"><b>117</b> you can leave out</span>
+    <span class="c cond"><b>14</b> that only apply in certain cases</span>
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    <p class="snote">Nothing else may be added at the top level.</p>
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">2</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">Dependabot configuration files require this key, and its value must be 2</td>
+  </tr><tr>
+    <td><span class="nm">enable-beta-ecosystems</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Enable ecosystems that have beta-level support</td>
+  </tr><tr>
+    <td><span class="nm">updates</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-update">an update</a></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">registries</span></td>
+    <td><a class="ty link" href="#shape-definitions-registry">a registry</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">multi-ecosystem-groups</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-multi-ecosystem-group">a multi-ecosystem-group</a></span><div class="notes"><span>at least 1 field</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Define groups that span multiple package ecosystems, allowing consolidated pull requests across different ecosystems</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>multi-ecosystem-groups</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-multi-ecosystem-group">a multi-ecosystem-group</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when enable-beta-ecosystems is &quot;true&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>otherwise these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">updates</span></td>
+    <td><span class="ty">a list, each one a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of updates</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">package-ecosystem</span></td>
+    <td><a class="ty link" href="#shape-definitions-package-ecosystem-values">a package-ecosystem-values</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr></table></section><section><h2>All 45 shapes</h2>
+    <p class="snote">Every shape this document describes. The ones used most often come first, because everything else is built on them. Click any name to jump to its rules.</p>
+    <div class="ix"><div class="ixgroup"><div class="ixh">Shapes</div><ul><li><a href="#shape-definitions-timezone">timezone</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-dependency-type">dependency-type</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-update-types">update-types</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-package-ecosystem-values">package-ecosystem-values</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-schedule-day">schedule-day</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-schedule-interval">schedule-interval</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-insecure-external-code-execution">insecure-external-code-execution</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-versioning-strategy">versioning-strategy</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-registry">registry</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-multi-ecosystem-group">multi-ecosystem-group</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-allow-items-properties-dependency-name">dependency-name</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-commit-message-properties-prefix">prefix</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-commit-message-properties-prefix-development">prefix-development</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-commit-message-properties-include">include</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-ignore-items-properties-dependency-name">dependency-name</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-ignore-items-properties-update-types">update-types</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-ignore-items-properties-versions">versions</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-multi-ecosystem-group-properties-commit-message-properties-prefix">prefix</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-multi-ecosystem-group-properties-commit-message-properties-prefix-development">prefix-development</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-multi-ecosystem-group-properties-commit-message-properties-include">include</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update">update</a> <span class="ixn">used 1</span></li></ul></div><div class="ixgroup"><div class="ixh">update</div><ul><li><a href="#shape-definitions-update-properties-directories">directories</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-directory">directory</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-schedule">schedule</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-update-properties-allow">allow</a></li><li><a href="#shape-definitions-update-properties-assignees">assignees</a></li><li><a href="#shape-definitions-update-properties-commit-message">commit-message</a></li><li><a href="#shape-definitions-update-properties-cooldown">cooldown</a></li><li><a href="#shape-definitions-update-properties-exclude-paths">exclude-paths</a></li><li><a href="#shape-definitions-update-properties-groups">groups</a></li><li><a href="#shape-definitions-update-properties-ignore">ignore</a></li><li><a href="#shape-definitions-update-properties-insecure-external-code-execution">insecure-external-code-execution</a></li><li><a href="#shape-definitions-update-properties-labels">labels</a></li><li><a href="#shape-definitions-update-properties-milestone">milestone</a></li><li><a href="#shape-definitions-update-properties-name">name</a></li><li><a href="#shape-definitions-update-properties-open-pull-requests-limit">open-pull-requests-limit</a></li><li><a href="#shape-definitions-update-properties-package-ecosystem">package-ecosystem</a></li><li><a href="#shape-definitions-update-properties-pull-request-branch-name">pull-request-branch-name</a></li><li><a href="#shape-definitions-update-properties-rebase-strategy">rebase-strategy</a></li><li><a href="#shape-definitions-update-properties-registries">registries</a></li><li><a href="#shape-definitions-update-properties-target-branch">target-branch</a></li><li><a href="#shape-definitions-update-properties-vendor">vendor</a></li><li><a href="#shape-definitions-update-properties-versioning-strategy">versioning-strategy</a></li><li><a href="#shape-definitions-update-properties-patterns">patterns</a></li><li><a href="#shape-definitions-update-properties-multi-ecosystem-group">multi-ecosystem-group</a></li></ul></div></div></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    <h3>Shapes</h3>
+    <div class="shapeblock" id="shape-definitions-timezone">
+      <h4>timezone</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><details class="pick"><summary>one of 597</summary><span class="chips"><span class="chip">Africa/Abidjan</span><span class="chip">Africa/Accra</span><span class="chip">Africa/Addis_Ababa</span><span class="chip">Africa/Algiers</span><span class="chip">Africa/Asmara</span><span class="chip">Africa/Asmera</span><span class="chip">Africa/Bamako</span><span class="chip">Africa/Bangui</span><span class="chip">Africa/Banjul</span><span class="chip">Africa/Bissau</span><span class="chip">Africa/Blantyre</span><span class="chip">Africa/Brazzaville</span><span class="chip">Africa/Bujumbura</span><span class="chip">Africa/Cairo</span><span class="chip">Africa/Casablanca</span><span class="chip">Africa/Ceuta</span><span class="chip">Africa/Conakry</span><span class="chip">Africa/Dakar</span><span class="chip">Africa/Dar_es_Salaam</span><span class="chip">Africa/Djibouti</span><span class="chip">Africa/Douala</span><span class="chip">Africa/El_Aaiun</span><span class="chip">Africa/Freetown</span><span class="chip">Africa/Gaborone</span><span class="chip">Africa/Harare</span><span class="chip">Africa/Johannesburg</span><span class="chip">Africa/Juba</span><span class="chip">Africa/Kampala</span><span class="chip">Africa/Khartoum</span><span class="chip">Africa/Kigali</span><span class="chip">Africa/Kinshasa</span><span class="chip">Africa/Lagos</span><span class="chip">Africa/Libreville</span><span class="chip">Africa/Lome</span><span class="chip">Africa/Luanda</span><span class="chip">Africa/Lubumbashi</span><span class="chip">Africa/Lusaka</span><span class="chip">Africa/Malabo</span><span class="chip">Africa/Maputo</span><span class="chip">Africa/Maseru</span><span class="chip">Africa/Mbabane</span><span class="chip">Africa/Mogadishu</span><span class="chip">Africa/Monrovia</span><span class="chip">Africa/Nairobi</span><span class="chip">Africa/Ndjamena</span><span class="chip">Africa/Niamey</span><span class="chip">Africa/Nouakchott</span><span class="chip">Africa/Ouagadougou</span><span class="chip">Africa/Porto-Novo</span><span class="chip">Africa/Sao_Tome</span><span class="chip">Africa/Timbuktu</span><span class="chip">Africa/Tripoli</span><span class="chip">Africa/Tunis</span><span class="chip">Africa/Windhoek</span><span class="chip">America/Adak</span><span class="chip">America/Anchorage</span><span class="chip">America/Anguilla</span><span class="chip">America/Antigua</span><span class="chip">America/Araguaina</span><span class="chip">America/Argentina/Buenos_Aires</span><span class="chip">America/Argentina/Catamarca</span><span class="chip">America/Argentina/ComodRivadavia</span><span class="chip">America/Argentina/Cordoba</span><span class="chip">America/Argentina/Jujuy</span><span class="chip">America/Argentina/La_Rioja</span><span class="chip">America/Argentina/Mendoza</span><span class="chip">America/Argentina/Rio_Gallegos</span><span class="chip">America/Argentina/Salta</span><span class="chip">America/Argentina/San_Juan</span><span class="chip">America/Argentina/San_Luis</span><span class="chip">America/Argentina/Tucuman</span><span class="chip">America/Argentina/Ushuaia</span><span class="chip">America/Aruba</span><span class="chip">America/Asuncion</span><span class="chip">America/Atikokan</span><span class="chip">America/Atka</span><span class="chip">America/Bahia</span><span class="chip">America/Bahia_Banderas</span><span class="chip">America/Barbados</span><span class="chip">America/Belem</span><span class="chip">America/Belize</span><span class="chip">America/Blanc-Sablon</span><span class="chip">America/Boa_Vista</span><span class="chip">America/Bogota</span><span class="chip">America/Boise</span><span class="chip">America/Buenos_Aires</span><span class="chip">America/Cambridge_Bay</span><span class="chip">America/Campo_Grande</span><span class="chip">America/Cancun</span><span class="chip">America/Caracas</span><span class="chip">America/Catamarca</span><span class="chip">America/Cayenne</span><span class="chip">America/Cayman</span><span class="chip">America/Chicago</span><span class="chip">America/Chihuahua</span><span class="chip">America/Ciudad_Juarez</span><span class="chip">America/Coral_Harbour</span><span class="chip">America/Cordoba</span><span class="chip">America/Costa_Rica</span><span class="chip">America/Coyhaique</span><span class="chip">America/Creston</span><span class="chip">America/Cuiaba</span><span class="chip">America/Curacao</span><span class="chip">America/Danmarkshavn</span><span class="chip">America/Dawson</span><span class="chip">America/Dawson_Creek</span><span class="chip">America/Denver</span><span class="chip">America/Detroit</span><span class="chip">America/Dominica</span><span class="chip">America/Edmonton</span><span class="chip">America/Eirunepe</span><span class="chip">America/El_Salvador</span><span class="chip">America/Ensenada</span><span class="chip">America/Fort_Nelson</span><span class="chip">America/Fort_Wayne</span><span class="chip">America/Fortaleza</span><span class="chip">America/Glace_Bay</span><span class="chip">America/Godthab</span><span class="chip">America/Goose_Bay</span><span class="chip">America/Grand_Turk</span><span class="chip">America/Grenada</span><span class="chip">America/Guadeloupe</span><span class="chip">America/Guatemala</span><span class="chip">America/Guayaquil</span><span class="chip">America/Guyana</span><span class="chip">America/Halifax</span><span class="chip">America/Havana</span><span class="chip">America/Hermosillo</span><span class="chip">America/Indiana/Indianapolis</span><span class="chip">America/Indiana/Knox</span><span class="chip">America/Indiana/Marengo</span><span class="chip">America/Indiana/Petersburg</span><span class="chip">America/Indiana/Tell_City</span><span class="chip">America/Indiana/Vevay</span><span class="chip">America/Indiana/Vincennes</span><span class="chip">America/Indiana/Winamac</span><span class="chip">America/Indianapolis</span><span class="chip">America/Inuvik</span><span class="chip">America/Iqaluit</span><span class="chip">America/Jamaica</span><span class="chip">America/Jujuy</span><span class="chip">America/Juneau</span><span class="chip">America/Kentucky/Louisville</span><span class="chip">America/Kentucky/Monticello</span><span class="chip">America/Knox_IN</span><span class="chip">America/Kralendijk</span><span class="chip">America/La_Paz</span><span class="chip">America/Lima</span><span class="chip">America/Los_Angeles</span><span class="chip">America/Louisville</span><span class="chip">America/Lower_Princes</span><span class="chip">America/Maceio</span><span class="chip">America/Managua</span><span class="chip">America/Manaus</span><span class="chip">America/Marigot</span><span class="chip">America/Martinique</span><span class="chip">America/Matamoros</span><span class="chip">America/Mazatlan</span><span class="chip">America/Mendoza</span><span class="chip">America/Menominee</span><span class="chip">America/Merida</span><span class="chip">America/Metlakatla</span><span class="chip">America/Mexico_City</span><span class="chip">America/Miquelon</span><span class="chip">America/Moncton</span><span class="chip">America/Monterrey</span><span class="chip">America/Montevideo</span><span class="chip">America/Montreal</span><span class="chip">America/Montserrat</span><span class="chip">America/Nassau</span><span class="chip">America/New_York</span><span class="chip">America/Nipigon</span><span class="chip">America/Nome</span><span class="chip">America/Noronha</span><span class="chip">America/North_Dakota/Beulah</span><span class="chip">America/North_Dakota/Center</span><span class="chip">America/North_Dakota/New_Salem</span><span class="chip">America/Nuuk</span><span class="chip">America/Ojinaga</span><span class="chip">America/Panama</span><span class="chip">America/Pangnirtung</span><span class="chip">America/Paramaribo</span><span class="chip">America/Phoenix</span><span class="chip">America/Port-au-Prince</span><span class="chip">America/Port_of_Spain</span><span class="chip">America/Porto_Acre</span><span class="chip">America/Porto_Velho</span><span class="chip">America/Puerto_Rico</span><span class="chip">America/Punta_Arenas</span><span class="chip">America/Rainy_River</span><span class="chip">America/Rankin_Inlet</span><span class="chip">America/Recife</span><span class="chip">America/Regina</span><span class="chip">America/Resolute</span><span class="chip">America/Rio_Branco</span><span class="chip">America/Rosario</span><span class="chip">America/Santa_Isabel</span><span class="chip">America/Santarem</span><span class="chip">America/Santiago</span><span class="chip">America/Santo_Domingo</span><span class="chip">America/Sao_Paulo</span><span class="chip">America/Scoresbysund</span><span class="chip">America/Shiprock</span><span class="chip">America/Sitka</span><span class="chip">America/St_Barthelemy</span><span class="chip">America/St_Johns</span><span class="chip">America/St_Kitts</span><span class="chip">America/St_Lucia</span><span class="chip">America/St_Thomas</span><span class="chip">America/St_Vincent</span><span class="chip">America/Swift_Current</span><span class="chip">America/Tegucigalpa</span><span class="chip">America/Thule</span><span class="chip">America/Thunder_Bay</span><span class="chip">America/Tijuana</span><span class="chip">America/Toronto</span><span class="chip">America/Tortola</span><span class="chip">America/Vancouver</span><span class="chip">America/Virgin</span><span class="chip">America/Whitehorse</span><span class="chip">America/Winnipeg</span><span class="chip">America/Yakutat</span><span class="chip">America/Yellowknife</span><span class="chip">Antarctica/Casey</span><span class="chip">Antarctica/Davis</span><span class="chip">Antarctica/DumontDUrville</span><span class="chip">Antarctica/Macquarie</span><span class="chip">Antarctica/Mawson</span><span class="chip">Antarctica/McMurdo</span><span class="chip">Antarctica/Palmer</span><span class="chip">Antarctica/Rothera</span><span class="chip">Antarctica/South_Pole</span><span class="chip">Antarctica/Syowa</span><span class="chip">Antarctica/Troll</span><span class="chip">Antarctica/Vostok</span><span class="chip">Arctic/Longyearbyen</span><span class="chip">Asia/Aden</span><span class="chip">Asia/Almaty</span><span class="chip">Asia/Amman</span><span class="chip">Asia/Anadyr</span><span class="chip">Asia/Aqtau</span><span class="chip">Asia/Aqtobe</span><span class="chip">Asia/Ashgabat</span><span class="chip">Asia/Ashkhabad</span><span class="chip">Asia/Atyrau</span><span class="chip">Asia/Baghdad</span><span class="chip">Asia/Bahrain</span><span class="chip">Asia/Baku</span><span class="chip">Asia/Bangkok</span><span class="chip">Asia/Barnaul</span><span class="chip">Asia/Beirut</span><span class="chip">Asia/Bishkek</span><span class="chip">Asia/Brunei</span><span class="chip">Asia/Calcutta</span><span class="chip">Asia/Chita</span><span class="chip">Asia/Choibalsan</span><span class="chip">Asia/Chongqing</span><span class="chip">Asia/Chungking</span><span class="chip">Asia/Colombo</span><span class="chip">Asia/Dacca</span><span class="chip">Asia/Damascus</span><span class="chip">Asia/Dhaka</span><span class="chip">Asia/Dili</span><span class="chip">Asia/Dubai</span><span class="chip">Asia/Dushanbe</span><span class="chip">Asia/Famagusta</span><span class="chip">Asia/Gaza</span><span class="chip">Asia/Harbin</span><span class="chip">Asia/Hebron</span><span class="chip">Asia/Ho_Chi_Minh</span><span class="chip">Asia/Hong_Kong</span><span class="chip">Asia/Hovd</span><span class="chip">Asia/Irkutsk</span><span class="chip">Asia/Istanbul</span><span class="chip">Asia/Jakarta</span><span class="chip">Asia/Jayapura</span><span class="chip">Asia/Jerusalem</span><span class="chip">Asia/Kabul</span><span class="chip">Asia/Kamchatka</span><span class="chip">Asia/Karachi</span><span class="chip">Asia/Kashgar</span><span class="chip">Asia/Kathmandu</span><span class="chip">Asia/Katmandu</span><span class="chip">Asia/Khandyga</span><span class="chip">Asia/Kolkata</span><span class="chip">Asia/Krasnoyarsk</span><span class="chip">Asia/Kuala_Lumpur</span><span class="chip">Asia/Kuching</span><span class="chip">Asia/Kuwait</span><span class="chip">Asia/Macao</span><span class="chip">Asia/Macau</span><span class="chip">Asia/Magadan</span><span class="chip">Asia/Makassar</span><span class="chip">Asia/Manila</span><span class="chip">Asia/Muscat</span><span class="chip">Asia/Nicosia</span><span class="chip">Asia/Novokuznetsk</span><span class="chip">Asia/Novosibirsk</span><span class="chip">Asia/Omsk</span><span class="chip">Asia/Oral</span><span class="chip">Asia/Phnom_Penh</span><span class="chip">Asia/Pontianak</span><span class="chip">Asia/Pyongyang</span><span class="chip">Asia/Qatar</span><span class="chip">Asia/Qostanay</span><span class="chip">Asia/Qyzylorda</span><span class="chip">Asia/Rangoon</span><span class="chip">Asia/Riyadh</span><span class="chip">Asia/Saigon</span><span class="chip">Asia/Sakhalin</span><span class="chip">Asia/Samarkand</span><span class="chip">Asia/Seoul</span><span class="chip">Asia/Shanghai</span><span class="chip">Asia/Singapore</span><span class="chip">Asia/Srednekolymsk</span><span class="chip">Asia/Taipei</span><span class="chip">Asia/Tashkent</span><span class="chip">Asia/Tbilisi</span><span class="chip">Asia/Tehran</span><span class="chip">Asia/Tel_Aviv</span><span class="chip">Asia/Thimbu</span><span class="chip">Asia/Thimphu</span><span class="chip">Asia/Tokyo</span><span class="chip">Asia/Tomsk</span><span class="chip">Asia/Ujung_Pandang</span><span class="chip">Asia/Ulaanbaatar</span><span class="chip">Asia/Ulan_Bator</span><span class="chip">Asia/Urumqi</span><span class="chip">Asia/Ust-Nera</span><span class="chip">Asia/Vientiane</span><span class="chip">Asia/Vladivostok</span><span class="chip">Asia/Yakutsk</span><span class="chip">Asia/Yangon</span><span class="chip">Asia/Yekaterinburg</span><span class="chip">Asia/Yerevan</span><span class="chip">Atlantic/Azores</span><span class="chip">Atlantic/Bermuda</span><span class="chip">Atlantic/Canary</span><span class="chip">Atlantic/Cape_Verde</span><span class="chip">Atlantic/Faeroe</span><span class="chip">Atlantic/Faroe</span><span class="chip">Atlantic/Jan_Mayen</span><span class="chip">Atlantic/Madeira</span><span class="chip">Atlantic/Reykjavik</span><span class="chip">Atlantic/South_Georgia</span><span class="chip">Atlantic/St_Helena</span><span class="chip">Atlantic/Stanley</span><span class="chip">Australia/ACT</span><span class="chip">Australia/Adelaide</span><span class="chip">Australia/Brisbane</span><span class="chip">Australia/Broken_Hill</span><span class="chip">Australia/Canberra</span><span class="chip">Australia/Currie</span><span class="chip">Australia/Darwin</span><span class="chip">Australia/Eucla</span><span class="chip">Australia/Hobart</span><span class="chip">Australia/LHI</span><span class="chip">Australia/Lindeman</span><span class="chip">Australia/Lord_Howe</span><span class="chip">Australia/Melbourne</span><span class="chip">Australia/NSW</span><span class="chip">Australia/North</span><span class="chip">Australia/Perth</span><span class="chip">Australia/Queensland</span><span class="chip">Australia/South</span><span class="chip">Australia/Sydney</span><span class="chip">Australia/Tasmania</span><span class="chip">Australia/Victoria</span><span class="chip">Australia/West</span><span class="chip">Australia/Yancowinna</span><span class="chip">Brazil/Acre</span><span class="chip">Brazil/DeNoronha</span><span class="chip">Brazil/East</span><span class="chip">Brazil/West</span><span class="chip">CET</span><span class="chip">CST6CDT</span><span class="chip">Canada/Atlantic</span><span class="chip">Canada/Central</span><span class="chip">Canada/Eastern</span><span class="chip">Canada/Mountain</span><span class="chip">Canada/Newfoundland</span><span class="chip">Canada/Pacific</span><span class="chip">Canada/Saskatchewan</span><span class="chip">Canada/Yukon</span><span class="chip">Chile/Continental</span><span class="chip">Chile/EasterIsland</span><span class="chip">Cuba</span><span class="chip">EET</span><span class="chip">EST</span><span class="chip">EST5EDT</span><span class="chip">Egypt</span><span class="chip">Eire</span><span class="chip">Etc/GMT</span><span class="chip">Etc/GMT+0</span><span class="chip">Etc/GMT+1</span><span class="chip">Etc/GMT+10</span><span class="chip">Etc/GMT+11</span><span class="chip">Etc/GMT+12</span><span class="chip">Etc/GMT+2</span><span class="chip">Etc/GMT+3</span><span class="chip">Etc/GMT+4</span><span class="chip">Etc/GMT+5</span><span class="chip">Etc/GMT+6</span><span class="chip">Etc/GMT+7</span><span class="chip">Etc/GMT+8</span><span class="chip">Etc/GMT+9</span><span class="chip">Etc/GMT-0</span><span class="chip">Etc/GMT-1</span><span class="chip">Etc/GMT-10</span><span class="chip">Etc/GMT-11</span><span class="chip">Etc/GMT-12</span><span class="chip">Etc/GMT-13</span><span class="chip">Etc/GMT-14</span><span class="chip">Etc/GMT-2</span><span class="chip">Etc/GMT-3</span><span class="chip">Etc/GMT-4</span><span class="chip">Etc/GMT-5</span><span class="chip">Etc/GMT-6</span><span class="chip">Etc/GMT-7</span><span class="chip">Etc/GMT-8</span><span class="chip">Etc/GMT-9</span><span class="chip">Etc/GMT0</span><span class="chip">Etc/Greenwich</span><span class="chip">Etc/UCT</span><span class="chip">Etc/UTC</span><span class="chip">Etc/Universal</span><span class="chip">Etc/Zulu</span><span class="chip">Europe/Amsterdam</span><span class="chip">Europe/Andorra</span><span class="chip">Europe/Astrakhan</span><span class="chip">Europe/Athens</span><span class="chip">Europe/Belfast</span><span class="chip">Europe/Belgrade</span><span class="chip">Europe/Berlin</span><span class="chip">Europe/Bratislava</span><span class="chip">Europe/Brussels</span><span class="chip">Europe/Bucharest</span><span class="chip">Europe/Budapest</span><span class="chip">Europe/Busingen</span><span class="chip">Europe/Chisinau</span><span class="chip">Europe/Copenhagen</span><span class="chip">Europe/Dublin</span><span class="chip">Europe/Gibraltar</span><span class="chip">Europe/Guernsey</span><span class="chip">Europe/Helsinki</span><span class="chip">Europe/Isle_of_Man</span><span class="chip">Europe/Istanbul</span><span class="chip">Europe/Jersey</span><span class="chip">Europe/Kaliningrad</span><span class="chip">Europe/Kiev</span><span class="chip">Europe/Kirov</span><span class="chip">Europe/Kyiv</span><span class="chip">Europe/Lisbon</span><span class="chip">Europe/Ljubljana</span><span class="chip">Europe/London</span><span class="chip">Europe/Luxembourg</span><span class="chip">Europe/Madrid</span><span class="chip">Europe/Malta</span><span class="chip">Europe/Mariehamn</span><span class="chip">Europe/Minsk</span><span class="chip">Europe/Monaco</span><span class="chip">Europe/Moscow</span><span class="chip">Europe/Nicosia</span><span class="chip">Europe/Oslo</span><span class="chip">Europe/Paris</span><span class="chip">Europe/Podgorica</span><span class="chip">Europe/Prague</span><span class="chip">Europe/Riga</span><span class="chip">Europe/Rome</span><span class="chip">Europe/Samara</span><span class="chip">Europe/San_Marino</span><span class="chip">Europe/Sarajevo</span><span class="chip">Europe/Saratov</span><span class="chip">Europe/Simferopol</span><span class="chip">Europe/Skopje</span><span class="chip">Europe/Sofia</span><span class="chip">Europe/Stockholm</span><span class="chip">Europe/Tallinn</span><span class="chip">Europe/Tirane</span><span class="chip">Europe/Tiraspol</span><span class="chip">Europe/Ulyanovsk</span><span class="chip">Europe/Uzhgorod</span><span class="chip">Europe/Vaduz</span><span class="chip">Europe/Vatican</span><span class="chip">Europe/Vienna</span><span class="chip">Europe/Vilnius</span><span class="chip">Europe/Volgograd</span><span class="chip">Europe/Warsaw</span><span class="chip">Europe/Zagreb</span><span class="chip">Europe/Zaporozhye</span><span class="chip">Europe/Zurich</span><span class="chip">GB</span><span class="chip">GB-Eire</span><span class="chip">GMT</span><span class="chip">GMT+0</span><span class="chip">GMT-0</span><span class="chip">GMT0</span><span class="chip">Greenwich</span><span class="chip">HST</span><span class="chip">Hongkong</span><span class="chip">Iceland</span><span class="chip">Indian/Antananarivo</span><span class="chip">Indian/Chagos</span><span class="chip">Indian/Christmas</span><span class="chip">Indian/Cocos</span><span class="chip">Indian/Comoro</span><span class="chip">Indian/Kerguelen</span><span class="chip">Indian/Mahe</span><span class="chip">Indian/Maldives</span><span class="chip">Indian/Mauritius</span><span class="chip">Indian/Mayotte</span><span class="chip">Indian/Reunion</span><span class="chip">Iran</span><span class="chip">Israel</span><span class="chip">Jamaica</span><span class="chip">Japan</span><span class="chip">Kwajalein</span><span class="chip">Libya</span><span class="chip">MET</span><span class="chip">MST</span><span class="chip">MST7MDT</span><span class="chip">Mexico/BajaNorte</span><span class="chip">Mexico/BajaSur</span><span class="chip">Mexico/General</span><span class="chip">NZ</span><span class="chip">NZ-CHAT</span><span class="chip">Navajo</span><span class="chip">PRC</span><span class="chip">PST8PDT</span><span class="chip">Pacific/Apia</span><span class="chip">Pacific/Auckland</span><span class="chip">Pacific/Bougainville</span><span class="chip">Pacific/Chatham</span><span class="chip">Pacific/Chuuk</span><span class="chip">Pacific/Easter</span><span class="chip">Pacific/Efate</span><span class="chip">Pacific/Enderbury</span><span class="chip">Pacific/Fakaofo</span><span class="chip">Pacific/Fiji</span><span class="chip">Pacific/Funafuti</span><span class="chip">Pacific/Galapagos</span><span class="chip">Pacific/Gambier</span><span class="chip">Pacific/Guadalcanal</span><span class="chip">Pacific/Guam</span><span class="chip">Pacific/Honolulu</span><span class="chip">Pacific/Johnston</span><span class="chip">Pacific/Kanton</span><span class="chip">Pacific/Kiritimati</span><span class="chip">Pacific/Kosrae</span><span class="chip">Pacific/Kwajalein</span><span class="chip">Pacific/Majuro</span><span class="chip">Pacific/Marquesas</span><span class="chip">Pacific/Midway</span><span class="chip">Pacific/Nauru</span><span class="chip">Pacific/Niue</span><span class="chip">Pacific/Norfolk</span><span class="chip">Pacific/Noumea</span><span class="chip">Pacific/Pago_Pago</span><span class="chip">Pacific/Palau</span><span class="chip">Pacific/Pitcairn</span><span class="chip">Pacific/Pohnpei</span><span class="chip">Pacific/Ponape</span><span class="chip">Pacific/Port_Moresby</span><span class="chip">Pacific/Rarotonga</span><span class="chip">Pacific/Saipan</span><span class="chip">Pacific/Samoa</span><span class="chip">Pacific/Tahiti</span><span class="chip">Pacific/Tarawa</span><span class="chip">Pacific/Tongatapu</span><span class="chip">Pacific/Truk</span><span class="chip">Pacific/Wake</span><span class="chip">Pacific/Wallis</span><span class="chip">Pacific/Yap</span><span class="chip">Poland</span><span class="chip">Portugal</span><span class="chip">ROC</span><span class="chip">ROK</span><span class="chip">Singapore</span><span class="chip">Turkey</span><span class="chip">UCT</span><span class="chip">US/Alaska</span><span class="chip">US/Aleutian</span><span class="chip">US/Arizona</span><span class="chip">US/Central</span><span class="chip">US/East-Indiana</span><span class="chip">US/Eastern</span><span class="chip">US/Hawaii</span><span class="chip">US/Indiana-Starke</span><span class="chip">US/Michigan</span><span class="chip">US/Mountain</span><span class="chip">US/Pacific</span><span class="chip">US/Samoa</span><span class="chip">UTC</span><span class="chip">Universal</span><span class="chip">W-SU</span><span class="chip">WET</span><span class="chip">Zulu</span></span></details></p>
+    </div><div class="shapeblock" id="shape-definitions-dependency-type">
+      <h4>dependency-type</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip">direct</span><span class="chip">indirect</span><span class="chip">all</span><span class="chip">production</span><span class="chip">development</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-types">
+      <h4>update-types</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each one an one of these</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-package-ecosystem-values">
+      <h4>package-ecosystem-values</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><details class="pick"><summary>one of 33</summary><span class="chips"><span class="chip">bazel</span><span class="chip">bun</span><span class="chip">bundler</span><span class="chip">cargo</span><span class="chip">composer</span><span class="chip">conda</span><span class="chip">deno</span><span class="chip">devcontainers</span><span class="chip">docker</span><span class="chip">docker-compose</span><span class="chip">dotnet-sdk</span><span class="chip">elm</span><span class="chip">github-actions</span><span class="chip">gitsubmodule</span><span class="chip">gomod</span><span class="chip">gradle</span><span class="chip">helm</span><span class="chip">julia</span><span class="chip">maven</span><span class="chip">mix</span><span class="chip">nix</span><span class="chip">npm</span><span class="chip">nuget</span><span class="chip">opentofu</span><span class="chip">pip</span><span class="chip">pre-commit</span><span class="chip">pub</span><span class="chip">rust-toolchain</span><span class="chip">sbt</span><span class="chip">swift</span><span class="chip">terraform</span><span class="chip">uv</span><span class="chip">vcpkg</span></span></details></p>
+    </div><div class="shapeblock" id="shape-definitions-schedule-day">
+      <h4>schedule-day</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><details class="pick"><summary>one of 7</summary><span class="chips"><span class="chip">monday</span><span class="chip">tuesday</span><span class="chip">wednesday</span><span class="chip">thursday</span><span class="chip">friday</span><span class="chip">saturday</span><span class="chip">sunday</span></span></details></p>
+    </div><div class="shapeblock" id="shape-definitions-schedule-interval">
+      <h4>schedule-interval</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><details class="pick"><summary>one of 7</summary><span class="chips"><span class="chip">daily</span><span class="chip">weekly</span><span class="chip">monthly</span><span class="chip">quarterly</span><span class="chip">semiannually</span><span class="chip">yearly</span><span class="chip">cron</span></span></details></p>
+    </div><div class="shapeblock" id="shape-definitions-insecure-external-code-execution">
+      <h4>insecure-external-code-execution</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip">allow</span><span class="chip">deny</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-versioning-strategy">
+      <h4>versioning-strategy</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip">auto</span><span class="chip">increase</span><span class="chip">increase-if-necessary</span><span class="chip">lockfile-only</span><span class="chip">widen</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-registry">
+      <h4>registry</h4>
+      <p class="snote">The top-level registries key is optional. It allows you to specify authentication details that Dependabot can use to access private package registries.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name you choose</b> <span class="cnt">23 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><details class="pick"><summary>one of 15</summary><span class="chips"><span class="chip">cargo-registry</span><span class="chip">composer-repository</span><span class="chip">docker-registry</span><span class="chip">git</span><span class="chip">goproxy-server</span><span class="chip">hex-organization</span><span class="chip">hex-repository</span><span class="chip">helm-registry</span><span class="chip">maven-repository</span><span class="chip">npm-registry</span><span class="chip">nuget-feed</span><span class="chip">pub-repository</span><span class="chip">python-index</span><span class="chip">rubygems-server</span><span class="chip">terraform-registry</span></span></details></td>
+    <td><span class="rq cond">Yes, once you fill in any name you choose</span></td>
+    <td class="de">Identifies the type of registry.</td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name you choose</span></td>
+    <td class="de">The URL to use to access the dependencies in this registry. The protocol is optional. If not specified, 'https://' is assumed. Dependabot adds or ignores trailing slashes as required.</td>
+  </tr><tr>
+    <td><span class="nm">username</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The username that Dependabot uses to access the registry.</td>
+  </tr><tr>
+    <td><span class="nm">password</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A reference to a Dependabot secret containing the password for the specified user.</td>
+  </tr><tr>
+    <td><span class="nm">key</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A reference to a Dependabot secret containing an access key for this registry.</td>
+  </tr><tr>
+    <td><span class="nm">token</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A reference to a Dependabot secret containing an access token for this registry.</td>
+  </tr><tr>
+    <td><span class="nm">replaces-base</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">For registries with type: python-index, if the boolean value is true, pip resolves dependencies by using the specified URL rather than the base URL of the Python Package Index (by default https://pypi.org/simple).</td>
+  </tr><tr>
+    <td><span class="nm">scope</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">text</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">For registries with type: npm-registry, the npm scope or scopes served by this registry, for example '@my-org'. Dependabot binds only the listed scopes to this registry when generating the .npmrc, so packages outside those scopes continue to resolve from the base registry. This value takes precedence over scope inference from an existing .npmrc or from the lockfile.</td>
+  </tr><tr>
+    <td><span class="nm">organization</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">repo</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">auth-key</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">public-key-fingerprint</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">registry</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the cargo registry.</td>
+  </tr><tr>
+    <td><span class="nm">tenant-id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The tenant ID for Azure OIDC authentication.</td>
+  </tr><tr>
+    <td><span class="nm">client-id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The client ID for Azure OIDC authentication.</td>
+  </tr><tr>
+    <td><span class="nm">jfrog-oidc-provider-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The JFrog OIDC provider name for authentication.</td>
+  </tr><tr>
+    <td><span class="nm">identity-mapping-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The identity mapping name for JFrog OIDC authentication.</td>
+  </tr><tr>
+    <td><span class="nm">audience</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The audience for OIDC or AWS authentication.</td>
+  </tr><tr>
+    <td><span class="nm">aws-region</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The AWS region for AWS CodeArtifact authentication.</td>
+  </tr><tr>
+    <td><span class="nm">account-id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The AWS account ID for AWS CodeArtifact authentication.</td>
+  </tr><tr>
+    <td><span class="nm">role-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The AWS role name for AWS CodeArtifact authentication.</td>
+  </tr><tr>
+    <td><span class="nm">domain</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The domain for AWS CodeArtifact authentication.</td>
+  </tr><tr>
+    <td><span class="nm">domain-owner</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The domain owner for AWS CodeArtifact authentication.</td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-multi-ecosystem-group">
+      <h4>multi-ecosystem-group</h4>
+      <p class="snote">Define a group that spans multiple package ecosystems, allowing consolidated pull requests across different ecosystems</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">schedule</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">Schedule preferences for the group</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>schedule</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">interval</span></td>
+    <td><a class="ty link" href="#shape-definitions-schedule-interval">a schedule-interval</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">day</span></td>
+    <td><a class="ty link" href="#shape-definitions-schedule-day">a schedule-day</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify an alternative day to check for updates</td>
+  </tr><tr>
+    <td><span class="nm">time</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify an alternative time of day to check for updates (format: hh:mm)</td>
+  </tr><tr>
+    <td><span class="nm">timezone</span></td>
+    <td><a class="ty link" href="#shape-definitions-timezone">a timezone</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The time zone identifier must be from the Time Zone database maintained by IANA</td>
+  </tr><tr>
+    <td><span class="nm cond">when interval is &quot;cron&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">cronjob</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in when interval is &quot;cron&quot;</span></td>
+    <td class="de">Specify a valid cron expression for updates</td>
+  </tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then <b>cronjob</b> becomes required</summary>
+      </details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">labels</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Labels to set on pull requests (additive - merges with ecosystem-level labels)</td>
+  </tr><tr>
+    <td><span class="nm">assignees</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Assignees to set on pull requests (additive - merges with ecosystem-level assignees)</td>
+  </tr><tr>
+    <td><span class="nm">milestone</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Associate all pull requests raised for this group with a milestone. You need to specify the numeric identifier of the milestone and not its label.</td>
+  </tr><tr>
+    <td><span class="nm">target-branch</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a different branch for manifest files and for pull requests.</td>
+  </tr><tr>
+    <td><span class="nm">commit-message</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Commit message preferences for the group</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>commit-message</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">prefix</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A prefix for all commit messages</td>
+  </tr><tr>
+    <td><span class="nm">prefix-development</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A separate prefix for all commit messages that update dependencies in the Development dependency group</td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">scope</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies that any prefix is followed by a list of the dependencies updated in the commit</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">pull-request-branch-name</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Pull request branch name preferences for the group</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>pull-request-branch-name</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">separator</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">-</span><span class="chip">_</span><span class="chip def">/<em>default</em></span></span></td>
+    <td><span class="rq cond">Yes, once you fill in pull-request-branch-name</span></td>
+    <td class="de">Change separator for PR branch name</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">open-pull-requests-limit</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span><div class="notes"><span>left out means 5</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Limit number of open pull requests for version updates.</td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><span class="ty">a list, each one an one of these</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify the semantic versioning update types for the group.</td>
+  </tr><tr>
+    <td><span class="nm">dependency-type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">production</span><span class="chip">development</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a dependency type to be included in the group.</td>
+  </tr><tr>
+    <td><span class="nm">exclude-patterns</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Exclude certain dependencies from the group.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-allow-items-properties-dependency-name">
+      <h4>dependency-name</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-commit-message-properties-prefix">
+      <h4>prefix</h4>
+      <p class="snote">A prefix for all commit messages. When you specify a prefix for commit messages, GitHub will automatically add a colon between the defined prefix and the commit message provided the defined prefix ends with a letter, number, closing parenthesis, or closing bracket. This means that, for example, if you end the prefix with a whitespace, there will be no colon added between the prefix and the commit message.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-commit-message-properties-prefix-development">
+      <h4>prefix-development</h4>
+      <p class="snote">A separate prefix for all commit messages that update dependencies in the Development dependency group. When you specify a value for this option, the prefix is used only for updates to dependencies in the Production dependency group. This is not supported by all package ecosystems.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-commit-message-properties-include">
+      <h4>include</h4>
+      <p class="snote">Specifies that any prefix is followed by a list of the dependencies updated in the commit.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a fixed value</span><span class="chips"><span class="chip">scope</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-ignore-items-properties-dependency-name">
+      <h4>dependency-name</h4>
+      <p class="snote">Use to ignore updates for dependencies with matching names, optionally using * to match zero or more characters.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-ignore-items-properties-update-types">
+      <h4>update-types</h4>
+      <p class="snote">Use to ignore types of updates. You can combine this with 'dependency-name: &quot;*&quot;' to ignore particular update-types for all dependencies.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-update-types">an update-types, and that shape is itself a list</a></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-ignore-items-properties-versions">
+      <h4>versions</h4>
+      <p class="snote">Use to ignore specific versions or ranges of versions. If you want to define a range, use the standard pattern for the package manager.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-multi-ecosystem-group-properties-commit-message-properties-prefix">
+      <h4>prefix</h4>
+      <p class="snote">A prefix for all commit messages</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-multi-ecosystem-group-properties-commit-message-properties-prefix-development">
+      <h4>prefix-development</h4>
+      <p class="snote">A separate prefix for all commit messages that update dependencies in the Development dependency group</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-multi-ecosystem-group-properties-commit-message-properties-include">
+      <h4>include</h4>
+      <p class="snote">Specifies that any prefix is followed by a list of the dependencies updated in the commit</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a fixed value</span><span class="chips"><span class="chip">scope</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update">
+      <h4>update</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">allow</span></td>
+    <td><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span></div><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Customize which updates are allowed</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of allow</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">dependency-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dependency-type</span></td>
+    <td><a class="ty link" href="#shape-definitions-dependency-type">a dependency-type</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><a class="ty link" href="#shape-definitions-update-types">an update-types, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to allow specific types of updates. You can combine this with 'dependency-name: &quot;*&quot;' to allow particular update-types for all dependencies.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">assignees</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Assignees to set on pull requests</td>
+  </tr><tr>
+    <td><span class="nm">commit-message</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Dependabot attempts to detect your commit message preferences and use similar patterns. Use this option to specify your preferences explicitly.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>commit-message</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">prefix</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A prefix for all commit messages. When you specify a prefix for commit messages, GitHub will automatically add a colon between the defined prefix and the commit message provided the defined prefix ends with a letter, number, closing parenthesis, or closing bracket. This means that, for example, if you end the prefix with a whitespace, there will be no colon added between the prefix and the commit message.</td>
+  </tr><tr>
+    <td><span class="nm">prefix-development</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A separate prefix for all commit messages that update dependencies in the Development dependency group. When you specify a value for this option, the prefix is used only for updates to dependencies in the Production dependency group. This is not supported by all package ecosystems.</td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">scope</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies that any prefix is followed by a list of the dependencies updated in the commit.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">cooldown</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Defines a cooldown period for dependency updates, allowing updates to be delayed for a configurable number of days. This feature enables users to customize how often Dependabot generates new version updates, offering greater control over update frequency.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>cooldown</b> <span class="cnt">6 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to 90">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Default cooldown period for dependencies without specific rules (optional).</td>
+  </tr><tr>
+    <td><span class="nm">semver-major-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to 90">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Cooldown period for major version updates (optional, applies only to package managers supporting SemVer).</td>
+  </tr><tr>
+    <td><span class="nm">semver-minor-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to 90">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Cooldown period for minor version updates (optional, applies only to package managers supporting SemVer).</td>
+  </tr><tr>
+    <td><span class="nm">semver-patch-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to 90">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Cooldown period for patch version updates (optional, applies only to package managers supporting SemVer).</td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to 100">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">100 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">List of dependencies to apply cooldown. Supports wildcards (`*`).</td>
+  </tr><tr>
+    <td><span class="nm">exclude</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to 100">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">100 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">List of dependencies excluded from cooldown. Supports wildcards (`*`).</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">directories</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Locations of package manifests</td>
+  </tr><tr>
+    <td><span class="nm">directory</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>for example /</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Location of package manifests</td>
+  </tr><tr>
+    <td><span class="nm">exclude-paths</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">List of file paths to exclude from dependency updates</td>
+  </tr><tr>
+    <td><span class="nm">groups</span></td>
+    <td><span class="ty">a group where you choose the names, each one a group of fields</span><div class="notes"><span>at least 1 field</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Configure groups for dependencies. Each 'groups' property is arbitrary will appear in pull request titles and branch names. For example, the code snippet '{&quot;groups&quot;: {&quot;NPM dependencies&quot;: {&quot;patterns&quot;: [&quot;*&quot;]}}}' sets the group name to 'NPM dependencies'.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>groups</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name you choose</b> <span class="cnt">6 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">applies-to</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">version-updates</span><span class="chip">security-updates</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to specify a whether the rules in the group apply to version updates or security updates.</td>
+  </tr><tr>
+    <td><span class="nm">dependency-type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">development</span><span class="chip">production</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a dependency type to be included in the group.</td>
+  </tr><tr>
+    <td><span class="nm">patterns</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Define strings of characters that match with a dependency name (or multiple dependency names) to include those dependencies in the group.</td>
+  </tr><tr>
+    <td><span class="nm">exclude-patterns</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Exclude certain dependencies from the group. If a dependency is excluded from a group, Dependabot will continue to raise single pull requests to update the dependency to its latest version.</td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><span class="ty">a list, each one an one of these</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify the semantic versioning level to include in the group</td>
+  </tr><tr>
+    <td><span class="nm">group-by</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">dependency-name</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Configure how dependencies are grouped within this group.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">ignore</span></td>
+    <td><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Ignore certain dependencies or versions</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of ignore</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">dependency-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to ignore updates for dependencies with matching names, optionally using * to match zero or more characters.</td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><a class="ty link" href="#shape-definitions-update-types">an update-types, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to ignore types of updates. You can combine this with 'dependency-name: &quot;*&quot;' to ignore particular update-types for all dependencies.</td>
+  </tr><tr>
+    <td><span class="nm">versions</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to ignore specific versions or ranges of versions. If you want to define a range, use the standard pattern for the package manager.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">insecure-external-code-execution</span></td>
+    <td><a class="ty link" href="#shape-definitions-insecure-external-code-execution">an insecure-external-code-execution</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Allow or deny code execution in manifest files</td>
+  </tr><tr>
+    <td><span class="nm">labels</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span><span>left out means dependencies</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Labels to set on pull requests</td>
+  </tr><tr>
+    <td><span class="nm">milestone</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Associate all pull requests raised for a package manager with a milestone. You need to specify the numeric identifier of the milestone and not its label.</td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 3 to 100">
+    <span class="bend">3</span><span class="btrack"></span>
+    <span class="bend">100 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A name for the update configuration.</td>
+  </tr><tr>
+    <td><span class="nm">open-pull-requests-limit</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span><div class="notes"><span>left out means 5</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Limit number of open pull requests for version updates</td>
+  </tr><tr>
+    <td><span class="nm">package-ecosystem</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">Package manager to use</td>
+  </tr><tr>
+    <td><span class="nm">pull-request-branch-name</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Pull request branch name preferences</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>pull-request-branch-name</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">separator</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">-</span><span class="chip">_</span><span class="chip def">/<em>default</em></span></span></td>
+    <td><span class="rq cond">Yes, once you fill in pull-request-branch-name</span></td>
+    <td class="de">Change separator for PR branch name</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">rebase-strategy</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">auto<em>default</em></span><span class="chip">disabled</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Disable automatic rebasing. 'auto' is the default and Dependabot will rebase open pull requests when changes are detected. 'disabled' will disable automatic rebasing.</td>
+  </tr><tr>
+    <td><span class="nm">registries</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">a fixed value</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">schedule</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Schedule preferences</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>schedule</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">interval</span></td>
+    <td><a class="ty link" href="#shape-definitions-schedule-interval">a schedule-interval</a></td>
+    <td><span class="rq cond">Yes, once you fill in schedule</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">day</span></td>
+    <td><a class="ty link" href="#shape-definitions-schedule-day">a schedule-day</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify an alternative day to check for updates</td>
+  </tr><tr>
+    <td><span class="nm">time</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify an alternative time of day to check for updates (format: hh:mm)</td>
+  </tr><tr>
+    <td><span class="nm">timezone</span></td>
+    <td><a class="ty link" href="#shape-definitions-timezone">a timezone</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The time zone identifier must be from the Time Zone database maintained by IANA</td>
+  </tr><tr>
+    <td><span class="nm cond">when interval is &quot;cron&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">cronjob</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in schedule</span></td>
+    <td class="de">Specify a valid cron expression for updates</td>
+  </tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then <b>cronjob</b> becomes required</summary>
+      </details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">target-branch</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a different branch for manifest files and for pull requests.</td>
+  </tr><tr>
+    <td><span class="nm">vendor</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Tell Dependabot to vendor dependencies when updating them. Don't use this option if you're using 'gomod'.</td>
+  </tr><tr>
+    <td><span class="nm">versioning-strategy</span></td>
+    <td><a class="ty link" href="#shape-definitions-versioning-strategy">a versioning-strategy</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">How to update manifest version requirements</td>
+  </tr><tr>
+    <td><span class="nm">patterns</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Array of dependency patterns to include in a multi-ecosystem group. Required when using multi-ecosystem-group. Use '*' to include all dependencies.</td>
+  </tr><tr>
+    <td><span class="nm">multi-ecosystem-group</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">String identifier linking this ecosystem to a multi-ecosystem group</td>
+  </tr><tr>
+    <td><span class="nm cond">in one case</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">schedule</span></td>
+    <td><a class="ty link" href="#shape-definitions-update-properties-schedule">a schedule</a></td>
+    <td><span class="rq cond">Yes, once you fill in in one case</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then <b>schedule</b> becomes required</summary>
+      </details></td></tr></table>
+    </div>
+  </div><div class="defblock">
+    <h3>update</h3>
+    <div class="shapeblock" id="shape-definitions-update-properties-directories">
+      <h4>directories</h4>
+      <p class="snote">Locations of package manifests</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-directory">
+      <h4>directory</h4>
+      <p class="snote">Location of package manifests</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>for example /</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-schedule">
+      <h4>schedule</h4>
+      <p class="snote">Schedule preferences</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">interval</span></td>
+    <td><a class="ty link" href="#shape-definitions-schedule-interval">a schedule-interval</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">day</span></td>
+    <td><a class="ty link" href="#shape-definitions-schedule-day">a schedule-day</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify an alternative day to check for updates</td>
+  </tr><tr>
+    <td><span class="nm">time</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify an alternative time of day to check for updates (format: hh:mm)</td>
+  </tr><tr>
+    <td><span class="nm">timezone</span></td>
+    <td><a class="ty link" href="#shape-definitions-timezone">a timezone</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The time zone identifier must be from the Time Zone database maintained by IANA</td>
+  </tr><tr>
+    <td><span class="nm cond">when interval is &quot;cron&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">cronjob</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in when interval is &quot;cron&quot;</span></td>
+    <td class="de">Specify a valid cron expression for updates</td>
+  </tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then <b>cronjob</b> becomes required</summary>
+      </details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-allow">
+      <h4>allow</h4>
+      <p class="snote">Customize which updates are allowed</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Nothing else may be added to it.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">dependency-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dependency-type</span></td>
+    <td><a class="ty link" href="#shape-definitions-dependency-type">a dependency-type</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><a class="ty link" href="#shape-definitions-update-types">an update-types, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to allow specific types of updates. You can combine this with 'dependency-name: &quot;*&quot;' to allow particular update-types for all dependencies.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-assignees">
+      <h4>assignees</h4>
+      <p class="snote">Assignees to set on pull requests</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-commit-message">
+      <h4>commit-message</h4>
+      <p class="snote">Dependabot attempts to detect your commit message preferences and use similar patterns. Use this option to specify your preferences explicitly.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">prefix</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A prefix for all commit messages. When you specify a prefix for commit messages, GitHub will automatically add a colon between the defined prefix and the commit message provided the defined prefix ends with a letter, number, closing parenthesis, or closing bracket. This means that, for example, if you end the prefix with a whitespace, there will be no colon added between the prefix and the commit message.</td>
+  </tr><tr>
+    <td><span class="nm">prefix-development</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 50">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">50 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A separate prefix for all commit messages that update dependencies in the Development dependency group. When you specify a value for this option, the prefix is used only for updates to dependencies in the Production dependency group. This is not supported by all package ecosystems.</td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">scope</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies that any prefix is followed by a list of the dependencies updated in the commit.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-cooldown">
+      <h4>cooldown</h4>
+      <p class="snote">Defines a cooldown period for dependency updates, allowing updates to be delayed for a configurable number of days. This feature enables users to customize how often Dependabot generates new version updates, offering greater control over update frequency.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">default-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to 90">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Default cooldown period for dependencies without specific rules (optional).</td>
+  </tr><tr>
+    <td><span class="nm">semver-major-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to 90">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Cooldown period for major version updates (optional, applies only to package managers supporting SemVer).</td>
+  </tr><tr>
+    <td><span class="nm">semver-minor-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 1 to 90">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Cooldown period for minor version updates (optional, applies only to package managers supporting SemVer).</td>
+  </tr><tr>
+    <td><span class="nm">semver-patch-days</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to 90">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">90</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Cooldown period for patch version updates (optional, applies only to package managers supporting SemVer).</td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to 100">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">100 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">List of dependencies to apply cooldown. Supports wildcards (`*`).</td>
+  </tr><tr>
+    <td><span class="nm">exclude</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to 100">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">100 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">List of dependencies excluded from cooldown. Supports wildcards (`*`).</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-exclude-paths">
+      <h4>exclude-paths</h4>
+      <p class="snote">List of file paths to exclude from dependency updates</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-groups">
+      <h4>groups</h4>
+      <p class="snote">Configure groups for dependencies. Each 'groups' property is arbitrary will appear in pull request titles and branch names. For example, the code snippet '{&quot;groups&quot;: {&quot;NPM dependencies&quot;: {&quot;patterns&quot;: [&quot;*&quot;]}}}' sets the group name to 'NPM dependencies'.</p>
+      
+      
+      
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name you choose</b> <span class="cnt">6 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">applies-to</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">version-updates</span><span class="chip">security-updates</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to specify a whether the rules in the group apply to version updates or security updates.</td>
+  </tr><tr>
+    <td><span class="nm">dependency-type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">development</span><span class="chip">production</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a dependency type to be included in the group.</td>
+  </tr><tr>
+    <td><span class="nm">patterns</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Define strings of characters that match with a dependency name (or multiple dependency names) to include those dependencies in the group.</td>
+  </tr><tr>
+    <td><span class="nm">exclude-patterns</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Exclude certain dependencies from the group. If a dependency is excluded from a group, Dependabot will continue to raise single pull requests to update the dependency to its latest version.</td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><span class="ty">a list, each one an one of these</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify the semantic versioning level to include in the group</td>
+  </tr><tr>
+    <td><span class="nm">group-by</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">dependency-name</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Configure how dependencies are grouped within this group.</td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-ignore">
+      <h4>ignore</h4>
+      <p class="snote">Ignore certain dependencies or versions</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Nothing else may be added to it.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">dependency-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to ignore updates for dependencies with matching names, optionally using * to match zero or more characters.</td>
+  </tr><tr>
+    <td><span class="nm">update-types</span></td>
+    <td><a class="ty link" href="#shape-definitions-update-types">an update-types, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to ignore types of updates. You can combine this with 'dependency-name: &quot;*&quot;' to ignore particular update-types for all dependencies.</td>
+  </tr><tr>
+    <td><span class="nm">versions</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use to ignore specific versions or ranges of versions. If you want to define a range, use the standard pattern for the package manager.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-insecure-external-code-execution">
+      <h4>insecure-external-code-execution</h4>
+      <p class="snote">Allow or deny code execution in manifest files</p>
+      
+      
+      
+      <p class="leafval"><a class="ty link" href="#shape-definitions-insecure-external-code-execution">an insecure-external-code-execution</a></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-labels">
+      <h4>labels</h4>
+      <p class="snote">Labels to set on pull requests</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span><span>left out means dependencies</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-milestone">
+      <h4>milestone</h4>
+      <p class="snote">Associate all pull requests raised for a package manager with a milestone. You need to specify the numeric identifier of the milestone and not its label.</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">a whole number</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-name">
+      <h4>name</h4>
+      <p class="snote">A name for the update configuration.</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from 3 to 100">
+    <span class="bend">3</span><span class="btrack"></span>
+    <span class="bend">100 characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-open-pull-requests-limit">
+      <h4>open-pull-requests-limit</h4>
+      <p class="snote">Limit number of open pull requests for version updates</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span><div class="notes"><span>left out means 5</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-package-ecosystem">
+      <h4>package-ecosystem</h4>
+      <p class="snote">Package manager to use</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-pull-request-branch-name">
+      <h4>pull-request-branch-name</h4>
+      <p class="snote">Pull request branch name preferences</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">separator</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">-</span><span class="chip">_</span><span class="chip def">/<em>default</em></span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">Change separator for PR branch name</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-rebase-strategy">
+      <h4>rebase-strategy</h4>
+      <p class="snote">Disable automatic rebasing. 'auto' is the default and Dependabot will rebase open pull requests when changes are detected. 'disabled' will disable automatic rebasing.</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip def">auto<em>default</em></span><span class="chip">disabled</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-registries">
+      <h4>registries</h4>
+      
+      
+      
+      
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">a fixed value</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-target-branch">
+      <h4>target-branch</h4>
+      <p class="snote">Specify a different branch for manifest files and for pull requests.</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-vendor">
+      <h4>vendor</h4>
+      <p class="snote">Tell Dependabot to vendor dependencies when updating them. Don't use this option if you're using 'gomod'.</p>
+      
+      
+      
+      <p class="leafval"><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-versioning-strategy">
+      <h4>versioning-strategy</h4>
+      <p class="snote">How to update manifest version requirements</p>
+      
+      
+      
+      <p class="leafval"><a class="ty link" href="#shape-definitions-versioning-strategy">a versioning-strategy</a></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-patterns">
+      <h4>patterns</h4>
+      <p class="snote">Array of dependency patterns to include in a multi-ecosystem group. Required when using multi-ecosystem-group. Use '*' to include all dependencies.</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-update-properties-multi-ecosystem-group">
+      <h4>multi-ecosystem-group</h4>
+      <p class="snote">String identifier linking this ecosystem to a multi-ecosystem group</p>
+      
+      
+      
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></p>
+    </div>
+  </div></section>
+
+</div>

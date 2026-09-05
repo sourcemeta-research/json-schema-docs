@@ -1,0 +1,1455 @@
+<!doctype html><meta charset="utf-8"><title>JSON schema for NPM package.json files</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>JSON schema for NPM package.json files</h1>
+
+<div class="counts">
+    <span class="c req"><b>4</b> you must always fill in</span>
+    <span class="c opt"><b>207</b> you can leave out</span>
+    
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to 214">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">214 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the package.</td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Version must be parsable by node-semver, which is bundled with npm as a dependency.</td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This helps people discover your package, as it's listed in 'npm search'.</td>
+  </tr><tr>
+    <td><span class="nm">keywords</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This helps people discover your package as it's listed in 'npm search'.</td>
+  </tr><tr>
+    <td><span class="nm">homepage</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The url to the project homepage.</td>
+  </tr><tr>
+    <td><span class="nm">bugs</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The url to your project's issue tracker and / or the email address to which issues should be reported. These are helpful for people who encounter issues with your package.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>bugs</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The url to your project's issue tracker.</td>
+  </tr><tr>
+    <td><span class="nm">email</span></td>
+    <td><span class="ty">an email address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The email address to which issues should be reported.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">license</span></td>
+    <td><a class="ty link" href="#shape-definitions-license">a license</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You should specify a license for your package so that people know how they are permitted to use it, and any restrictions you're placing on it.</td>
+  </tr><tr>
+    <td><span class="nm">licenses</span></td>
+    <td><span class="ty">a list, each one a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">DEPRECATED: Instead, use SPDX expressions, like this: { &quot;license&quot;: &quot;ISC&quot; } or { &quot;license&quot;: &quot;(MIT OR Apache-2.0)&quot; } see: 'https://docs.npmjs.com/files/package.json#license'.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of licenses</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">type</span></td>
+    <td><a class="ty link" href="#shape-definitions-license">a license</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">author</span></td>
+    <td><a class="ty link" href="#shape-definitions-person">a person</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">contributors</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-person">a person</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of people who contributed to this package.</td>
+  </tr><tr>
+    <td><span class="nm">maintainers</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-person">a person</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of people who maintains this package.</td>
+  </tr><tr>
+    <td><span class="nm">files</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The 'files' field is an array of files to include in your project. If you name a folder in the array, then it will also include the files inside that folder.</td>
+  </tr><tr>
+    <td><span class="nm">main</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The main field is a module ID that is the primary entry point to your program.</td>
+  </tr><tr>
+    <td><span class="nm">exports</span></td>
+    <td><span class="ty">one of 4 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-packageExportsEntryPath">a packageExportsEntryPath</a></span><span class="form">a group of fields</span><span class="form"><a class="ty link" href="#shape-definitions-packageExportsEntryObject">a packageExportsEntryObject</a></span><span class="form"><a class="ty link" href="#shape-definitions-packageExportsFallback">a packageExportsFallback, and that shape is itself a list</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The &quot;exports&quot; field is used to restrict external access to non-exported module files, also enables a module to import itself using &quot;name&quot;.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>exports</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">.</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when the module specifier matches &quot;name&quot;, shadows the &quot;main&quot; field.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^\./.+">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path prefix that is resolved when the module specifier starts with &quot;name/&quot;, set to &quot;./*&quot; to allow external modules to import any subpath.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">imports</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The &quot;imports&quot; field is used to create private mappings that only apply to import specifiers from within the package itself.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>imports</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^#.+$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this environment matches the property name.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">bin</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>bin</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">commonjs<em>default</em></span><span class="chip">module</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When set to &quot;module&quot;, the type field allows a package to specify all .js files within are ES modules. If the &quot;type&quot; field is omitted or set to &quot;commonjs&quot;, all .js files are treated as CommonJS.</td>
+  </tr><tr>
+    <td><span class="nm">types</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Set the types property to point to your bundled declaration file.</td>
+  </tr><tr>
+    <td><span class="nm">typings</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Note that the &quot;typings&quot; field is synonymous with &quot;types&quot;, and could be used as well.</td>
+  </tr><tr>
+    <td><span class="nm">typesVersions</span></td>
+    <td><span class="ty">a group where you choose the names, each one a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The &quot;typesVersions&quot; field is used since TypeScript 3.1 to support features that were only made available in newer TypeScript versions.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>typesVersions</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Contains overrides for the TypeScript version that matches the version range matching the property key.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name you choose</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">*</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Maps all file paths to the file paths specified in the array.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^[^*]+$">any name in a set format</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Maps the file path matching the property key to the file paths specified in the array.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^[^*]*\*[^*]*$">any name in a set format</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Maps file paths matching the pattern specified in property key to file paths specified in the array.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">man</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify either a single file or an array of filenames to put in place for the man program to find.</td>
+  </tr><tr>
+    <td><span class="nm">directories</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>directories</b> <span class="cnt">6 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">bin</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If you specify a 'bin' directory, then all the files in that folder will be used as the 'bin' hash.</td>
+  </tr><tr>
+    <td><span class="nm">doc</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Put markdown files in here. Eventually, these will be displayed nicely, maybe, someday.</td>
+  </tr><tr>
+    <td><span class="nm">example</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Put example scripts in here. Someday, it might be exposed in some clever way.</td>
+  </tr><tr>
+    <td><span class="nm">lib</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Tell people where the bulk of your library is. Nothing special is done with the lib folder in any way, but it's useful meta info.</td>
+  </tr><tr>
+    <td><span class="nm">man</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A folder that is full of man pages. Sugar to generate a 'man' array by walking the folder.</td>
+  </tr><tr>
+    <td><span class="nm">test</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">repository</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify the place where your code lives. This is helpful for people who want to contribute.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>repository</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">directory</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">funding</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-fundingUrl">a fundingUrl</a></span><span class="form"><a class="ty link" href="#shape-definitions-fundingWay">a fundingWay</a></span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">scripts</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The 'scripts' member is an object hash of script commands that are run at various times in the lifecycle of your package. The key is the lifecycle event, and the value is the command to run at that point.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>scripts</b> <span class="cnt">31 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">lint</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run code quality tools, e.g. ESLint, TSLint, etc.</td>
+  </tr><tr>
+    <td><span class="nm">prepublish</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run BEFORE the package is published (Also run on local npm install without any arguments).</td>
+  </tr><tr>
+    <td><span class="nm">prepare</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs BEFORE the package is packed, i.e. during &quot;npm publish&quot; and &quot;npm pack&quot;, and on local &quot;npm install&quot; without any arguments. This is run AFTER &quot;prepublish&quot;, but BEFORE &quot;prepublishOnly&quot;.</td>
+  </tr><tr>
+    <td><span class="nm">prepublishOnly</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run BEFORE the package is prepared and packed, ONLY on npm publish.</td>
+  </tr><tr>
+    <td><span class="nm">prepack</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">run BEFORE a tarball is packed (on npm pack, npm publish, and when installing git dependencies).</td>
+  </tr><tr>
+    <td><span class="nm">postpack</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run AFTER the tarball has been generated and moved to its final destination.</td>
+  </tr><tr>
+    <td><span class="nm">publish</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Publishes a package to the registry so that it can be installed by name. See https://docs.npmjs.com/cli/v8/commands/npm-publish</td>
+  </tr><tr>
+    <td><span class="nm">postpublish</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsPublishAfter">a scriptsPublishAfter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">preinstall</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run BEFORE the package is installed.</td>
+  </tr><tr>
+    <td><span class="nm">install</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsInstallAfter">a scriptsInstallAfter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">postinstall</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsInstallAfter">a scriptsInstallAfter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">preuninstall</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsUninstallBefore">a scriptsUninstallBefore</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">uninstall</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsUninstallBefore">a scriptsUninstallBefore</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">postuninstall</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run AFTER the package is uninstalled.</td>
+  </tr><tr>
+    <td><span class="nm">preversion</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsVersionBefore">a scriptsVersionBefore</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsVersionBefore">a scriptsVersionBefore</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">postversion</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Run AFTER bump the package version.</td>
+  </tr><tr>
+    <td><span class="nm">pretest</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsTest">a scriptsTest</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">test</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsTest">a scriptsTest</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">posttest</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsTest">a scriptsTest</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">prestop</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsStop">a scriptsStop</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">stop</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsStop">a scriptsStop</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">poststop</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsStop">a scriptsStop</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">prestart</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsStart">a scriptsStart</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">start</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsStart">a scriptsStart</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">poststart</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsStart">a scriptsStart</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">prerestart</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsRestart">a scriptsRestart</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">restart</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsRestart">a scriptsRestart</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">postrestart</span></td>
+    <td><a class="ty link" href="#shape-definitions-scriptsRestart">a scriptsRestart</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">serve</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Start dev server to serve application files</td>
+  </tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">config</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A 'config' hash can be used to set configuration parameters used in package scripts that persist across upgrades.</td>
+  </tr><tr>
+    <td><span class="nm">dependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-dependency">a dependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">devDependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-devDependency">a devDependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">optionalDependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-optionalDependency">an optionalDependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">peerDependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-peerDependency">a peerDependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">peerDependenciesMeta</span></td>
+    <td><a class="ty link" href="#shape-definitions-peerDependencyMeta">a peerDependencyMeta</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">bundleDependencies</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Array of package names that will be bundled when publishing the package.</td>
+  </tr><tr>
+    <td><span class="nm">bundledDependencies</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">DEPRECATED: This field is honored, but &quot;bundleDependencies&quot; is the correct field name. Ignored if &quot;bundleDependencies&quot; is also present.</td>
+  </tr><tr>
+    <td><span class="nm">resolutions</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Resolutions is used to support selective version resolutions using yarn, which lets you define custom package versions or ranges inside your dependencies. For npm, use overrides instead. See: https://yarnpkg.com/configuration/manifest#resolutions</td>
+  </tr><tr>
+    <td><span class="nm">overrides</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Overrides is used to support selective version overrides using npm, which lets you define custom package versions or ranges inside your dependencies. For yarn, use resolutions instead. See: https://docs.npmjs.com/cli/v9/configuring-npm/package-json#overrides</td>
+  </tr><tr>
+    <td><span class="nm">packageManager</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Defines which package manager is expected to be used when working on the current project. This field is currently experimental and needs to be opted-in; see https://nodejs.org/api/corepack.html</td>
+  </tr><tr>
+    <td><span class="nm">engines</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>engines</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">node</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">runtime</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-runtimeEngineDependency">a runtimeEngineDependency</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-runtimeEngineDependency">a runtimeEngineDependency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which JavaScript runtimes (like Node.js, Deno, Bun) are supported. Values should use WinterCG Runtime Keys (see https://runtime-keys.proposal.wintercg.org/).</td>
+  </tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">volta</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Defines which tools and versions are expected to be used when Volta is installed.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>volta</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">extends</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The value of that entry should be a path to another JSON file which also has a &quot;volta&quot; section</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match (node|npm|pnpm|yarn)">any name in a set format</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">engineStrict</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">os</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify which operating systems your module will run on.</td>
+  </tr><tr>
+    <td><span class="nm">cpu</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify that your code only runs on certain cpu architectures.</td>
+  </tr><tr>
+    <td><span class="nm">devEngines</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Define the runtime and package manager for developing the current project.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>devEngines</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">os</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which operating systems are supported for development</td>
+  </tr><tr>
+    <td><span class="nm">cpu</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which CPU architectures are supported for development</td>
+  </tr><tr>
+    <td><span class="nm">libc</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which C standard libraries are supported for development</td>
+  </tr><tr>
+    <td><span class="nm">runtime</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which JavaScript runtimes (like Node.js, Deno, Bun) are supported for development. Values should use WinterCG Runtime Keys (see https://runtime-keys.proposal.wintercg.org/)</td>
+  </tr><tr>
+    <td><span class="nm">packageManager</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-devEngineDependency">a devEngineDependency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which package managers are supported for development</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">preferGlobal</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">DEPRECATED: This option used to trigger an npm warning, but it will no longer warn. It is purely there for informational purposes. It is now recommended that you install any binaries as local devDependencies wherever possible.</td>
+  </tr><tr>
+    <td><span class="nm">private</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">one of these</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If set to true, then npm will refuse to publish it.</td>
+  </tr><tr>
+    <td><span class="nm">publishConfig</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Values applied at publish time. npm: publish-time config values (tag, registry, access, provenance), see https://docs.npmjs.com/cli/v12/configuring-npm/package-json#publishconfig. pnpm: also overrides manifest fields (main, exports, types, etc.) before packing, plus pnpm-specific fields (directory, linkDirectory, executableFiles), see https://pnpm.io/package_json#publishconfig.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>publishConfig</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">access</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">public</span><span class="chip">restricted</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Access level for scoped packages at publish time (defaults to &quot;restricted&quot;). Supported by npm, honored by pnpm.</td>
+  </tr><tr>
+    <td><span class="nm">tag</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Distribution tag to publish under (defaults to &quot;latest&quot;). Supported by npm, honored by pnpm.</td>
+  </tr><tr>
+    <td><span class="nm">registry</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Registry to publish the package to. Supported by npm, honored by pnpm.</td>
+  </tr><tr>
+    <td><span class="nm">provenance</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">npm only: generate and publish a provenance attestation (requires a supported CI provider).</td>
+  </tr><tr>
+    <td><span class="nm">directory</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">pnpm only: subdirectory (relative to this package.json) to publish from; it must contain its own package.json.</td>
+  </tr><tr>
+    <td><span class="nm">linkDirectory</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">pnpm only: symlink the project from publishConfig.directory during local development (default: true).</td>
+  </tr><tr>
+    <td><span class="nm">executableFiles</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">pnpm only: additional files to mark executable (+x) in the package archive.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">dist</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>dist</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">shasum</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tarball</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">readme</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">module</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">An ECMAScript module ID that is the primary entry point to your program.</td>
+  </tr><tr>
+    <td><span class="nm">esnext</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A module ID with untranspiled code that is the primary entry point to your program.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>esnext</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">main</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">browser</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">workspaces</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Allows packages within a directory to depend on one another using direct linking of local files. Additionally, dependencies within a workspace are hoisted to the workspace root when possible to reduce duplication. Note: It's also a good idea to set &quot;private&quot; to true when using this feature.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>workspaces</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">packages</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Workspace package paths. Glob patterns are supported.</td>
+  </tr><tr>
+    <td><span class="nm">nohoist</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Packages to block from hoisting to the workspace root. Currently only supported in Yarn only.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">jspm</span></td>
+    <td><a class="ty link" href="#shape-">a JSON schema for NPM package.json files</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">eslintConfig</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="eslintrc.json">eslintrc.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">prettier</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="https://www.schemastore.org/prettierrc.json">https://www.schemastore.org/prettierrc.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">stylelint</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="stylelintrc.json">stylelintrc.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">ava</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="ava.json">ava.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">release</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="semantic-release.json">semantic-release.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">jscpd</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="jscpd.json">jscpd.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">madge</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="madge.json">madge.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">nodemonConfig</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="nodemon.json">nodemon.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">quikrun</span></td>
+    <td><span class="ty">follows rules kept in another file</span><a class="extlink" href="https://www.schemastore.org/quikrun.json">https://www.schemastore.org/quikrun.json</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">pnpm</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Defines pnpm specific configuration.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>pnpm</b> <span class="cnt">18 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">overrides</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to override any dependency in the dependency graph.</td>
+  </tr><tr>
+    <td><span class="nm">packageExtensions</span></td>
+    <td><span class="ty">a group where you choose the names, each one a group of fields</span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to extend the existing package definitions with additional information.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>packageExtensions</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^.+$">any name in a set format</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">dependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-dependency">a dependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">optionalDependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-optionalDependency">an optionalDependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">peerDependencies</span></td>
+    <td><a class="ty link" href="#shape-definitions-peerDependency">a peerDependency</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">peerDependenciesMeta</span></td>
+    <td><a class="ty link" href="#shape-definitions-peerDependencyMeta">a peerDependencyMeta</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">peerDependencyRules</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>peerDependencyRules</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">ignoreMissing</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">pnpm will not print warnings about missing peer dependencies from this list.</td>
+  </tr><tr>
+    <td><span class="nm">allowedVersions</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Unmet peer dependency warnings will not be printed for peer dependencies of the specified range.</td>
+  </tr><tr>
+    <td><span class="nm">allowAny</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Any peer dependency matching the pattern will be resolved from any version, regardless of the range specified in &quot;peerDependencies&quot;.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">neverBuiltDependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of dependencies to run builds for.</td>
+  </tr><tr>
+    <td><span class="nm">onlyBuiltDependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of package names that are allowed to be executed during installation.</td>
+  </tr><tr>
+    <td><span class="nm">onlyBuiltDependenciesFile</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies a JSON file that lists the only packages permitted to run installation scripts during the pnpm install process.</td>
+  </tr><tr>
+    <td><span class="nm">ignoredBuiltDependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of package names that should not be built during installation.</td>
+  </tr><tr>
+    <td><span class="nm">allowedDeprecatedVersions</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of deprecated versions that the warnings are suppressed.</td>
+  </tr><tr>
+    <td><span class="nm">patchedDependencies</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of dependencies that are patched.</td>
+  </tr><tr>
+    <td><span class="nm">allowNonAppliedPatches</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When true, installation won't fail if some of the patches from the &quot;patchedDependencies&quot; field were not applied.</td>
+  </tr><tr>
+    <td><span class="nm">allowUnusedPatches</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When true, installation won't fail if some of the patches from the &quot;patchedDependencies&quot; field were not applied.</td>
+  </tr><tr>
+    <td><span class="nm">updateConfig</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>updateConfig</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">ignoreDependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of packages that should be ignored when running &quot;pnpm outdated&quot; or &quot;pnpm update --latest&quot;.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">configDependencies</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Configurational dependencies are installed before all the other types of dependencies (before 'dependencies', 'devDependencies', 'optionalDependencies').</td>
+  </tr><tr>
+    <td><span class="nm">auditConfig</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>auditConfig</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">ignoreCves</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of CVE IDs that will be ignored by &quot;pnpm audit&quot;.</td>
+  </tr><tr>
+    <td><span class="nm">ignoreGhsas</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of GHSA Codes that will be ignored by &quot;pnpm audit&quot;.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">requiredScripts</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of scripts that must exist in each project.</td>
+  </tr><tr>
+    <td><span class="nm">supportedArchitectures</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies architectures for which you'd like to install optional dependencies, even if they don't match the architecture of the system running the install.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>supportedArchitectures</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">os</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">cpu</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">libc</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">ignoredOptionalDependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of optional dependencies that the install should be skipped.</td>
+  </tr><tr>
+    <td><span class="nm">executionEnv</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>executionEnv</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">nodeVersion</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies which exact Node.js version should be used for the project's runtime.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">stackblitz</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Defines the StackBlitz configuration for the project.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>stackblitz</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">installDependencies</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">StackBlitz automatically installs npm dependencies when opening a project.</td>
+  </tr><tr>
+    <td><span class="nm">startCommand</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A terminal command to be executed when opening the project, after installing npm dependencies.</td>
+  </tr><tr>
+    <td><span class="nm">compileTrigger</span></td>
+    <td><span class="ty">one of 1 forms</span><div class="forms"><span class="form">one of these</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The compileTrigger option controls how file changes in the editor are written to the WebContainers in-memory filesystem. </td>
+  </tr><tr>
+    <td><span class="nm">env</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of default environment variables that will be set in each top-level shell process.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">allowScripts</span></td>
+    <td><span class="ty">a group where you choose the names, each one a yes or no</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Records which dependencies are permitted to run install scripts (preinstall, install, postinstall, and prepare for non-registry sources). Maintained via the &quot;npm approve-scripts&quot; command, which enforces a default-deny policy: install scripts for any dependency without a matching entry are silently skipped. Keys are package identifiers — either name-only (e.g. &quot;pkg&quot;) or pinned with a version (e.g. &quot;pkg@1.2.3&quot;); by default entries are pinned so approval is version-specific. A value of true allows the dependency's install scripts to run, while false explicitly denies them (existing false entries are never silently overridden).</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>allowScripts</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">sideEffects</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Provides hints to the Webpack compiler, denoting which files in your project are &quot;pure&quot; and therefore safe to prune if unused.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^_">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Any property starting with _ is valid.</td>
+  </tr></table></section><section><h2>All 30 shapes</h2>
+    <p class="snote">Every shape this document describes. The ones used most often come first, because everything else is built on them. Click any name to jump to its rules.</p>
+    <div class="ix"><div class="ixgroup"><div class="ixh">Shapes</div><ul><li><a href="#shape-definitions-packageExportsEntryOrFallback">packageExportsEntryOrFallback</a> <span class="ixn">used 10</span></li><li><a href="#shape-definitions-devEngineDependency">devEngineDependency</a> <span class="ixn">used 10</span></li><li><a href="#shape-definitions-packageImportsEntryOrFallback">packageImportsEntryOrFallback</a> <span class="ixn">used 8</span></li><li><a href="#shape-definitions-person">person</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-scriptsRestart">scriptsRestart</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-scriptsStart">scriptsStart</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-scriptsStop">scriptsStop</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-scriptsTest">scriptsTest</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-fundingUrl">fundingUrl</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-dependency">dependency</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-optionalDependency">optionalDependency</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-peerDependency">peerDependency</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-peerDependencyMeta">peerDependencyMeta</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-license">license</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-scriptsInstallAfter">scriptsInstallAfter</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-scriptsUninstallBefore">scriptsUninstallBefore</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-scriptsVersionBefore">scriptsVersionBefore</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-packageExportsEntryPath">packageExportsEntryPath</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-packageExportsEntryObject">packageExportsEntryObject</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-packageExportsEntry">packageExportsEntry</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-packageExportsFallback">packageExportsFallback</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-packageImportsEntry">packageImportsEntry</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-fundingWay">fundingWay</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-runtimeEngineDependency">runtimeEngineDependency</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-devDependency">devDependency</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-scriptsPublishAfter">scriptsPublishAfter</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-packageImportsEntryPath">packageImportsEntryPath</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-packageImportsEntryObject">packageImportsEntryObject</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-packageImportsFallback">packageImportsFallback</a> <span class="ixn">used 1</span></li><li><a href="#shape-">JSON schema for NPM package.json files</a> <span class="ixn">used 1</span></li></ul></div></div></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-packageExportsEntryOrFallback">
+      <h4>packageExportsEntryOrFallback</h4>
+      
+      
+      
+      <p class="snote">Used in 10 places.</p>
+      <p class="leafval"><span class="ty">either <a class="ty link" href="#shape-definitions-packageExportsEntry">a packageExportsEntry</a> or <a class="ty link" href="#shape-definitions-packageExportsFallback">a packageExportsFallback, and that shape is itself a list</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-devEngineDependency">
+      <h4>devEngineDependency</h4>
+      <p class="snote">Specifies requirements for development environment components such as operating systems, runtimes, or package managers. Used to ensure consistent development environments across the team.</p>
+      
+      
+      <p class="snote">Used in 10 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The name of the dependency, with allowed values depending on the parent field</td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The version range for the dependency</td>
+  </tr><tr>
+    <td><span class="nm">onFail</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">ignore</span><span class="chip">warn</span><span class="chip">error</span><span class="chip">download</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">What action to take if validation fails</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-packageImportsEntryOrFallback">
+      <h4>packageImportsEntryOrFallback</h4>
+      
+      
+      
+      <p class="snote">Used in 8 places.</p>
+      <p class="leafval"><span class="ty">either <a class="ty link" href="#shape-definitions-packageImportsEntry">a packageImportsEntry</a> or <a class="ty link" href="#shape-definitions-packageImportsFallback">a packageImportsFallback, and that shape is itself a list</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-person">
+      <h4>person</h4>
+      <p class="snote">A person who has been involved in creating or maintaining this package.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">email</span></td>
+    <td><span class="ty">an email address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-scriptsRestart">
+      <h4>scriptsRestart</h4>
+      <p class="snote">Run by the 'npm restart' command. Note: 'npm restart' will run the stop and start scripts if no restart script is provided.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-scriptsStart">
+      <h4>scriptsStart</h4>
+      <p class="snote">Run by the 'npm start' command.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-scriptsStop">
+      <h4>scriptsStop</h4>
+      <p class="snote">Run by the 'npm stop' command.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-scriptsTest">
+      <h4>scriptsTest</h4>
+      <p class="snote">Run by the 'npm test' command.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-fundingUrl">
+      <h4>fundingUrl</h4>
+      <p class="snote">URL to a website with details about how to fund the package.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">a web address</span></p>
+    </div><div class="shapeblock" id="shape-definitions-dependency">
+      <h4>dependency</h4>
+      <p class="snote">Dependencies are specified with a simple hash of package name to version range. The version range is a string which has one or more space-separated descriptors. Dependencies can also be identified with a tarball or git URL.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-optionalDependency">
+      <h4>optionalDependency</h4>
+      <p class="snote">Specifies dependencies that are optional for your project. These dependencies are attempted to be installed during the npm install process, but if they fail to install, the installation process will not fail.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-peerDependency">
+      <h4>peerDependency</h4>
+      <p class="snote">Specifies dependencies that are required by the package but are expected to be provided by the consumer of the package.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-peerDependencyMeta">
+      <h4>peerDependencyMeta</h4>
+      <p class="snote">When a user installs your package, warnings are emitted if packages specified in &quot;peerDependencies&quot; are not already installed. The &quot;peerDependenciesMeta&quot; field serves to provide more information on how your peer dependencies are utilized. Most commonly, it allows peer dependencies to be marked as optional. Metadata for this field is specified with a simple hash of the package name to a metadata object.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name you choose</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">optional</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies that this peer dependency is optional and should not be installed automatically.</td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-license">
+      <h4>license</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">one of these</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-scriptsInstallAfter">
+      <h4>scriptsInstallAfter</h4>
+      <p class="snote">Run AFTER the package is installed.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-scriptsUninstallBefore">
+      <h4>scriptsUninstallBefore</h4>
+      <p class="snote">Run BEFORE the package is uninstalled.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-scriptsVersionBefore">
+      <h4>scriptsVersionBefore</h4>
+      <p class="snote">Run BEFORE bump the package version.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-packageExportsEntryPath">
+      <h4>packageExportsEntryPath</h4>
+      <p class="snote">The module path that is resolved when this specifier is imported. Set to `null` to disallow importing this module.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span><span>the value itself may be empty</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-packageExportsEntryObject">
+      <h4>packageExportsEntryObject</h4>
+      <p class="snote">Used to specify conditional exports, note that Conditional exports are unsupported in older environments, so it's recommended to use the fallback array option if support for those environments is a concern.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">require</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this specifier is imported as a CommonJS module using the `require(...)` function.</td>
+  </tr><tr>
+    <td><span class="nm">import</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this specifier is imported as an ECMAScript module using an `import` declaration or the dynamic `import(...)` function.</td>
+  </tr><tr>
+    <td><span class="nm">module-sync</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The same as `import`, but can be used with require(esm) in Node 20+. This requires the files to not use any top-level awaits.</td>
+  </tr><tr>
+    <td><span class="nm">node</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this environment is Node.js.</td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when no other export type matches.</td>
+  </tr><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved for TypeScript types when this specifier is imported. Should be listed before other conditions. Additionally, versioned &quot;types&quot; condition in the form &quot;types@{selector}&quot; are supported.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^[^.0-9]+$">any name made of numbers, dots, dashes</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this environment matches the property name.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^types@.+$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageExportsEntryOrFallback">a packageExportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved for TypeScript types when this specifier is imported. Should be listed before other conditions. Additionally, versioned &quot;types&quot; condition in the form &quot;types@{selector}&quot; are supported.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-packageExportsEntry">
+      <h4>packageExportsEntry</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">either <a class="ty link" href="#shape-definitions-packageExportsEntryPath">a packageExportsEntryPath</a> or <a class="ty link" href="#shape-definitions-packageExportsEntryObject">a packageExportsEntryObject</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-packageExportsFallback">
+      <h4>packageExportsFallback</h4>
+      <p class="snote">Used to allow fallbacks in case this environment doesn't support the preceding entries.</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-packageExportsEntry">a packageExportsEntry</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-packageImportsEntry">
+      <h4>packageImportsEntry</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">either <a class="ty link" href="#shape-definitions-packageImportsEntryPath">a packageImportsEntryPath</a> or <a class="ty link" href="#shape-definitions-packageImportsEntryObject">a packageImportsEntryObject</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-fundingWay">
+      <h4>fundingWay</h4>
+      <p class="snote">Used to inform about ways to help fund development of the package.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><a class="ty link" href="#shape-definitions-fundingUrl">a fundingUrl</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The type of funding or the platform through which funding can be provided, e.g. patreon, opencollective, tidelift or github.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-runtimeEngineDependency">
+      <h4>runtimeEngineDependency</h4>
+      <p class="snote">Specifies a supported JavaScript runtime.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The runtime name</td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The version range for the runtime</td>
+  </tr><tr>
+    <td><span class="nm">onFail</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">ignore</span><span class="chip">warn</span><span class="chip">error</span><span class="chip">download</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">What action to take if runtime validation fails</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-devDependency">
+      <h4>devDependency</h4>
+      <p class="snote">Specifies dependencies that are required for the development and testing of the project. These dependencies are not needed in the production environment.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-scriptsPublishAfter">
+      <h4>scriptsPublishAfter</h4>
+      <p class="snote">Run AFTER the package is published.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-packageImportsEntryPath">
+      <h4>packageImportsEntryPath</h4>
+      <p class="snote">The module path that is resolved when this specifier is imported. Set to `null` to disallow importing this module.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>the value itself may be empty</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-packageImportsEntryObject">
+      <h4>packageImportsEntryObject</h4>
+      <p class="snote">Used to specify conditional exports, note that Conditional exports are unsupported in older environments, so it's recommended to use the fallback array option if support for those environments is a concern.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">require</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this specifier is imported as a CommonJS module using the `require(...)` function.</td>
+  </tr><tr>
+    <td><span class="nm">import</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this specifier is imported as an ECMAScript module using an `import` declaration or the dynamic `import(...)` function.</td>
+  </tr><tr>
+    <td><span class="nm">node</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this environment is Node.js.</td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when no other export type matches.</td>
+  </tr><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved for TypeScript types when this specifier is imported. Should be listed before other conditions. Additionally, versioned &quot;types&quot; condition in the form &quot;types@{selector}&quot; are supported.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^[^.0-9]+$">any name made of numbers, dots, dashes</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved when this environment matches the property name.</td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^types@.+$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-packageImportsEntryOrFallback">a packageImportsEntryOrFallback</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The module path that is resolved for TypeScript types when this specifier is imported. Should be listed before other conditions. Additionally, versioned &quot;types&quot; condition in the form &quot;types@{selector}&quot; are supported.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-packageImportsFallback">
+      <h4>packageImportsFallback</h4>
+      <p class="snote">Used to allow fallbacks in case this environment doesn't support the preceding entries.</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-packageImportsEntry">a packageImportsEntry</a></span></p>
+    </div>
+  </div></section>
+
+</div>

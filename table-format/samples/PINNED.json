@@ -1,0 +1,117 @@
+{
+  "samples/real/github-workflow.json": {
+    "url": "https://json.schemastore.org/github-workflow.json",
+    "sha256": "e128cbc5f24b1009b261e0e6ebef4811be76dca7061bab5d53e9782284268f06",
+    "bytes": 113655
+  },
+  "samples/real/package.json": {
+    "url": "https://json.schemastore.org/package.json",
+    "sha256": "e5390e202b0ab1bcf3154f69bb2334576c53218638dcd857deb413f18ab55a29",
+    "bytes": 47756
+  },
+  "samples/real/openapi31.json": {
+    "url": "https://spec.openapis.org/oas/3.1/schema/2022-10-07",
+    "sha256": "da01ba28852cac0de53893797cb8d1942bc3b05084f526dcc216717dec314ed0",
+    "bytes": 33992
+  },
+  "samples/real/compose-spec.json": {
+    "url": "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json",
+    "sha256": "73ca5878c77570ba222a558016c7b3c6770ba5f3377786593e32180666512f8f",
+    "bytes": 76664
+  },
+  "samples/real/metaschema-draft07.json": {
+    "url": "https://json-schema.org/draft-07/schema",
+    "sha256": "692e1d165e47afcb5f11b2ce1c639635ffa834035d6ecb6bcf3087481dae8404",
+    "bytes": 4979
+  },
+  "patterns/omc/omc-v2.6.json": {
+    "url": "https://github.com/movielabs/omc-json-schema (OMC v2.6, from MovieLabs)",
+    "sha256": "bc016fc547e839eb40dc24c70aad349d0b960f81413987fc5452c774d71b28c8",
+    "bytes": 202228
+  },
+  "samples/stress/metaschema-draft04.json": {
+    "url": "https://json-schema.org/draft-04/schema",
+    "sha256": "e1489d0b4755f02793302591d3fcb8f07b6893a82a94f24895f8e4edf11b82e2",
+    "bytes": 4357
+  },
+  "samples/stress/metaschema-draft06.json": {
+    "url": "https://json-schema.org/draft-06/schema",
+    "sha256": "0064e880ba214bff1cee511e678fbe48c9826dd359e91e2423fc36de67b2ebe1",
+    "bytes": 4497
+  },
+  "samples/stress/metaschema-2019-09.json": {
+    "url": "https://json-schema.org/draft/2019-09/schema",
+    "sha256": "7b761b3e121f0a0ca1ea2a0b8e2cc856bcf801604b8268d71bacaa202bc0c13b",
+    "bytes": 1785
+  },
+  "samples/stress/metaschema-2020-12.json": {
+    "url": "https://json-schema.org/draft/2020-12/schema",
+    "sha256": "41da76f5afb7ce062d248f762463a92f7ca47e4e0f905b224ba6afeef91ded0f",
+    "bytes": 2452
+  },
+  "samples/stress/sarif-2.1.0.json": {
+    "url": "https://json.schemastore.org/sarif-2.1.0.json",
+    "sha256": "7c9688f0a1c4a4e1649ecc78521087e664729c1dff56ee8212ff195c7b16132a",
+    "bytes": 111720
+  },
+  "samples/stress/tsconfig.json": {
+    "url": "https://json.schemastore.org/tsconfig.json",
+    "sha256": "d28a7dc74d8e7fb2b140256e642cd353eece72a4c644f2fc9c7d235d8187b576",
+    "bytes": 469368
+  },
+  "samples/stress/eslintrc.json": {
+    "url": "https://json.schemastore.org/eslintrc.json",
+    "sha256": "2e7bf9df71bef201db128b6287c9d8b89bad4e7f8aa839d224e9c42141bb4e09",
+    "bytes": 55161
+  },
+  "samples/stress/prettierrc.json": {
+    "url": "https://json.schemastore.org/prettierrc.json",
+    "sha256": "a5f9c7ed250e12c1b5fb7f0a2ae1b03e064513b40be96688cd2517925f42a6f0",
+    "bytes": 13404
+  },
+  "samples/stress/dependabot-2.0.json": {
+    "url": "https://json.schemastore.org/dependabot-2.0.json",
+    "sha256": "c6c2432adc55b40f828b0f987f8024bb9b8926a978301e9cdf4fe3410ee7cf31",
+    "bytes": 50840
+  },
+  "samples/stress/chrome-manifest.json": {
+    "url": "https://json.schemastore.org/chrome-manifest.json",
+    "sha256": "8fc2fe8078ed7c05dce7b6e3e969e160ca3ba20e22e410ab42dc801fcae8492a",
+    "bytes": 34194
+  },
+  "samples/stress/openapi30.json": {
+    "url": "https://spec.openapis.org/oas/3.0/schema/2021-09-28",
+    "sha256": "7a0db7311a69d8b7f2505f59c5d4cbb58539a0961df0c05724a07538014822cf",
+    "bytes": 35752
+  },
+  "samples/stress/asyncapi-2.6.json": {
+    "url": "https://raw.githubusercontent.com/asyncapi/spec-json-schemas/master/schemas/2.6.0.json",
+    "sha256": "4b0bfe579e3c98a1da14db72bbd22a446ae23d5ae347ec7873a4cb488e446583",
+    "bytes": 132524
+  },
+  "samples/stress/geojson.json": {
+    "url": "https://geojson.org/schema/GeoJSON.json",
+    "sha256": "5456d0bdf070d3b654ee6b78c7d807c2663756931cf9f5e50726ed6241535666",
+    "bytes": 46177
+  },
+  "samples/stress/gitlab-ci.json": {
+    "url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json",
+    "sha256": "a4dc2b155aa574575fbfd51dcca99388db5ba1b563ab5e05ce8df005e7eb9ced",
+    "bytes": 128034
+  },
+  "samples/stress/resume.json": {
+    "url": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/schema.json",
+    "sha256": "8911e912ee487954b10cb59da39265c7e62ef7cba5973706d125448adc853969",
+    "bytes": 15018
+  },
+  "samples/stress/geojson-stub.json": {
+    "url": "https://json.schemastore.org/geojson.json",
+    "sha256": "5532d1f9974aa19b69846c1b1d902100fd375663595b849a17ff1ceac31e5774",
+    "bytes": 166
+  },
+  "samples/stress/renovate-stub.json": {
+    "url": "https://json.schemastore.org/renovate.json",
+    "sha256": "608fb3d3e2b409e306d466b22272129637d7359f1b5ed004661839f43c72d6ca",
+    "bytes": 66
+  }
+}

@@ -1,0 +1,1637 @@
+<!doctype html><meta charset="utf-8"><title>github-workflow</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>github-workflow</h1>
+
+<div class="counts">
+    <span class="c req"><b>8</b> you must always fill in</span>
+    <span class="c opt"><b>198</b> you can leave out</span>
+    <span class="c cond"><b>10</b> that only apply in certain cases</span>
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    <p class="snote">Nothing else may be added at the top level.</p>
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of your workflow. GitHub displays the names of your workflows on your repository's actions page. If you omit this field, GitHub sets the name to the workflow's filename.</td>
+  </tr><tr>
+    <td><span class="nm">on</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-event">an event</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-event">an event</a></span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The name of the GitHub event that triggers the workflow. You can provide a single event string, array of events, array of event types, or an event configuration map that schedules a workflow or restricts the execution of a workflow to specific files, tags, or branch changes. For a list of available events, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 3 of <b>on</b> <span class="cnt">35 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">branch_protection_rule</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the branch_protection_rule event occurs. More than one activity type triggers this event.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>branch_protection_rule</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">check_run</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the check_run event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/checks/runs.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>check_run</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, rerequested, completed, requested_action</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">check_suite</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the check_suite event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/checks/suites/.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>check_suite</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means completed, requested, rerequested</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">create</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime someone creates a branch or tag, which triggers the create event. For information about the REST API, see https://developer.github.com/v3/git/refs/#create-a-reference.</td>
+  </tr><tr>
+    <td><span class="nm">delete</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime someone deletes a branch or tag, which triggers the delete event. For information about the REST API, see https://developer.github.com/v3/git/refs/#delete-a-reference.</td>
+  </tr><tr>
+    <td><span class="nm">deployment</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime someone creates a deployment, which triggers the deployment event. Deployments created with a commit SHA may not have a Git ref. For information about the REST API, see https://developer.github.com/v3/repos/deployments/.</td>
+  </tr><tr>
+    <td><span class="nm">deployment_status</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime a third party provides a deployment status, which triggers the deployment_status event. Deployments created with a commit SHA may not have a Git ref. For information about the REST API, see https://developer.github.com/v3/repos/deployments/#create-a-deployment-status.</td>
+  </tr><tr>
+    <td><span class="nm">discussion</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the discussion event occurs. More than one activity type triggers this event. For information about the GraphQL API, see https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>discussion</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, edited, deleted, transferred, pinned, unpinned, labeled, unlabeled, locked, unlocked, category_changed, answered, unanswered</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">discussion_comment</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the discussion_comment event occurs. More than one activity type triggers this event. For information about the GraphQL API, see https://docs.github.com/en/graphql/guides/using-the-graphql-api-for-discussions</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>discussion_comment</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">fork</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime when someone forks a repository, which triggers the fork event. For information about the REST API, see https://developer.github.com/v3/repos/forks/#create-a-fork.</td>
+  </tr><tr>
+    <td><span class="nm">gollum</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow when someone creates or updates a Wiki page, which triggers the gollum event.</td>
+  </tr><tr>
+    <td><span class="nm">issue_comment</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the issue_comment event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues/comments/.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>issue_comment</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">issues</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the issues event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>issues</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means opened, edited, deleted, transferred, pinned, unpinned, closed, reopened, assigned, unassigned, labeled, unlabeled, locked, unlocked, milestoned, demilestoned, typed, untyped, field_added, field_removed</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">label</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the label event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues/labels/.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>label</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">merge_group</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow when a pull request is added to a merge queue, which adds the pull request to a merge group. For information about the merge queue, see https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request-with-a-merge-queue .</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>merge_group</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means checks_requested</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">milestone</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the milestone event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/issues/milestones/.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>milestone</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, closed, opened, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">page_build</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime someone pushes to a GitHub Pages-enabled branch, which triggers the page_build event. For information about the REST API, see https://developer.github.com/v3/repos/pages/.</td>
+  </tr><tr>
+    <td><span class="nm">project</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the project event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/projects/.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>project</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, updated, closed, reopened, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">project_card</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the project_card event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/projects/cards.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>project_card</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, moved, converted, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">project_column</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the project_column event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/projects/columns.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>project_column</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, updated, moved, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">public</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime someone makes a private repository public, which triggers the public event. For information about the REST API, see https://developer.github.com/v3/repos/#edit.</td>
+  </tr><tr>
+    <td><span class="nm">pull_request</span></td>
+    <td><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a group of fields <i>you cannot use branches and branches-ignore together</i> <i>you cannot use tags and tags-ignore together</i> <i>you cannot use paths and paths-ignore together</i></span></div><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the pull_request event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/pulls.
+Note: Workflows do not run on private base repositories when you open a pull request from a forked repository.
+When you create a pull request from a forked repository to the base repository, GitHub sends the pull_request event to the base repository and no pull request events occur on the forked repository.
+Workflows don't run on forked repositories by default. You must enable GitHub Actions in the Actions tab of the forked repository.
+The permissions for the GITHUB_TOKEN in forked repositories is read-only. For more information about the GITHUB_TOKEN, see https://help.github.com/en/articles/virtual-environments-for-github-actions.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>pull_request</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr class="nest"><td colspan="4">
+      <details class="borrow"><summary>and the 7 fields every a shared shape carries</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means opened, synchronize, reopened</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">branches</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">branches-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths</span></td>
+    <td><a class="ty link" href="#shape-definitions-path">a path</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-path">a path</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">pull_request_review</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the pull_request_review event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/pulls/reviews.
+Note: Workflows do not run on private base repositories when you open a pull request from a forked repository.
+When you create a pull request from a forked repository to the base repository, GitHub sends the pull_request event to the base repository and no pull request events occur on the forked repository.
+Workflows don't run on forked repositories by default. You must enable GitHub Actions in the Actions tab of the forked repository.
+The permissions for the GITHUB_TOKEN in forked repositories is read-only. For more information about the GITHUB_TOKEN, see https://help.github.com/en/articles/virtual-environments-for-github-actions.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>pull_request_review</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means submitted, edited, dismissed</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">pull_request_review_comment</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime a comment on a pull request's unified diff is modified, which triggers the pull_request_review_comment event. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/pulls/comments.
+Note: Workflows do not run on private base repositories when you open a pull request from a forked repository.
+When you create a pull request from a forked repository to the base repository, GitHub sends the pull_request event to the base repository and no pull request events occur on the forked repository.
+Workflows don't run on forked repositories by default. You must enable GitHub Actions in the Actions tab of the forked repository.
+The permissions for the GITHUB_TOKEN in forked repositories is read-only. For more information about the GITHUB_TOKEN, see https://help.github.com/en/articles/virtual-environments-for-github-actions.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>pull_request_review_comment</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means created, edited, deleted</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">pull_request_target</span></td>
+    <td><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a group of fields <i>you cannot use branches and branches-ignore together</i> <i>you cannot use tags and tags-ignore together</i> <i>you cannot use paths and paths-ignore together</i></span></div><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This event is similar to pull_request, except that it runs in the context of the base repository of the pull request, rather than in the merge commit. This means that you can more safely make your secrets available to the workflows triggered by the pull request, because only workflows defined in the commit on the base repository are run. For example, this event allows you to create workflows that label and comment on pull requests, based on the contents of the event payload.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>pull_request_target</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr class="nest"><td colspan="4">
+      <details class="borrow"><summary>and the 7 fields every a shared shape carries</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means opened, synchronize, reopened</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">branches</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">branches-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths</span></td>
+    <td><a class="ty link" href="#shape-definitions-path">a path</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-path">a path</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">push</span></td>
+    <td><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a group of fields <i>you cannot use branches and branches-ignore together</i> <i>you cannot use tags and tags-ignore together</i> <i>you cannot use paths and paths-ignore together</i></span></div><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow when someone pushes to a repository branch, which triggers the push event.
+Note: The webhook payload available to GitHub Actions does not include the added, removed, and modified attributes in the commit object. You can retrieve the full commit object using the REST API. For more information, see https://developer.github.com/v3/repos/commits/#get-a-single-commit.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>push</b> <span class="cnt">6 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr class="nest"><td colspan="4">
+      <details class="borrow"><summary>and the 6 fields every a shared shape carries</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">branches</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">branches-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-branch">a branch</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths</span></td>
+    <td><a class="ty link" href="#shape-definitions-path">a path</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths-ignore</span></td>
+    <td><a class="ty link" href="#shape-definitions-path">a path</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">registry_package</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime a package is published or updated. For more information, see https://help.github.com/en/github/managing-packages-with-github-packages.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>registry_package</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means published, updated</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">release</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the release event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/repos/releases/ in the GitHub Developer documentation.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>release</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means published, unpublished, created, edited, deleted, prereleased, released</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">status</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the status of a Git commit changes, which triggers the status event. For information about the REST API, see https://developer.github.com/v3/repos/statuses/.</td>
+  </tr><tr>
+    <td><span class="nm">watch</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs your workflow anytime the watch event occurs. More than one activity type triggers this event. For information about the REST API, see https://developer.github.com/v3/activity/starring/.</td>
+  </tr><tr>
+    <td><span class="nm">workflow_call</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Allows workflows to be reused by other workflows.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>workflow_call</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><span class="ty">a group where you choose the names, each one a group of fields</span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When using the workflow_call keyword, you can optionally specify inputs that are passed to the called workflow from the caller workflow.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>inputs</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[_a-zA-Z][a-zA-Z0-9_-]*$">any name in a set format</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string identifier to associate with the input. The value of &lt;input_id&gt; is a map of the input's metadata. The &lt;input_id&gt; must be a unique identifier within the inputs object. The &lt;input_id&gt; must start with a letter or _ and contain only alphanumeric characters, -, or _.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string description of the input parameter.</td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.</td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">boolean</span><span class="chip">number</span><span class="chip">string</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in workflow_call</span></td>
+    <td class="de">Required if input is defined for the on.workflow_call keyword. The value of this parameter is a string specifying the data type of the input. This must be one of: boolean, number, or string.</td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The default value is used when an input parameter isn't specified in a workflow file.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">outputs</span></td>
+    <td><span class="ty">a group where you choose the names, each one a group of fields</span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When using the workflow_call keyword, you can optionally specify inputs that are passed to the called workflow from the caller workflow.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>outputs</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[_a-zA-Z][a-zA-Z0-9_-]*$">any name in a set format</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string identifier to associate with the output. The value of &lt;output_id&gt; is a map of the output's metadata. The &lt;output_id&gt; must be a unique identifier within the outputs object. The &lt;output_id&gt; must start with a letter or _ and contain only alphanumeric characters, -, or _.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string description of the output parameter.</td>
+  </tr><tr>
+    <td><span class="nm">value</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in workflow_call</span></td>
+    <td class="de">The value that the output parameter will be mapped to. You can set this to a string or an expression with context. For example, you can use the steps context to set the value of an output to the output value of a step.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">secrets</span></td>
+    <td><span class="ty">a group where you choose the names, each one a group of fields</span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of the secrets that can be used in the called workflow. Within the called workflow, you can use the secrets context to refer to a secret.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>secrets</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[_a-zA-Z][a-zA-Z0-9_-]*$">any name in a set format</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string identifier to associate with the secret.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string description of the secret parameter.</td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A boolean specifying whether the secret must be supplied.</td>
+  </tr></table></details></td></tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">workflow_dispatch</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can now create workflows that are manually triggered with the new workflow_dispatch event. You will then see a 'Run workflow' button on the Actions tab, enabling you to easily trigger a run.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>workflow_dispatch</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-workflowDispatchInput">a workflowDispatchInput</a></span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Input parameters allow you to specify data that the action expects to use during runtime. GitHub stores input parameters as environment variables. Input ids with uppercase letters are converted to lowercase during runtime. We recommended using lowercase input ids.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>inputs</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[_a-zA-Z][a-zA-Z0-9_-]*$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-workflowDispatchInput">a workflowDispatchInput</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">workflow_run</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This event occurs when a workflow run is requested or completed, and allows you to execute a workflow based on the finished result of another workflow. For example, if your pull_request workflow generates build artifacts, you can create a new workflow that uses workflow_run to analyze the results and add a comment to the original pull request.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>workflow_run</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">types</span></td>
+    <td><a class="ty link" href="#shape-definitions-types">a types</a><div class="notes"><span>left out means requested, completed</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">workflows</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^branches(-ignore)?$">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">repository_dispatch</span></td>
+    <td><a class="ty link" href="#shape-definitions-eventObject">an eventObject</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can use the GitHub API to trigger a webhook event called repository_dispatch when you want to trigger a workflow for activity that happens outside of GitHub. For more information, see https://developer.github.com/v3/repos/#create-a-repository-dispatch-event.
+To trigger the custom repository_dispatch webhook event, you must send a POST request to a GitHub API endpoint and provide an event_type name to describe the activity type. To trigger a workflow run, you must also configure your workflow to use the repository_dispatch event.</td>
+  </tr><tr>
+    <td><span class="nm">schedule</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can schedule a workflow to run at specific UTC times using POSIX cron syntax (https://pubs.opengroup.org/onlinepubs/9699919799/utilities/crontab.html#tag_20_25_07). You can optionally specify a timezone using an IANA timezone string (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for timezone-aware scheduling. Scheduled workflows run on the latest commit on the default or base branch. The shortest interval you can run scheduled workflows is once every 5 minutes.
+Note: GitHub Actions does not support the non-standard syntax @yearly, @monthly, @weekly, @daily, @hourly, and @reboot.
+You can use crontab guru (https://crontab.guru/) to help generate your cron syntax and confirm what time it will run. To help you get started, there is also a list of crontab guru examples (https://crontab.guru/examples.html).</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of schedule</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">cron</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in schedule</span></td>
+    <td class="de">A cron expression that represents a schedule. A scheduled workflow will run at most once every 5 minutes.</td>
+  </tr><tr>
+    <td><span class="nm">timezone</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string that represents the time zone a scheduled workflow will run relative to in IANA format (e.g. 'America/New_York' or 'Europe/London'). If omitted, the workflow will run relative to midnight UTC.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">env</span></td>
+    <td><a class="ty link" href="#shape-definitions-env">an env</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of environment variables that are available to all jobs and steps in the workflow.</td>
+  </tr><tr>
+    <td><span class="nm">defaults</span></td>
+    <td><a class="ty link" href="#shape-definitions-defaults">a defaults</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of default settings that will apply to all jobs in the workflow.</td>
+  </tr><tr>
+    <td><span class="nm">concurrency</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form"><a class="ty link" href="#shape-definitions-concurrency">a concurrency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context. 
+You can also specify concurrency at the workflow level. 
+When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.</td>
+  </tr><tr>
+    <td><span class="nm">jobs</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-normalJob">a normalJob</a> or <a class="ty link" href="#shape-definitions-reusableWorkflowCallJob">a reusableWorkflowCallJob</a></span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>at least 1 field</span><span>nothing else may be added here</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">A workflow run is made up of one or more jobs. Jobs run in parallel by default. To run jobs sequentially, you can define dependencies on other jobs using the jobs.&lt;job_id&gt;.needs keyword.
+Each job runs in a fresh instance of the virtual environment specified by runs-on.
+You can run an unlimited number of jobs as long as you are within the workflow usage limits. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#usage-limits.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>jobs</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[_a-zA-Z][a-zA-Z0-9_-]*$">any name in a set format</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-normalJob">a normalJob</a> or <a class="ty link" href="#shape-definitions-reusableWorkflowCallJob">a reusableWorkflowCallJob</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">run-name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name for workflow runs generated from the workflow. GitHub displays the workflow run name in the list of workflow runs on your repository's 'Actions' tab.</td>
+  </tr><tr>
+    <td><span class="nm">permissions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions">a permissions</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></section><section><h2>All 30 shapes</h2>
+    <p class="snote">Every shape this document describes. The ones used most often come first, because everything else is built on them. Click any name to jump to its rules.</p>
+    <div class="ix"><div class="ixgroup"><div class="ixh">Shapes</div><ul><li><a href="#shape-definitions-eventObject">eventObject</a> <span class="ixn">used 29</span></li><li><a href="#shape-definitions-types">types</a> <span class="ixn">used 20</span></li><li><a href="#shape-definitions-permissions-level">permissions-level</a> <span class="ixn">used 16</span></li><li><a href="#shape-definitions-branch">branch</a> <span class="ixn">used 12</span></li><li><a href="#shape-definitions-expressionSyntax">expressionSyntax</a> <span class="ixn">used 10</span></li><li><a href="#shape-definitions-env">env</a> <span class="ixn">used 8</span></li><li><a href="#shape-definitions-path">path</a> <span class="ixn">used 6</span></li><li><a href="#shape-definitions-configuration">configuration</a> <span class="ixn">used 4</span></li><li><a href="#shape-definitions-concurrency">concurrency</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-permissions">permissions</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-defaults">defaults</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-event">event</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-stringContainingExpressionSyntax">stringContainingExpressionSyntax</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-globs">globs</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-name">name</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-shell">shell</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-step">step</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-working-directory">working-directory</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-jobNeeds">jobNeeds</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-matrix">matrix</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-jobContainer">jobContainer</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-serviceContainer">serviceContainer</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-permissions-event">permissions-event</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-environment">environment</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-snapshot">snapshot</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-reusableWorkflowCallJob">reusableWorkflowCallJob</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-normalJob">normalJob</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-workflowDispatchInput">workflowDispatchInput</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-architecture">architecture</a></li><li><a href="#shape-definitions-machine">machine</a></li></ul></div></div></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-eventObject">
+      <h4>eventObject</h4>
+      
+      
+      
+      <p class="snote">Used in 29 places.</p>
+      <p class="leafval"><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a group of fields</span></div><div class="notes"><span>the value itself may be empty</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-types">
+      <h4>types</h4>
+      <p class="snote">Selects the types of activity that will trigger a workflow run. Most GitHub events are triggered by more than one type of activity. For example, the event for the release resource is triggered when a release is published, unpublished, created, edited, deleted, or prereleased. The types keyword enables you to narrow down activity that causes the workflow to run. When only one activity type triggers a webhook event, the types keyword is unnecessary.
+You can use an array of event types. For more information about each event and their activity types, see https://help.github.com/en/articles/events-that-trigger-workflows#webhook-events.</p>
+      
+      
+      <p class="snote">Used in 20 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list</span><span class="form">text</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-permissions-level">
+      <h4>permissions-level</h4>
+      
+      
+      
+      <p class="snote">Used in 16 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip">read</span><span class="chip">write</span><span class="chip">none</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-branch">
+      <h4>branch</h4>
+      <p class="snote">When using the push and pull_request events, you can configure a workflow to run on specific branches or tags. If you only define only tags or only branches, the workflow won't run for events affecting the undefined Git ref.
+The branches, branches-ignore, tags, and tags-ignore keywords accept glob patterns that use the * and ** wildcard characters to match more than one branch or tag name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
+The patterns defined in branches and tags are evaluated against the Git ref's name. For example, defining the pattern mona/octocat in branches will match the refs/heads/mona/octocat Git ref. The pattern releases/** will match the refs/heads/releases/10 Git ref.
+You can use two types of filters to prevent a workflow from running on pushes and pull requests to tags and branches:
+- branches or branches-ignore - You cannot use both the branches and branches-ignore filters for the same event in a workflow. Use the branches filter when you need to filter branches for positive matches and exclude branches. Use the branches-ignore filter when you only need to exclude branch names.
+- tags or tags-ignore - You cannot use both the tags and tags-ignore filters for the same event in a workflow. Use the tags filter when you need to filter tags for positive matches and exclude tags. Use the tags-ignore filter when you only need to exclude tag names.
+You can exclude tags and branches using the ! character. The order that you define patterns matters.
+- A matching negative pattern (prefixed with !) after a positive match will exclude the Git ref.
+- A matching positive pattern after a negative match will include the Git ref again.</p>
+      
+      
+      <p class="snote">Used in 12 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-globs">a globs, and that shape is itself a list</a></p>
+    </div><div class="shapeblock" id="shape-definitions-expressionSyntax">
+      <h4>expressionSyntax</h4>
+      
+      
+      
+      <p class="snote">Used in 10 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-env">
+      <h4>env</h4>
+      <p class="snote">To set custom environment variables, you need to specify the variables in the workflow file. You can define environment variables for a step, job, or entire workflow using the jobs.&lt;job_id&gt;.steps[*].env, jobs.&lt;job_id&gt;.env, and env keywords. For more information, see https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepsenv</p>
+      
+      
+      <p class="snote">Used in 8 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form"><a class="ty link" href="#shape-definitions-stringContainingExpressionSyntax">a stringContainingExpressionSyntax</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-path">
+      <h4>path</h4>
+      <p class="snote">When using the push and pull_request events, you can configure a workflow to run when at least one file does not match paths-ignore or at least one modified file matches the configured paths. Path filters are not evaluated for pushes to tags.
+The paths-ignore and paths keywords accept glob patterns that use the * and ** wildcard characters to match more than one path name. For more information, see https://help.github.com/en/github/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet.
+You can exclude paths using two types of filters. You cannot use both of these filters for the same event in a workflow.
+- paths-ignore - Use the paths-ignore filter when you only need to exclude path names.
+- paths - Use the paths filter when you need to filter paths for positive matches and exclude paths.</p>
+      
+      
+      <p class="snote">Used in 6 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-globs">a globs, and that shape is itself a list</a></p>
+    </div><div class="shapeblock" id="shape-definitions-configuration">
+      <h4>configuration</h4>
+      
+      
+      
+      <p class="snote">Used in 4 places.</p>
+      <p class="leafval"><span class="ty">one of 5 forms</span><div class="forms"><span class="form">text</span><span class="form">a number</span><span class="form">yes or no</span><span class="form">a group of fields</span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-configuration">a configuration</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-concurrency">
+      <h4>concurrency</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 3 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">group</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`.</td>
+  </tr><tr>
+    <td><span class="nm">cancel-in-progress</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">To cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.</td>
+  </tr><tr>
+    <td><span class="nm">queue</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">single<em>default</em></span><span class="chip">max</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Controls how pending jobs or workflow runs are queued within a concurrency group. With the default `single`, at most one run can be pending — additional pending runs cancel the previous one. With `max`, up to 100 runs can be pending and are processed in FIFO order. The combination of `queue: max` and `cancel-in-progress: true` is not allowed.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-permissions">
+      <h4>permissions</h4>
+      <p class="snote">You can modify the default permissions granted to the GITHUB_TOKEN, adding or removing access as required, so that you only allow the minimum required access.</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">one of these</span><span class="form"><a class="ty link" href="#shape-definitions-permissions-event">a permissions-event</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-defaults">
+      <h4>defaults</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">run</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>at least 1 field</span><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>run</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">shell</span></td>
+    <td><a class="ty link" href="#shape-definitions-shell">a shell</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">working-directory</span></td>
+    <td><a class="ty link" href="#shape-definitions-working-directory">a working-directory</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-event">
+      <h4>event</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><details class="pick"><summary>one of 34</summary><span class="chips"><span class="chip">branch_protection_rule</span><span class="chip">check_run</span><span class="chip">check_suite</span><span class="chip">create</span><span class="chip">delete</span><span class="chip">deployment</span><span class="chip">deployment_status</span><span class="chip">discussion</span><span class="chip">discussion_comment</span><span class="chip">fork</span><span class="chip">gollum</span><span class="chip">issue_comment</span><span class="chip">issues</span><span class="chip">label</span><span class="chip">merge_group</span><span class="chip">milestone</span><span class="chip">page_build</span><span class="chip">project</span><span class="chip">project_card</span><span class="chip">project_column</span><span class="chip">public</span><span class="chip">pull_request</span><span class="chip">pull_request_review</span><span class="chip">pull_request_review_comment</span><span class="chip">pull_request_target</span><span class="chip">push</span><span class="chip">registry_package</span><span class="chip">release</span><span class="chip">status</span><span class="chip">watch</span><span class="chip">workflow_call</span><span class="chip">workflow_dispatch</span><span class="chip">workflow_run</span><span class="chip">repository_dispatch</span></span></details></p>
+    </div><div class="shapeblock" id="shape-definitions-stringContainingExpressionSyntax">
+      <h4>stringContainingExpressionSyntax</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-globs">
+      <h4>globs</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-name">
+      <h4>name</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-shell">
+      <h4>shell</h4>
+      <p class="snote">You can override the default shell settings in the runner's operating system using the shell keyword. You can use built-in shell keywords, or you can define a custom set of shell options.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">one of these</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-step">
+      <h4>step</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A unique identifier for the step. You can use the id to reference the step in contexts. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.</td>
+  </tr><tr>
+    <td><span class="nm">if</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can use the if conditional to prevent a step from running unless a condition is met. You can use any supported context and expression to create a conditional.
+Expressions in an if conditional do not require the ${{ }} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.</td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A name for your step to display on GitHub.</td>
+  </tr><tr>
+    <td><span class="nm">uses</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Selects an action to run as part of a step in your job. An action is a reusable unit of code. You can use an action defined in the same repository as the workflow, a public repository, or in a published Docker container image (https://hub.docker.com/).
+We strongly recommend that you include the version of the action you are using by specifying a Git ref, SHA, or Docker tag number. If you don't specify a version, it could break your workflows or cause unexpected behavior when the action owner publishes an update.
+- Using the commit SHA of a released action version is the safest for stability and security.
+- Using the specific major action version allows you to receive critical fixes and security patches while still maintaining compatibility. It also assures that your workflow should still work.
+- Using the master branch of an action may be convenient, but if someone releases a new major version with a breaking change, your workflow could break.
+Some actions require inputs that you must set using the with keyword. Review the action's README file to determine the inputs required.
+Actions are either JavaScript files or Docker containers. If the action you're using is a Docker container you must run the job in a Linux virtual environment. For more details, see https://help.github.com/en/articles/virtual-environments-for-github-actions.</td>
+  </tr><tr>
+    <td><span class="nm">run</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs command-line programs using the operating system's shell. If you do not provide a name, the step name will default to the text specified in the run command.
+Commands run using non-login shells by default. You can choose a different shell and customize the shell used to run commands. For more information, see https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#using-a-specific-shell.
+Each run keyword represents a new process and shell in the virtual environment. When you provide multi-line commands, each line runs in the same shell.</td>
+  </tr><tr>
+    <td><span class="nm">working-directory</span></td>
+    <td><a class="ty link" href="#shape-definitions-working-directory">a working-directory</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>working-directory</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">run</span></td><td></td><td><span class="rq cond">Yes, once you fill in working-directory</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">shell</span></td>
+    <td><a class="ty link" href="#shape-definitions-shell">a shell</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>shell</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">run</span></td><td></td><td><span class="rq cond">Yes, once you fill in shell</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">with</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>and follows <a class="link" href="#shape-definitions-env">an env</a> as well</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of the input parameters defined by the action. Each input parameter is a key/value pair. Input parameters are set as environment variables. The variable is prefixed with INPUT_ and converted to upper case.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>with</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">args</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">entrypoint</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">env</span></td>
+    <td><a class="ty link" href="#shape-definitions-env">an env</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets environment variables for steps to use in the virtual environment. You can also set environment variables for the entire workflow or a job.</td>
+  </tr><tr>
+    <td><span class="nm">continue-on-error</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Prevents a job from failing when a step fails. Set to true to allow a job to pass when this step fails.</td>
+  </tr><tr>
+    <td><span class="nm">timeout-minutes</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a number</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The maximum number of minutes to run the step before killing the process.</td>
+  </tr><tr>
+    <td><span class="nm">background</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs a step asynchronously so the job continues to the next step without waiting for it to finish. You can use background on steps that use run or uses. To reference a background step from wait or cancel, give it an id. A maximum of 10 background steps can run concurrently in a single job.</td>
+  </tr><tr>
+    <td><span class="nm">wait</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Pauses the job until one or more background steps complete. Provide a single step id as a string, or multiple step ids as an array. After a wait step completes, the outputs of the referenced background steps become available to subsequent steps.</td>
+  </tr><tr>
+    <td><span class="nm">wait-all</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Pauses the job until all active background steps complete. The wait-all keyword takes no arguments.</td>
+  </tr><tr>
+    <td><span class="nm">cancel</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Gracefully terminates a running background step. The runner sends the step's process a termination signal (SIGTERM) so it can clean up. The cancel keyword targets a single background step by its id.</td>
+  </tr><tr>
+    <td><span class="nm">parallel</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-step">a step</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Runs a group of steps concurrently, then waits for all of them to finish before continuing. Every step in the group runs as a background step, with an implicit wait at the end of the group.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-working-directory">
+      <h4>working-directory</h4>
+      <p class="snote">Using the working-directory keyword, you can specify the working directory of where to run the command.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-jobNeeds">
+      <h4>jobNeeds</h4>
+      <p class="snote">Identifies any jobs that must complete successfully before this job will run. It can be a string or array of strings. If a job fails, all jobs that need it are skipped unless the jobs use a conditional statement that causes the job to continue.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a list, each one <a class="ty link" href="#shape-definitions-name">a name</a></span><span class="form"><a class="ty link" href="#shape-definitions-name">a name</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-matrix">
+      <h4>matrix</h4>
+      <p class="snote">A build matrix is a set of different configurations of the virtual environment. For example you might run a job against more than one supported version of a language, operating system, or tool. Each configuration is a copy of the job that runs and reports a status.
+You can specify a matrix by supplying an array for the configuration options. For example, if the GitHub virtual environment supports Node.js versions 6, 8, and 10 you could specify an array of those versions in the matrix.
+When you define a matrix of operating systems, you must set the required runs-on keyword to the operating system of the current job, rather than hard-coding the operating system name. To access the operating system name, you can use the matrix.os context parameter to set runs-on. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-jobContainer">
+      <h4>jobContainer</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">image</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The Docker image to use as the container to run the action. The value can be the Docker Hub image name or a registry name.</td>
+  </tr><tr>
+    <td><span class="nm">credentials</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If the image's container registry requires authentication to pull the image, you can use credentials to set a map of the username and password. The credentials are the same values that you would provide to the `docker login` command.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>credentials</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">username</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">password</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">env</span></td>
+    <td><a class="ty link" href="#shape-definitions-env">an env</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets a map of environment variables in the container.</td>
+  </tr><tr>
+    <td><span class="nm">ports</span></td>
+    <td><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">a number</span><span class="form">text</span></div><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets an array of ports to expose on the container.</td>
+  </tr><tr>
+    <td><span class="nm">volumes</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets an array of volumes for the container to use. You can use volumes to share data between services or other steps in a job. You can specify named Docker volumes, anonymous Docker volumes, or bind mounts on the host.
+To specify a volume, you specify the source and destination path: &lt;source&gt;:&lt;destinationPath&gt;
+The &lt;source&gt; is a volume name or an absolute path on the host machine, and &lt;destinationPath&gt; is an absolute path in the container.</td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Additional Docker container resource options. For a list of options, see https://docs.docker.com/engine/reference/commandline/create/#options.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-serviceContainer">
+      <h4>serviceContainer</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">image</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The Docker image to use as the service container to run the action. The value can be the Docker Hub image name or a registry name.</td>
+  </tr><tr>
+    <td><span class="nm">credentials</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If the image's container registry requires authentication to pull the image, you can use credentials to set a map of the username and password. The credentials are the same values that you would provide to the `docker login` command.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>credentials</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">username</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">password</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">env</span></td>
+    <td><a class="ty link" href="#shape-definitions-env">an env</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets a map of environment variables in the service container.</td>
+  </tr><tr>
+    <td><span class="nm">ports</span></td>
+    <td><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">a number</span><span class="form">text</span></div><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets an array of ports to expose on the service container.</td>
+  </tr><tr>
+    <td><span class="nm">volumes</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Sets an array of volumes for the service container to use. You can use volumes to share data between services or other steps in a job. You can specify named Docker volumes, anonymous Docker volumes, or bind mounts on the host.
+To specify a volume, you specify the source and destination path: &lt;source&gt;:&lt;destinationPath&gt;
+The &lt;source&gt; is a volume name or an absolute path on the host machine, and &lt;destinationPath&gt; is an absolute path in the container.</td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Additional Docker container resource options. For a list of options, see https://docs.docker.com/engine/reference/commandline/create/#options.</td>
+  </tr><tr>
+    <td><span class="nm">command</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Overrides the Docker image's default command (`CMD`). The value is passed as arguments after the image name in the `docker create` command. If you also specify `entrypoint`, `command` provides the arguments to that entrypoint.</td>
+  </tr><tr>
+    <td><span class="nm">entrypoint</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Overrides the Docker image's default `ENTRYPOINT`. The value is a single string defining the executable to run. Use this when you need to replace the image's entrypoint entirely. You can combine `entrypoint` with `command` to pass arguments to the custom entrypoint.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-permissions-event">
+      <h4>permissions-event</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">actions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">artifact-metadata</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">attestations</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">checks</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">code-quality</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">contents</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">deployments</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">discussions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">id-token</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">issues</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">models</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">read</span><span class="chip">none</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">packages</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">pages</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">pull-requests</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">repository-projects</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">security-events</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">statuses</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions-level">a permissions-level</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">copilot-requests</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">write</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-environment">
+      <h4>environment</h4>
+      <p class="snote">The environment that the job references</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The name of the environment configured in the repo.</td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A deployment URL</td>
+  </tr><tr>
+    <td><span class="nm">deployment</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Whether to create a deployment for this job. Setting to false lets the job use environment secrets and variables without creating a deployment record. Wait timers and required reviewers still apply.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-snapshot">
+      <h4>snapshot</h4>
+      <p class="snote">You can use `jobs.&lt;job_id&gt;.snapshot` to generate a custom image.
+Add the snapshot keyword to the job, using either the string syntax or mapping syntax as shown in https://docs.github.com/en/actions/how-tos/manage-runners/larger-runners/use-custom-images#generating-a-custom-image.
+Each job that includes the snapshot keyword creates a separate image. To generate only one image or image version, include all workflow steps in a single job. Each successful run of a job that includes the snapshot keyword creates a new version of that image.
+For more information, see https://docs.github.com/en/actions/how-tos/manage-runners/larger-runners/use-custom-images.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-reusableWorkflowCallJob">
+      <h4>reusableWorkflowCallJob</h4>
+      <p class="snote">Each job must have an id to associate with the job. The key job_id is a string and its value is a map of the job's configuration data. You must replace &lt;job_id&gt; with a string that is unique to the jobs object. The &lt;job_id&gt; must start with a letter or _ and contain only alphanumeric characters, -, or _.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the job displayed on GitHub.</td>
+  </tr><tr>
+    <td><span class="nm">needs</span></td>
+    <td><a class="ty link" href="#shape-definitions-jobNeeds">a jobNeeds</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">permissions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions">a permissions</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">if</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can use the if conditional to prevent a job from running unless a condition is met. You can use any supported context and expression to create a conditional.
+Expressions in an if conditional do not require the ${{ }} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.</td>
+  </tr><tr>
+    <td><span class="nm">uses</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The location and version of a reusable workflow file to run as a job, of the form './{path/to}/{localfile}.yml' or '{owner}/{repo}/{path}/{filename}@{ref}'. {ref} can be a SHA, a release tag, or a branch name. Using the commit SHA is the safest for stability and security.</td>
+  </tr><tr>
+    <td><span class="nm">with</span></td>
+    <td><a class="ty link" href="#shape-definitions-env">an env</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of inputs that are passed to the called workflow. Any inputs that you pass must match the input specifications defined in the called workflow. Unlike 'jobs.&lt;job_id&gt;.steps[*].with', the inputs you pass with 'jobs.&lt;job_id&gt;.with' are not be available as environment variables in the called workflow. Instead, you can reference the inputs by using the inputs context.</td>
+  </tr><tr>
+    <td><span class="nm">secrets</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-env">an env</a></span><span class="form">a fixed value</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When a job is used to call a reusable workflow, you can use 'secrets' to provide a map of secrets that are passed to the called workflow. Any secrets that you pass must match the names defined in the called workflow.</td>
+  </tr><tr>
+    <td><span class="nm">strategy</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A strategy creates a build matrix for your jobs. You can define different variations of an environment to run each job in.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>strategy</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">matrix</span></td>
+    <td><a class="ty link" href="#shape-definitions-matrix">a matrix</a></td>
+    <td><span class="rq cond">Yes, once you fill in strategy</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">fail-fast</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When set to true, GitHub cancels all in-progress jobs if any matrix job fails. Default: true</td>
+  </tr><tr>
+    <td><span class="nm">max-parallel</span></td>
+    <td><span class="ty">a number or text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The maximum number of jobs that can run simultaneously when using a matrix job strategy. By default, GitHub will maximize the number of jobs run in parallel depending on the available runners on GitHub-hosted virtual machines.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">concurrency</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form"><a class="ty link" href="#shape-definitions-concurrency">a concurrency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context. 
+You can also specify concurrency at the workflow level. 
+When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-normalJob">
+      <h4>normalJob</h4>
+      <p class="snote">Each job must have an id to associate with the job. The key job_id is a string and its value is a map of the job's configuration data. You must replace &lt;job_id&gt; with a string that is unique to the jobs object. The &lt;job_id&gt; must start with a letter or _ and contain only alphanumeric characters, -, or _.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the job displayed on GitHub.</td>
+  </tr><tr>
+    <td><span class="nm">needs</span></td>
+    <td><a class="ty link" href="#shape-definitions-jobNeeds">a jobNeeds</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">snapshot</span></td>
+    <td><a class="ty link" href="#shape-definitions-snapshot">a snapshot</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">permissions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions">a permissions</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">runs-on</span></td>
+    <td><span class="ty">one of 5 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span><span class="form">a group of fields</span><span class="form"><a class="ty link" href="#shape-definitions-stringContainingExpressionSyntax">a stringContainingExpressionSyntax</a></span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The type of machine to run the job on. The machine can be either a GitHub-hosted runner, or a self-hosted runner.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 3 of <b>runs-on</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">group</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">labels</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">environment</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form"><a class="ty link" href="#shape-definitions-environment">an environment</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The environment that the job references.</td>
+  </tr><tr>
+    <td><span class="nm">outputs</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span><div class="notes"><span>at least 1 field</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of outputs for a job. Job outputs are available to all downstream jobs that depend on this job.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>outputs</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">env</span></td>
+    <td><a class="ty link" href="#shape-definitions-env">an env</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of environment variables that are available to all steps in the job.</td>
+  </tr><tr>
+    <td><span class="nm">defaults</span></td>
+    <td><a class="ty link" href="#shape-definitions-defaults">a defaults</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A map of default settings that will apply to all steps in the job.</td>
+  </tr><tr>
+    <td><span class="nm">if</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can use the if conditional to prevent a job from running unless a condition is met. You can use any supported context and expression to create a conditional.
+Expressions in an if conditional do not require the ${{ }} syntax. For more information, see https://help.github.com/en/articles/contexts-and-expression-syntax-for-github-actions.</td>
+  </tr><tr>
+    <td><span class="nm">steps</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-step">a step</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A job contains a sequence of tasks called steps. Steps can run commands, run setup tasks, or run an action in your repository, a public repository, or an action published in a Docker registry. Not all steps run actions, but all actions run as a step. Each step runs in its own process in the virtual environment and has access to the workspace and filesystem. Because steps run in their own process, changes to environment variables are not preserved between steps. GitHub provides built-in steps to set up and complete a job.
+Must contain either `uses` or `run`
+</td>
+  </tr><tr>
+    <td><span class="nm">timeout-minutes</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a number</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div><div class="notes"><span>left out means 360</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The maximum number of minutes to let a workflow run before GitHub automatically cancels it. Default: 360</td>
+  </tr><tr>
+    <td><span class="nm">strategy</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A strategy creates a build matrix for your jobs. You can define different variations of an environment to run each job in.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>strategy</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">matrix</span></td>
+    <td><a class="ty link" href="#shape-definitions-matrix">a matrix</a></td>
+    <td><span class="rq cond">Yes, once you fill in strategy</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">fail-fast</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When set to true, GitHub cancels all in-progress jobs if any matrix job fails. Default: true</td>
+  </tr><tr>
+    <td><span class="nm">max-parallel</span></td>
+    <td><span class="ty">a number or text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The maximum number of jobs that can run simultaneously when using a matrix job strategy. By default, GitHub will maximize the number of jobs run in parallel depending on the available runners on GitHub-hosted virtual machines.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">continue-on-error</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form"><a class="ty link" href="#shape-definitions-expressionSyntax">an expressionSyntax</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Prevents a workflow run from failing when a job fails. Set to true to allow a workflow run to pass when this job fails.</td>
+  </tr><tr>
+    <td><span class="nm">container</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form"><a class="ty link" href="#shape-definitions-jobContainer">a jobContainer</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A container to run any steps in a job that don't already specify a container. If you have steps that use both script and container actions, the container actions will run as sibling containers on the same network with the same volume mounts.
+If you do not set a container, all steps will run directly on the host specified by runs-on unless a step refers to an action configured to run in a container.</td>
+  </tr><tr>
+    <td><span class="nm">services</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-serviceContainer">a serviceContainer</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Additional containers to host services for a job in a workflow. These are useful for creating databases or cache services like redis. The runner on the virtual machine will automatically create a network and manage the life cycle of the service containers.
+When you use a service container for a job or your step uses container actions, you don't need to set port information to access the service. Docker automatically exposes all ports between containers on the same network.
+When both the job and the action run in a container, you can directly reference the container by its hostname. The hostname is automatically mapped to the service name.
+When a step does not use a container action, you must access the service using localhost and bind the ports.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>services</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-serviceContainer">a serviceContainer</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">concurrency</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form"><a class="ty link" href="#shape-definitions-concurrency">a concurrency</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Concurrency ensures that only a single job or workflow using the same concurrency group will run at a time. A concurrency group can be any string or expression. The expression can use any context except for the secrets context. 
+You can also specify concurrency at the workflow level. 
+When a concurrent job or workflow is queued, if another job or workflow using the same concurrency group in the repository is in progress, the queued job or workflow will be pending. By default any previously pending job or workflow in the concurrency group will be canceled; this behavior can be changed with `queue`. To also cancel any currently running job or workflow in the same concurrency group, specify cancel-in-progress: true.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-workflowDispatchInput">
+      <h4>workflowDispatchInput</h4>
+      <p class="snote">A string identifier to associate with the input. The value of &lt;input_id&gt; is a map of the input's metadata. The &lt;input_id&gt; must be a unique identifier within the inputs object. The &lt;input_id&gt; must start with a letter or _ and contain only alphanumeric characters, -, or _.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string description of the input parameter.</td>
+  </tr><tr>
+    <td><span class="nm">deprecationMessage</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string shown to users using the deprecated input.</td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A boolean to indicate whether the action requires the input parameter. Set to true when the parameter is required.</td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string representing the default value. The default value is used when an input parameter isn't specified in a workflow file.</td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">string</span><span class="chip">choice</span><span class="chip">boolean</span><span class="chip">number</span><span class="chip">environment</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A string representing the type of the input.</td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The options of the dropdown list, if the type is a choice.</td>
+  </tr><tr>
+    <td><span class="nm cond">when type is &quot;string&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;boolean&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;number&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">a number</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;environment&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;choice&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then <b>options</b> becomes required</summary>
+      </details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-architecture">
+      <h4>architecture</h4>
+      
+      
+      
+      
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip">ARM32</span><span class="chip">x64</span><span class="chip">x86</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-machine">
+      <h4>machine</h4>
+      
+      
+      
+      
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip">linux</span><span class="chip">macos</span><span class="chip">windows</span></span></p>
+    </div>
+  </div></section>
+
+</div>

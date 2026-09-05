@@ -1,0 +1,357 @@
+<!doctype html><meta charset="utf-8"><title>metaschema-draft04</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>metaschema-draft04</h1>
+<p class="subtitle">Core schema meta-schema</p>
+<div class="counts">
+    
+    <span class="c opt"><b>37</b> you can leave out</span>
+    
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">$schema</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">title</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">multipleOf</span></td>
+    <td><span class="ty">a number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maximum</span></td>
+    <td><span class="ty">a number</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">exclusiveMaximum</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>exclusiveMaximum</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">maximum</span></td><td></td><td><span class="rq cond">Yes, once you fill in exclusiveMaximum</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">minimum</span></td>
+    <td><span class="ty">a number</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">exclusiveMinimum</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>exclusiveMinimum</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">minimum</span></td><td></td><td><span class="rq cond">Yes, once you fill in exclusiveMinimum</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">maxLength</span></td>
+    <td><a class="ty link" href="#shape-definitions-positiveInteger">a positiveInteger</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minLength</span></td>
+    <td><a class="ty link" href="#shape-definitions-positiveIntegerDefault0">a positiveIntegerDefault0</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">pattern</span></td>
+    <td><span class="ty">a search pattern</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">additionalItems</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form"><a class="ty link" href="#shape-">a this whole document</a></span></div><div class="notes"><span>left out means a group of details</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">items</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-">a this whole document</a> or <a class="ty link" href="#shape-definitions-schemaArray">a schemaArray, and that shape is itself a list</a></span><div class="notes"><span>left out means a group of details</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maxItems</span></td>
+    <td><a class="ty link" href="#shape-definitions-positiveInteger">a positiveInteger</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minItems</span></td>
+    <td><a class="ty link" href="#shape-definitions-positiveIntegerDefault0">a positiveIntegerDefault0</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">uniqueItems</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maxProperties</span></td>
+    <td><a class="ty link" href="#shape-definitions-positiveInteger">a positiveInteger</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minProperties</span></td>
+    <td><a class="ty link" href="#shape-definitions-positiveIntegerDefault0">a positiveIntegerDefault0</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><a class="ty link" href="#shape-definitions-stringArray">a stringArray, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">additionalProperties</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form"><a class="ty link" href="#shape-">a this whole document</a></span></div><div class="notes"><span>left out means a group of details</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">definitions</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-">a this whole document</a></span><div class="notes"><span>left out means a group of details</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>definitions</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-">a this whole document</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">properties</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-">a this whole document</a></span><div class="notes"><span>left out means a group of details</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>properties</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-">a this whole document</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">patternProperties</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-">a this whole document</a></span><div class="notes"><span>left out means a group of details</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>patternProperties</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-">a this whole document</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">dependencies</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-">a this whole document</a> or <a class="ty link" href="#shape-definitions-stringArray">a stringArray, and that shape is itself a list</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>dependencies</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-">a this whole document</a> or <a class="ty link" href="#shape-definitions-stringArray">a stringArray, and that shape is itself a list</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">enum</span></td>
+    <td><span class="ty">a list</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-simpleTypes">a simpleTypes</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-simpleTypes">a simpleTypes</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">format</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allOf</span></td>
+    <td><a class="ty link" href="#shape-definitions-schemaArray">a schemaArray, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">anyOf</span></td>
+    <td><a class="ty link" href="#shape-definitions-schemaArray">a schemaArray, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">oneOf</span></td>
+    <td><a class="ty link" href="#shape-definitions-schemaArray">a schemaArray, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">not</span></td>
+    <td><a class="ty link" href="#shape-">a this whole document</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-schemaArray">
+      <h4>schemaArray</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 4 places.</p>
+      <p class="leafval"><span class="ty">a list, each one <a class="ty link" href="#shape-">a this whole document</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-positiveInteger">
+      <h4>positiveInteger</h4>
+      
+      
+      
+      <p class="snote">Used in 4 places.</p>
+      <p class="leafval"><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-positiveIntegerDefault0">
+      <h4>positiveIntegerDefault0</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-positiveInteger">a positiveInteger</a><div class="notes"><span>left out means 0</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-simpleTypes">
+      <h4>simpleTypes</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><details class="pick"><summary>one of 7</summary><span class="chips"><span class="chip">array</span><span class="chip">boolean</span><span class="chip">integer</span><span class="chip">null</span><span class="chip">number</span><span class="chip">object</span><span class="chip">string</span></span></details></p>
+    </div><div class="shapeblock" id="shape-definitions-stringArray">
+      <h4>stringArray</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div>
+  </div></section>
+
+</div>

@@ -1,0 +1,990 @@
+<!doctype html><meta charset="utf-8"><title>JSON schema for Google Chrome extension manifest files</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>JSON schema for Google Chrome extension manifest files</h1>
+
+<div class="counts">
+    <span class="c req"><b>4</b> you must always fill in</span>
+    <span class="c opt"><b>105</b> you can leave out</span>
+    <span class="c cond"><b>24</b> that only apply in certain cases</span>
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">manifest_version</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">2</span><span class="chip">3</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">One integer specifying the version of the manifest file format your package requires.</td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 45">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">45 characters</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The name of the extension</td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><a class="ty link" href="#shape-definitions-version-string">a version_string</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">One to four dot-separated integers identifying the version of this extension.</td>
+  </tr><tr>
+    <td><span class="nm">default_locale</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>left out means en</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies the subdirectory of _locales that contains the default strings for this extension.</td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 132">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">132 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A plain text description of the extension</td>
+  </tr><tr>
+    <td><span class="nm">icons</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>at least 1 field</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">One or more icons that represent the extension, app, or theme. Recommended format: PNG; also BMP, GIF, ICO, JPEG.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>icons</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">16</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used as the favicon for an extension's pages and infobar.</td>
+  </tr><tr>
+    <td><span class="nm">48</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used on the extension management page (chrome://extensions).</td>
+  </tr><tr>
+    <td><span class="nm">128</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used during installation and in the Chrome Web Store.</td>
+  </tr><tr>
+    <td><span class="nm">256</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used during installation and in the Chrome Web Store.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">chrome_url_overrides</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>at most 1 field</span><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Override pages are a way to substitute an HTML file from your extension for a page that Google Chrome normally provides.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>chrome_url_overrides</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">bookmarks</span></td>
+    <td><a class="ty link" href="#shape-definitions-page">a page</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The page that appears when the user chooses the Bookmark Manager menu item from the Chrome menu or, on Mac, the Bookmark Manager item from the Bookmarks menu. You can also get to this page by entering the URL chrome://bookmarks.</td>
+  </tr><tr>
+    <td><span class="nm">history</span></td>
+    <td><a class="ty link" href="#shape-definitions-page">a page</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The page that appears when the user chooses the History menu item from the Chrome menu or, on Mac, the Show Full History item from the History menu. You can also get to this page by entering the URL chrome://history.</td>
+  </tr><tr>
+    <td><span class="nm">newtab</span></td>
+    <td><a class="ty link" href="#shape-definitions-page">a page</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The page that appears when the user creates a new tab or window. You can also get to this page by entering the URL chrome://newtab.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">commands</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use the commands API to add keyboard shortcuts that trigger actions in your extension, for example, an action to open the browser action or send a command to the extension.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>commands</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-command">a command</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^_execute_browser_action$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-command">a command</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^_execute_page_action$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-command">a command</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">content_scripts</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Content scripts are JavaScript files that run in the context of web pages.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of content_scripts</b> <span class="cnt">10 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">matches</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-match-pattern">a match_pattern</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in content_scripts</span></td>
+    <td class="de">Specifies which pages this content script will be injected into.</td>
+  </tr><tr>
+    <td><span class="nm">exclude_matches</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-match-pattern">a match_pattern</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Excludes pages that this content script would otherwise be injected into.</td>
+  </tr><tr>
+    <td><span class="nm">css</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-uri">an uri</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The list of CSS files to be injected into matching pages. These are injected in the order they appear in this array, before any DOM is constructed or displayed for the page.</td>
+  </tr><tr>
+    <td><span class="nm">js</span></td>
+    <td><a class="ty link" href="#shape-definitions-scripts">a scripts, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The list of JavaScript files to be injected into matching pages. These are injected in the order they appear in this array.</td>
+  </tr><tr>
+    <td><span class="nm">world</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">ISOLATED<em>default</em></span><span class="chip">MAIN</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The JavaScript world for a script to execute within.</td>
+  </tr><tr>
+    <td><span class="nm">run_at</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">document_start</span><span class="chip">document_end</span><span class="chip def">document_idle<em>default</em></span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Controls when the files in js are injected.</td>
+  </tr><tr>
+    <td><span class="nm">all_frames</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Controls whether the content script runs in all frames of the matching page, or only the top frame.</td>
+  </tr><tr>
+    <td><span class="nm">include_globs</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-glob-pattern">a glob_pattern</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Applied after matches to include only those URLs that also match this glob. Intended to emulate the @include Greasemonkey keyword.</td>
+  </tr><tr>
+    <td><span class="nm">exclude_globs</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-glob-pattern">a glob_pattern</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Applied after matches to exclude URLs that match this glob. Intended to emulate the @exclude Greasemonkey keyword.</td>
+  </tr><tr>
+    <td><span class="nm">match_about_blank</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Whether to insert the content script on about:blank and about:srcdoc.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">devtools_page</span></td>
+    <td><a class="ty link" href="#shape-definitions-page">a page</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A DevTools extension adds functionality to the Chrome DevTools. It can add new UI panels and sidebars, interact with the inspected page, get information about network requests, and more.</td>
+  </tr><tr>
+    <td><span class="nm">externally_connectable</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Declares which extensions, apps, and web pages can connect to your extension via runtime.connect and runtime.sendMessage.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>externally_connectable</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">ids</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">matches</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">accepts_tls_channel_id</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indicates that the extension would like to make use of the TLS channel ID of the web page connecting to it. The web page must also opt to send the TLS channel ID to the extension via setting includeTlsChannelId to true in runtime.connect's connectInfo or runtime.sendMessage's options.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">file_browser_handlers</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can use this API to enable users to upload files to your website.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of file_browser_handlers</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in file_browser_handlers</span></td>
+    <td class="de">Used by event handling code to differentiate between multiple file handlers</td>
+  </tr><tr>
+    <td><span class="nm">default_title</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in file_browser_handlers</span></td>
+    <td class="de">What the button will display.</td>
+  </tr><tr>
+    <td><span class="nm">file_filters</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in file_browser_handlers</span></td>
+    <td class="de">Filetypes to match.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">homepage_url</span></td>
+    <td><a class="ty link" href="#shape-definitions-uri">an uri</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The URL of the homepage for this extension.</td>
+  </tr><tr>
+    <td><span class="nm">incognito</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">spanning<em>default</em></span><span class="chip">split</span><span class="chip">not_allowed</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify how this extension will behave if allowed to run in incognito mode.</td>
+  </tr><tr>
+    <td><span class="nm">input_components</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Allows your extension to handle keystrokes, set the composition, and manage the candidate window.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of input_components</b> <span class="cnt">6 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in input_components</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in input_components</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in input_components</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in input_components</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">language</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in input_components</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">layouts</span></td>
+    <td><span class="ty">a list</span></td>
+    <td><span class="rq cond">Yes, once you fill in input_components</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">key</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This value can be used to control the unique ID of an extension, app, or theme when it is loaded during development.</td>
+  </tr><tr>
+    <td><span class="nm">minimum_chrome_version</span></td>
+    <td><a class="ty link" href="#shape-definitions-version-string">a version_string</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The version of Chrome that your extension, app, or theme requires, if any.</td>
+  </tr><tr>
+    <td><span class="nm">nacl_modules</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">One or more mappings from MIME types to the Native Client module that handles each type.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of nacl_modules</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">path</span></td>
+    <td><a class="ty link" href="#shape-definitions-uri">an uri</a></td>
+    <td><span class="rq cond">Yes, once you fill in nacl_modules</span></td>
+    <td class="de">The location of a Native Client manifest (a .nmf file) within the extension directory.</td>
+  </tr><tr>
+    <td><span class="nm">mime_type</span></td>
+    <td><a class="ty link" href="#shape-definitions-mime-type">a mime_type</a></td>
+    <td><span class="rq cond">Yes, once you fill in nacl_modules</span></td>
+    <td class="de">The MIME type for which the Native Client module will be registered as content handler.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">oauth2</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use the Chrome Identity API to authenticate users: the getAuthToken for users logged into their Google Account and the launchWebAuthFlow for users logged into a non-Google account.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>oauth2</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">client_id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in oauth2</span></td>
+    <td class="de">You need to register your app in the Google APIs Console to get the client ID.</td>
+  </tr><tr>
+    <td><span class="nm">scopes</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in oauth2</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">offline_enabled</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Whether the app or extension is expected to work offline. When Chrome detects that it is offline, apps with this field set to true will be highlighted on the New Tab page.</td>
+  </tr><tr>
+    <td><span class="nm">omnibox</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The omnibox API allows you to register a keyword with Google Chrome's address bar, which is also known as the omnibox.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>omnibox</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">keyword</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in omnibox</span></td>
+    <td class="de">The keyword that will trigger your extension.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">optional_permissions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions">a permissions, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use the chrome.permissions API to request declared optional permissions at run time rather than install time, so users understand why the permissions are needed and grant only those that are necessary.</td>
+  </tr><tr>
+    <td><span class="nm">options_page</span></td>
+    <td><a class="ty link" href="#shape-definitions-page">a page</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">To allow users to customize the behavior of your extension, you may wish to provide an options page. If you do, a link to it will be provided from the extensions management page at chrome://extensions. Clicking the Options link opens a new tab pointing at your options page.</td>
+  </tr><tr>
+    <td><span class="nm">options_ui</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">To allow users to customize the behavior of your extension, you may wish to provide an options page. If you do, an Options link will be shown on the extensions management page at chrome://extensions which opens a dialogue containing your options page.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>options_ui</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">page</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in options_ui</span></td>
+    <td class="de">The path to your options page, relative to your extension's root.</td>
+  </tr><tr>
+    <td><span class="nm">chrome_style</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If true, a Chrome user agent stylesheet will be applied to your options page. The default value is false, but we recommend you enable it for a consistent UI with Chrome.</td>
+  </tr><tr>
+    <td><span class="nm">open_in_tab</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If true, your extension's options page will be opened in a new tab rather than embedded in chrome://extensions. The default is false, and we recommend that you don't change it. This is only useful to delay the inevitable deprecation of the old options UI! It will be removed soon, so try not to use it. It will break.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">permissions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions">a permissions, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Permissions help to limit damage if your extension or app is compromised by malware. Some permissions are also displayed to users before installation, as detailed in Permission Warnings.</td>
+  </tr><tr>
+    <td><span class="nm">requirements</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Technologies required by the app or extension. Hosting sites such as the Chrome Web Store may use this list to dissuade users from installing apps or extensions that will not work on their computer.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>requirements</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">plugins</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indicates if an app or extension requires NPAPI to run. This requirement is enabled by default when the manifest includes the 'plugins' field.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>plugins</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">npapi</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in requirements</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">3D</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The '3D' requirement denotes GPU hardware acceleration.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>3D</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">features</span></td>
+    <td><span class="ty">a list, each one a fixed value</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in requirements</span></td>
+    <td class="de">List of the 3D-related features your app requires.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">sandbox</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Defines an collection of app or extension pages that are to be served in a sandboxed unique origin, and optionally a Content Security Policy to use with them.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>sandbox</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">pages</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-page">a page</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in sandbox</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">content_security_policy</span></td>
+    <td><a class="ty link" href="#shape-definitions-content-security-policy">a content_security_policy</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">short_name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 12">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">12 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The short name is typically used where there is insufficient space to display the full name.</td>
+  </tr><tr>
+    <td><span class="nm">update_url</span></td>
+    <td><a class="ty link" href="#shape-definitions-uri">an uri</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If you publish using the Chrome Developer Dashboard, ignore this field. If you host your own extension or app: URL to an update manifest XML file.</td>
+  </tr><tr>
+    <td><span class="nm">tts_engine</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Register itself as a speech engine.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>tts_engine</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">voices</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in tts_engine</span></td>
+    <td class="de">Voices the extension can synthesize.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of voices</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">voice_name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in tts_engine</span></td>
+    <td class="de">Identifies the name of the voice and the engine used.</td>
+  </tr><tr>
+    <td><span class="nm">lang</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Almost always, a voice can synthesize speech in just a single language. When an engine supports more than one language, it can easily register a separate voice for each language.</td>
+  </tr><tr>
+    <td><span class="nm">gender</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If your voice corresponds to a male or female voice, you can use this parameter to help clients choose the most appropriate voice for their application.</td>
+  </tr><tr>
+    <td><span class="nm">event_types</span></td>
+    <td><span class="ty">a list, each one an one of these</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in tts_engine</span></td>
+    <td class="de">Events sent to update the client on the progress of speech synthesis.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">version_name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">In addition to the version field, which is used for update purposes, version_name can be set to a descriptive version string and will be used for display purposes if present.</td>
+  </tr><tr>
+    <td><span class="nm">chrome_settings_overrides</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">content_pack</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">current_locale</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">import</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">platforms</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">signature</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">spellcheck</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">storage</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">system_indicator</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm cond">when manifest_version is &quot;3&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">background</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The background page is an HTML page that runs in the extension process. It exists for the lifetime of your extension, and only one instance of it at a time is active.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>background</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">service_worker</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The service worker js file.</td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">module</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">host_permissions</span></td>
+    <td><a class="ty link" href="#shape-definitions-permissions">a permissions, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">action</span></td>
+    <td><a class="ty link" href="#shape-definitions-action-v3">an action_v3</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to control the toolbar button for your extension in Chrome's UI.</td>
+  </tr><tr>
+    <td><span class="nm">content_security_policy</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>content_security_policy</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">extension_pages</span></td>
+    <td><a class="ty link" href="#shape-definitions-content-security-policy">a content_security_policy</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This policy covers pages in your extension, including html files and service workers.</td>
+  </tr><tr>
+    <td><span class="nm">sandbox</span></td>
+    <td><a class="ty link" href="#shape-definitions-content-security-policy">a content_security_policy</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">This policy covers any sandboxed extension pages that your extension uses.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">web_accessible_resources</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-web-resource">a web_resource</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">An array of objects that declare resource access rules. Each object maps an array of extension resources to an array of URLs and/or extension IDs that can access those resources.</td>
+  </tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>otherwise these apply <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">background</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The background page is an HTML page that runs in the extension process. It exists for the lifetime of your extension, and only one instance of it at a time is active.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>background</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">persistent</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When false, makes the background page an event page (loaded only when needed).</td>
+  </tr><tr>
+    <td><span class="nm">page</span></td>
+    <td><a class="ty link" href="#shape-definitions-page">a page</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify the HTML of the background page.</td>
+  </tr><tr>
+    <td><span class="nm">scripts</span></td>
+    <td><a class="ty link" href="#shape-definitions-scripts">a scripts, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A background page will be generated by the extension system that includes each of the files listed in the scripts property.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">browser_action</span></td>
+    <td><a class="ty link" href="#shape-definitions-action-v2">an action_v2</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use browser actions to put icons in the main Google Chrome toolbar, to the right of the address bar. In addition to its icon, a browser action can also have a tooltip, a badge, and a popup.</td>
+  </tr><tr>
+    <td><span class="nm">page_action</span></td>
+    <td><a class="ty link" href="#shape-definitions-action-v2">an action_v2</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Use the chrome.pageAction API to put icons inside the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages.</td>
+  </tr><tr>
+    <td><span class="nm">content_security_policy</span></td>
+    <td><a class="ty link" href="#shape-definitions-content-security-policy">a content_security_policy</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">web_accessible_resources</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-uri">an uri</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">An array of strings specifying the paths (relative to the package root) of packaged resources that are expected to be usable in the context of a web page.</td>
+  </tr></table></details></td></tr></table></section><section><h2>All 14 shapes</h2>
+    <p class="snote">Every shape this document describes. The ones used most often come first, because everything else is built on them. Click any name to jump to its rules.</p>
+    <div class="ix"><div class="ixgroup"><div class="ixh">Shapes</div><ul><li><a href="#shape-definitions-uri">uri</a> <span class="ixn">used 10</span></li><li><a href="#shape-definitions-icon">icon</a> <span class="ixn">used 9</span></li><li><a href="#shape-definitions-page">page</a> <span class="ixn">used 7</span></li><li><a href="#shape-definitions-content-security-policy">content_security_policy</a> <span class="ixn">used 4</span></li><li><a href="#shape-definitions-command">command</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-glob-pattern">glob_pattern</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-match-pattern">match_pattern</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-permissions">permissions</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-action-v2">action_v2</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-scripts">scripts</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-version-string">version_string</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-action-v3">action_v3</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-mime-type">mime_type</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-web-resource">web_resource</a> <span class="ixn">used 1</span></li></ul></div></div></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-uri">
+      <h4>uri</h4>
+      
+      
+      
+      <p class="snote">Used in 10 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-icon">
+      <h4>icon</h4>
+      
+      
+      
+      <p class="snote">Used in 9 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-uri">an uri</a></p>
+    </div><div class="shapeblock" id="shape-definitions-page">
+      <h4>page</h4>
+      
+      
+      
+      <p class="snote">Used in 7 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-uri">an uri</a></p>
+    </div><div class="shapeblock" id="shape-definitions-content-security-policy">
+      <h4>content_security_policy</h4>
+      <p class="snote">This introduces some fairly strict policies that will make extensions more secure by default, and provides you with the ability to create and enforce rules governing the types of content that can be loaded and executed by your extensions and applications.</p>
+      
+      
+      <p class="snote">Used in 4 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>left out means script-src 'self'; object-src 'self'</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-command">
+      <h4>command</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm cond">when global is &quot;true&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">global</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Whether this command should work while Chrome does not have focus. Keyboard shortcut suggestions for global commands are limited to Ctrl+Shift+[0..9]</td>
+  </tr><tr>
+    <td><span class="nm">suggested_key</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>suggested_key</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^(default|mac|windows|linux|chromeos)$">any name in a set format</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>otherwise these apply <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">global</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Whether this command should work while Chrome does not have focus. Keyboard shortcut suggestions for global commands are limited to Ctrl+Shift+[0..9]</td>
+  </tr><tr>
+    <td><span class="nm">suggested_key</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span><div class="notes"><span>any name in a set format</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>suggested_key</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^(default|mac|windows|linux|chromeos)$">any name in a set format</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-glob-pattern">
+      <h4>glob_pattern</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-match-pattern">
+      <h4>match_pattern</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-permissions">
+      <h4>permissions</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">one of these</span><span class="form">text</span></div><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-action-v2">
+      <h4>action_v2</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">default_title</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Tooltip for the main toolbar icon.</td>
+  </tr><tr>
+    <td><span class="nm">default_popup</span></td>
+    <td><a class="ty link" href="#shape-definitions-uri">an uri</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The popup appears when the user clicks the icon.</td>
+  </tr><tr>
+    <td><span class="nm">default_icon</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>default_icon</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">19</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">38</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-scripts">
+      <h4>scripts</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-uri">an uri</a></span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-version-string">
+      <h4>version_string</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-action-v3">
+      <h4>action_v3</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">default_title</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Tooltip for the main toolbar icon.</td>
+  </tr><tr>
+    <td><span class="nm">default_popup</span></td>
+    <td><a class="ty link" href="#shape-definitions-uri">an uri</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The popup appears when the user clicks the icon.</td>
+  </tr><tr>
+    <td><span class="nm">default_icon</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>default_icon</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">16</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">24</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">32</span></td>
+    <td><a class="ty link" href="#shape-definitions-icon">an icon</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-mime-type">
+      <h4>mime_type</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-web-resource">
+      <h4>web_resource</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">resources</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-glob-pattern">a glob_pattern</a></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">An array of resources to be exposed. Resources are specified as strings and may contain * for wildcard matches. For example, &quot;/images/*&quot; exposes everything in the extension's /images directory recursively while &quot;*.png&quot; exposes all PNG files.</td>
+  </tr><tr>
+    <td><span class="nm">matches</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-match-pattern">a match_pattern</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of URL match patterns specifying which pages can access the resources. Only the origin is used to match URLs; subdomains patterns (*.google.com) and paths are ignored.</td>
+  </tr><tr>
+    <td><span class="nm">extension_ids</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A list of extension IDs, specifying which extensions can access the resources.</td>
+  </tr><tr>
+    <td><span class="nm">use_dynamic_url</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If true, only allow resources to be accessible through dynamic ID. The dynamic ID is generated per session. It's regenerated on browser restart or extension reload.</td>
+  </tr></table>
+    </div>
+  </div></section>
+
+</div>

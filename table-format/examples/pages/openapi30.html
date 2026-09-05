@@ -1,0 +1,1726 @@
+<!doctype html><meta charset="utf-8"><title>openapi30</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>openapi30</h1>
+<p class="subtitle">The description of OpenAPI v3.0.x documents, as defined by https://spec.openapis.org/oas/v3.0.3</p>
+<div class="counts">
+    <span class="c req"><b>34</b> you must always fill in</span>
+    <span class="c opt"><b>213</b> you can leave out</span>
+    
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    <p class="snote">Nothing else may be added at the top level.</p>
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">openapi</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">info</span></td>
+    <td><a class="ty link" href="#shape-definitions-Info">an Info</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">externalDocs</span></td>
+    <td><a class="ty link" href="#shape-definitions-ExternalDocumentation">an ExternalDocumentation</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">servers</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-Server">a Server</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">security</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-SecurityRequirement">a SecurityRequirement</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-Tag">a Tag</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">paths</span></td>
+    <td><a class="ty link" href="#shape-definitions-Paths">a Paths</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">components</span></td>
+    <td><a class="ty link" href="#shape-definitions-Components">a Components</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></section><section><h2>All 39 shapes</h2>
+    <p class="snote">Every shape this document describes. The ones used most often come first, because everything else is built on them. Click any name to jump to its rules.</p>
+    <div class="ix"><div class="ixgroup"><div class="ixh">Shapes</div><ul><li><a href="#shape-definitions-Reference">Reference</a> <span class="ixn">used 31</span></li><li><a href="#shape-definitions-Schema">Schema</a> <span class="ixn">used 11</span></li><li><a href="#shape-definitions-Server">Server</a> <span class="ixn">used 4</span></li><li><a href="#shape-definitions-MediaType">MediaType</a> <span class="ixn">used 4</span></li><li><a href="#shape-definitions-Example">Example</a> <span class="ixn">used 4</span></li><li><a href="#shape-definitions-ExternalDocumentation">ExternalDocumentation</a> <span class="ixn">used 4</span></li><li><a href="#shape-definitions-Response">Response</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-Header">Header</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-ExampleXORExamples">ExampleXORExamples</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-Parameter">Parameter</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-PathItem">PathItem</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-SecurityRequirement">SecurityRequirement</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-SchemaXORContent">SchemaXORContent</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-RequestBody">RequestBody</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-Link">Link</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-Callback">Callback</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-Info">Info</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Contact">Contact</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-License">License</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-ServerVariable">ServerVariable</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Components">Components</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Discriminator">Discriminator</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-XML">XML</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Paths">Paths</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Operation">Operation</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Responses">Responses</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Tag">Tag</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-ParameterLocation">ParameterLocation</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-SecurityScheme">SecurityScheme</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-APIKeySecurityScheme">APIKeySecurityScheme</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-HTTPSecurityScheme">HTTPSecurityScheme</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-OAuth2SecurityScheme">OAuth2SecurityScheme</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-OpenIdConnectSecurityScheme">OpenIdConnectSecurityScheme</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-OAuthFlows">OAuthFlows</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-ImplicitOAuthFlow">ImplicitOAuthFlow</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-PasswordOAuthFlow">PasswordOAuthFlow</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-ClientCredentialsFlow">ClientCredentialsFlow</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-AuthorizationCodeOAuthFlow">AuthorizationCodeOAuthFlow</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-Encoding">Encoding</a> <span class="ixn">used 1</span></li></ul></div></div></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-Reference">
+      <h4>Reference</h4>
+      
+      
+      
+      <p class="snote">Used in 31 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match ^\$ref$">any name in a set format</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Schema">
+      <h4>Schema</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 11 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">title</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">multipleOf</span></td>
+    <td><span class="ty">a number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maximum</span></td>
+    <td><span class="ty">a number</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">exclusiveMaximum</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minimum</span></td>
+    <td><span class="ty">a number</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">exclusiveMinimum</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maxLength</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minLength</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span><div class="notes"><span>left out means 0</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">pattern</span></td>
+    <td><span class="ty">a search pattern</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maxItems</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minItems</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span><div class="notes"><span>left out means 0</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">uniqueItems</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">maxProperties</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">minProperties</span></td>
+    <td><span class="ty">a whole number</span><span class="bar" title="from 0 to any number of">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">any number of</span></span><div class="notes"><span>left out means 0</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">enum</span></td>
+    <td><span class="ty">a list, each one an anything</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">array</span><span class="chip">boolean</span><span class="chip">integer</span><span class="chip">number</span><span class="chip">object</span><span class="chip">string</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">not</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allOf</span></td>
+    <td><span class="ty">a list, each entry either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">oneOf</span></td>
+    <td><span class="ty">a list, each entry either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">anyOf</span></td>
+    <td><span class="ty">a list, each entry either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">items</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">properties</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>properties</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">additionalProperties</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-Schema">a Schema</a></span><span class="form"><a class="ty link" href="#shape-definitions-Reference">a Reference</a></span><span class="form">yes or no</span></div><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">format</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">nullable</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">discriminator</span></td>
+    <td><a class="ty link" href="#shape-definitions-Discriminator">a Discriminator</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">readOnly</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">writeOnly</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">example</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">externalDocs</span></td>
+    <td><a class="ty link" href="#shape-definitions-ExternalDocumentation">an ExternalDocumentation</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">deprecated</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">xml</span></td>
+    <td><a class="ty link" href="#shape-definitions-XML">a XML</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Server">
+      <h4>Server</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 4 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">variables</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-ServerVariable">a ServerVariable</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>variables</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-ServerVariable">a ServerVariable</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-MediaType">
+      <h4>MediaType</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 4 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">schema</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">example</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">examples</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Example">an Example</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>examples</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Example">an Example</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">encoding</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-Encoding">an Encoding</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>encoding</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-Encoding">an Encoding</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Example">
+      <h4>Example</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 4 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">summary</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">value</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">externalValue</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-ExternalDocumentation">
+      <h4>ExternalDocumentation</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 4 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Response">
+      <h4>Response</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 3 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">headers</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Header">a Header</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>headers</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Header">a Header</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">content</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>content</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">links</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Link">a Link</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>links</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Link">a Link</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Header">
+      <h4>Header</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 3 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">deprecated</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allowEmptyValue</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">style</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip def">simple<em>default</em></span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">explode</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allowReserved</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">schema</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">content</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></span><div class="notes"><span>between 1 and 1 fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>content</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">example</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">examples</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Example">an Example</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>examples</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Example">an Example</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-ExampleXORExamples">
+      <h4>ExampleXORExamples</h4>
+      <p class="snote">Example and examples are mutually exclusive</p>
+      <p class="snote">You cannot use example and examples together.</p>
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">anything</span></p>
+    </div><div class="shapeblock" id="shape-definitions-Parameter">
+      <h4>Parameter</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 3 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">in</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">deprecated</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allowEmptyValue</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">style</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">explode</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allowReserved</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">schema</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">content</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></span><div class="notes"><span>between 1 and 1 fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>content</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">example</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">examples</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Example">an Example</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>examples</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Example">an Example</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-PathItem">
+      <h4>PathItem</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">$ref</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">summary</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">servers</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-Server">a Server</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">parameters</span></td>
+    <td><span class="ty">a list, each entry either <a class="ty link" href="#shape-definitions-Parameter">a Parameter</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^(get|put|post|delete|options|head|patch|trace)$">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-Operation">an Operation</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-SecurityRequirement">
+      <h4>SecurityRequirement</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-SchemaXORContent">
+      <h4>SchemaXORContent</h4>
+      <p class="snote">Schema and content are mutually exclusive, at least one is required</p>
+      <p class="snote">You cannot use schema and content together.</p>
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">anything</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-RequestBody">
+      <h4>RequestBody</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">content</span></td>
+    <td><span class="ty">a group where you choose the names, each one <a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>content</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-MediaType">a MediaType</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">required</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Link">
+      <h4>Link</h4>
+      
+      <p class="snote">You cannot use operationId and operationRef together.</p>
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">operationId</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">operationRef</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">parameters</span></td>
+    <td><span class="ty">a group where you choose the names, each one an anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>parameters</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">requestBody</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">server</span></td>
+    <td><a class="ty link" href="#shape-definitions-Server">a Server</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Callback">
+      <h4>Callback</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-PathItem">a PathItem</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Info">
+      <h4>Info</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">title</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">termsOfService</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">contact</span></td>
+    <td><a class="ty link" href="#shape-definitions-Contact">a Contact</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">license</span></td>
+    <td><a class="ty link" href="#shape-definitions-License">a License</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Contact">
+      <h4>Contact</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">email</span></td>
+    <td><span class="ty">an email address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-License">
+      <h4>License</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-ServerVariable">
+      <h4>ServerVariable</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">enum</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Components">
+      <h4>Components</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">schemas</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>schemas</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Schema">a Schema</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">responses</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Response">a Response</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>responses</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Response">a Response</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">parameters</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Parameter">a Parameter</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>parameters</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Parameter">a Parameter</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">examples</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Example">an Example</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>examples</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Example">an Example</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">requestBodies</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-RequestBody">a RequestBody</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>requestBodies</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-RequestBody">a RequestBody</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">headers</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Header">a Header</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>headers</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Header">a Header</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">securitySchemes</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-SecurityScheme">a SecurityScheme</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>securitySchemes</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-SecurityScheme">a SecurityScheme</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">links</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Link">a Link</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>links</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Link">a Link</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">callbacks</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Callback">a Callback</a></span><div class="notes"><span>any name made of letters, numbers, dots, underscores, dashes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>callbacks</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9\.\-_]+$">any name made of letters, numbers, dots, underscores, dashes</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Reference">a Reference</a> or <a class="ty link" href="#shape-definitions-Callback">a Callback</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Discriminator">
+      <h4>Discriminator</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">propertyName</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">mapping</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>mapping</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-XML">
+      <h4>XML</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">namespace</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">prefix</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">attribute</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">wrapped</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Paths">
+      <h4>Paths</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match ^\/">any name in a set format</span></td>
+    <td><a class="ty link" href="#shape-definitions-PathItem">a PathItem</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Operation">
+      <h4>Operation</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">summary</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">externalDocs</span></td>
+    <td><a class="ty link" href="#shape-definitions-ExternalDocumentation">an ExternalDocumentation</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">operationId</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">parameters</span></td>
+    <td><span class="ty">a list, each entry either <a class="ty link" href="#shape-definitions-Parameter">a Parameter</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">requestBody</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-RequestBody">a RequestBody</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">responses</span></td>
+    <td><a class="ty link" href="#shape-definitions-Responses">a Responses</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">callbacks</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Callback">a Callback</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>callbacks</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Callback">a Callback</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">deprecated</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">security</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-SecurityRequirement">a SecurityRequirement</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">servers</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-Server">a Server</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Responses">
+      <h4>Responses</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Response">a Response</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^[1-5](?:\d{2}|XX)$">any name in a set format</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Response">a Response</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Tag">
+      <h4>Tag</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">externalDocs</span></td>
+    <td><a class="ty link" href="#shape-definitions-ExternalDocumentation">an ExternalDocumentation</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-ParameterLocation">
+      <h4>ParameterLocation</h4>
+      <p class="snote">Parameter location</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 4 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-SecurityScheme">
+      <h4>SecurityScheme</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">either <a class="ty link" href="#shape-definitions-APIKeySecurityScheme">an APIKeySecurityScheme</a>, <a class="ty link" href="#shape-definitions-HTTPSecurityScheme">a HTTPSecurityScheme</a>, <a class="ty link" href="#shape-definitions-OAuth2SecurityScheme">an OAuth2SecurityScheme</a> or <a class="ty link" href="#shape-definitions-OpenIdConnectSecurityScheme">an OpenIdConnectSecurityScheme</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-APIKeySecurityScheme">
+      <h4>APIKeySecurityScheme</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">apiKey</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">in</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">header</span><span class="chip">query</span><span class="chip">cookie</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-HTTPSecurityScheme">
+      <h4>HTTPSecurityScheme</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">scheme</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">bearerFormat</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">http</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-OAuth2SecurityScheme">
+      <h4>OAuth2SecurityScheme</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">oauth2</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">flows</span></td>
+    <td><a class="ty link" href="#shape-definitions-OAuthFlows">an OAuthFlows</a></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-OpenIdConnectSecurityScheme">
+      <h4>OpenIdConnectSecurityScheme</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">a fixed value</span><span class="chips"><span class="chip">openIdConnect</span></span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">openIdConnectUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-OAuthFlows">
+      <h4>OAuthFlows</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">implicit</span></td>
+    <td><a class="ty link" href="#shape-definitions-ImplicitOAuthFlow">an ImplicitOAuthFlow</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">password</span></td>
+    <td><a class="ty link" href="#shape-definitions-PasswordOAuthFlow">a PasswordOAuthFlow</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">clientCredentials</span></td>
+    <td><a class="ty link" href="#shape-definitions-ClientCredentialsFlow">a ClientCredentialsFlow</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">authorizationCode</span></td>
+    <td><a class="ty link" href="#shape-definitions-AuthorizationCodeOAuthFlow">an AuthorizationCodeOAuthFlow</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-ImplicitOAuthFlow">
+      <h4>ImplicitOAuthFlow</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">authorizationUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">refreshUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">scopes</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>scopes</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-PasswordOAuthFlow">
+      <h4>PasswordOAuthFlow</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">tokenUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">refreshUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">scopes</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>scopes</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-ClientCredentialsFlow">
+      <h4>ClientCredentialsFlow</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">tokenUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">refreshUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">scopes</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>scopes</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-AuthorizationCodeOAuthFlow">
+      <h4>AuthorizationCodeOAuthFlow</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">authorizationUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tokenUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">refreshUrl</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">scopes</span></td>
+    <td><span class="ty">a group where you choose the names, each one a text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>scopes</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^x-">any name in a set format</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-Encoding">
+      <h4>Encoding</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">contentType</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">headers</span></td>
+    <td><span class="ty">a group where you choose the names, each one either <a class="ty link" href="#shape-definitions-Header">a Header</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>headers</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><span class="ty">either <a class="ty link" href="#shape-definitions-Header">a Header</a> or <a class="ty link" href="#shape-definitions-Reference">a Reference</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">style</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">form</span><span class="chip">spaceDelimited</span><span class="chip">pipeDelimited</span><span class="chip">deepObject</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">explode</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allowReserved</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div>
+  </div></section>
+<section><h2>What this page does not show</h2>
+    <p class="snote">These rules are in the original and there is no honest short way to write them, so they are listed here rather than shown as something they are not.</p>
+    <ul class="drops"><li>a rule saying the value must not match a whole shape ((unnamed))</li></ul></section>
+</div>

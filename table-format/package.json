@@ -1,0 +1,35 @@
+{
+  "name": "json-schema-table",
+  "version": "0.1.0",
+  "description": "Turns any JSON Schema into a table format that reads as a document and rebuilds into a working schema.",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16"
+  },
+  "bin": {
+    "schema-to-table": "scripts/schema-to-table.js",
+    "table-to-html": "scripts/table-to-html.js",
+    "table-to-schema": "scripts/table-to-schema.js",
+    "table-to-markdown": "scripts/table-to-markdown.js",
+    "validate-format": "scripts/validate-format.js"
+  },
+  "files": [
+    "scripts/",
+    "patterns/table-format.schema.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node checks/build-all.js",
+    "pretest": "node checks/build-all.js",
+    "test": "node checks/selftest.js",
+    "stress": "node checks/stress-test.js",
+    "cli": "node checks/cli-matrix.js",
+    "matrix": "node checks/keyword-matrix.js",
+    "behaviour": "node checks/validate-against-data.js",
+    "simplicity": "node checks/simplify-check.js",
+    "provenance": "node checks/verify-provenance.js",
+    "examples": "node checks/make-examples.js",
+    "export": "node scripts/export-repo.js"
+  }
+}

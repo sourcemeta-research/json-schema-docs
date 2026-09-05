@@ -1,0 +1,451 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://json-docs-lab/table-format/1",
+  "title": "Table format",
+  "description": "What a schema becomes on its way to being read. Two halves kept apart: doc is what a page shows a person, rules is the residue needed to rebuild something that validates the same documents. A renderer may read doc and must never read rules.",
+  "type": "object",
+  "required": [
+    "format",
+    "title",
+    "root",
+    "shapes"
+  ],
+  "properties": {
+    "format": {
+      "const": "json-docs-table/1"
+    },
+    "title": {
+      "type": "string",
+      "description": "What the whole document is called."
+    },
+    "description": {
+      "type": "string"
+    },
+    "dialect": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Which JSON Schema dialect this came from. Kept so the rebuilt schema can declare the same one."
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Where the original was read from."
+    },
+    "root": {
+      "$ref": "#/$defs/shapeBody",
+      "description": "What a whole file looks like, as opposed to any named shape inside it."
+    },
+    "shapes": {
+      "type": "array",
+      "description": "Every named shape, most used first, because what everything else is built on is what a reader needs first.",
+      "items": {
+        "$ref": "#/$defs/shape"
+      }
+    },
+    "dropped": {
+      "type": "array",
+      "description": "Rules in the original that have no honest short reading. Listing them is what stops a page quietly claiming to be complete.",
+      "items": {
+        "type": "object",
+        "required": [
+          "why",
+          "where"
+        ],
+        "properties": {
+          "why": {
+            "type": "string"
+          },
+          "where": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "containers": {
+      "type": "object",
+      "description": "Keywords belonging to a drawer that holds shapes but is not itself a shape. Part of the rules half: never read by a renderer."
+    }
+  },
+  "$defs": {
+    "shape": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "rows"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/shapeBody"
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The pointer this shape sits at in the original. Links use it, and the rebuild uses it to put the shape back where it came from."
+        },
+        "name": {
+          "type": "string"
+        },
+        "group": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The drawer it was filed under, when the original filed shapes in drawers."
+        },
+        "description": {
+          "type": "string"
+        },
+        "usedBy": {
+          "type": "integer",
+          "description": "How many places point at this shape. This is what the ordering is built on."
+        },
+        "isList": {
+          "type": "boolean",
+          "description": "True when the shape is itself a list. Its rows then describe one entry, not the shape."
+        },
+        "example": {
+          "description": "One real value written by the schema's author. Carried to every field pointing here, so a reader is not sent away to find out what to type."
+        }
+      }
+    },
+    "shapeBody": {
+      "type": "object",
+      "required": [
+        "rows"
+      ],
+      "properties": {
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/row"
+          }
+        },
+        "closed": {
+          "type": "boolean",
+          "description": "Nothing else may be added."
+        },
+        "picks": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "One field whose value decides which shape applies. Thirty if-then blocks saying the same thing are one decision, not thirty rules.",
+          "items": {
+            "type": "object",
+            "required": [
+              "field",
+              "value",
+              "ref"
+            ],
+            "properties": {
+              "field": {
+                "type": "string"
+              },
+              "value": {},
+              "ref": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rules": {
+          "type": "object",
+          "description": "The validating residue. Never read by a renderer."
+        },
+        "exclusiveSets": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": "Same, at the level of a whole shape."
+        }
+      }
+    },
+    "row": {
+      "type": "object",
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "description": "A field's name is not always a name. It may be one the writer chooses, or one that only has to look a certain way.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "fixed",
+                "any",
+                "pattern",
+                "condition"
+              ]
+            },
+            "text": {
+              "type": "string",
+              "description": "What to show. For a pattern, what the pattern allows, said in words."
+            },
+            "pattern": {
+              "type": "string",
+              "description": "The pattern itself, for the rebuild."
+            }
+          }
+        },
+        "needed": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "always",
+                "never",
+                "conditional"
+              ]
+            }
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "borrowed": {
+          "type": "boolean",
+          "description": "This field comes from a shape this one inherits. It applies here, but it is declared elsewhere, and writing it back on the rebuild would move the rule."
+        },
+        "from": {
+          "type": "string",
+          "description": "Which shape it was borrowed from."
+        },
+        "brings": {
+          "type": "object",
+          "description": "Filling this field in makes other things needed. Fires on the field being present, whatever its value.",
+          "properties": {
+            "kind": {
+              "enum": [
+                "required",
+                "fields"
+              ]
+            },
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "rows": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/row"
+              }
+            }
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        },
+        "rules": {
+          "type": "object",
+          "description": "The validating residue for this field. Never read by a renderer."
+        }
+      }
+    },
+    "value": {
+      "type": "object",
+      "description": "What goes in a field, said as a fact rather than as a way of drawing it. A bar, a set of chips and a yes or no toggle are three ways to draw one idea, and choosing between them is the renderer's job, not this format's.",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "value",
+            "group",
+            "list",
+            "ref",
+            "choice-of-refs",
+            "choice",
+            "fixed",
+            "bool",
+            "elsewhere",
+            "conditional",
+            "anything",
+            "never"
+          ]
+        },
+        "words": {
+          "type": "string",
+          "description": "The plainest true sentence about this value."
+        },
+        "ref": {
+          "type": "string",
+          "description": "The shape this points at."
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The shapes it may be any one of."
+        },
+        "href": {
+          "type": "string",
+          "description": "Rules kept in another file, and where."
+        },
+        "alsoFollowsRef": {
+          "type": "string",
+          "description": "A shape whose rules apply on top of these. A pointer beside other keywords is inheritance, not replacement. Only the pointer is stored; the name is looked up."
+        },
+        "item": {
+          "$ref": "#/$defs/value",
+          "description": "What one entry of a list holds."
+        },
+        "itemClosed": {
+          "type": "boolean",
+          "description": "A list is closed on its entries, not on itself."
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/row"
+          },
+          "description": "Fields inside this one."
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          },
+          "description": "Forms this value may take, when they are not all named shapes."
+        },
+        "thenRows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/row"
+          }
+        },
+        "elseRows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/row"
+          }
+        },
+        "fixed": {
+          "type": "array",
+          "description": "The only values allowed."
+        },
+        "forbidden": {
+          "type": "array",
+          "description": "Values that are not allowed. Only kept where it is a plain exclusion, because a negated shape has no short honest reading."
+        },
+        "default": {
+          "description": "What it means to leave the field out."
+        },
+        "example": {
+          "description": "A real value from the author. This is what tells alternatives apart when they differ only by format."
+        },
+        "patternWords": {
+          "type": "string",
+          "description": "What a pattern allows, said in words, because the pattern itself is unreadable."
+        },
+        "range": {
+          "type": "object",
+          "description": "Two ends and what they count. Drawn rather than written, wherever the renderer can.",
+          "properties": {
+            "min": {},
+            "max": {},
+            "unit": {
+              "type": "string"
+            }
+          }
+        },
+        "uniqueItems": {
+          "type": "boolean"
+        },
+        "closed": {
+          "type": "boolean"
+        },
+        "nullable": {
+          "type": "boolean",
+          "description": "The value itself may be empty."
+        },
+        "exclusiveSets": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": "Groups of fields that cannot all be used at once. The commonest real use of a negation, and a rule a writer will otherwise trip over."
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          },
+          "description": "Entries at fixed positions: the first is one thing, the second another."
+        },
+        "restItem": {
+          "$ref": "#/$defs/value",
+          "description": "What every entry after the fixed slots holds. Separate from `item`, because a list can have both fixed slots and a rule for the rest."
+        },
+        "slotsOnly": {
+          "type": "boolean",
+          "description": "The list stops after its fixed slots. Nothing may follow them."
+        },
+        "thenRequires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Fields that become required when the condition holds. A branch can make an existing field required without adding any fields of its own."
+        },
+        "elseRequires": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The same, for when the condition does not hold."
+        },
+        "howManyFields": {
+          "type": "object",
+          "description": "How many fields a group must have. A rule a writer can break, so it belongs on the page.",
+          "properties": {
+            "min": {},
+            "max": {}
+          }
+        },
+        "whoWrites": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "description": "Whether the reader fills this in or only receives it."
+        },
+        "holds": {
+          "type": "object",
+          "description": "What the text inside a field actually is, when it carries something other than plain text.",
+          "properties": {
+            "type": {},
+            "encoding": {}
+          }
+        }
+      }
+    }
+  }
+}

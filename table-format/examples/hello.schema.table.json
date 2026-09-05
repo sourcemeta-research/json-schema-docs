@@ -1,0 +1,348 @@
+{
+ "format": "json-docs-table/1",
+ "title": "Order",
+ "description": "A single order placed by a customer.",
+ "dialect": "https://json-schema.org/draft/2020-12/schema",
+ "source": "examples/hello.schema.json",
+ "root": {
+  "rows": [
+   {
+    "name": {
+     "kind": "fixed",
+     "text": "id"
+    },
+    "needed": {
+     "kind": "always"
+    },
+    "description": "How this order is referred to everywhere else.",
+    "deprecated": false,
+    "value": {
+     "kind": "value",
+     "words": "text",
+     "patternWords": "made of letters, numbers, dashes"
+    },
+    "rules": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]+$",
+     "description": "How this order is referred to everywhere else."
+    }
+   },
+   {
+    "name": {
+     "kind": "fixed",
+     "text": "status"
+    },
+    "needed": {
+     "kind": "never"
+    },
+    "description": "",
+    "deprecated": false,
+    "value": {
+     "default": "draft",
+     "kind": "fixed",
+     "fixed": [
+      "draft",
+      "placed",
+      "shipped"
+     ],
+     "words": "one of these"
+    },
+    "rules": {
+     "default": "draft",
+     "enum": [
+      "draft",
+      "placed",
+      "shipped"
+     ]
+    }
+   },
+   {
+    "name": {
+     "kind": "fixed",
+     "text": "items"
+    },
+    "needed": {
+     "kind": "always"
+    },
+    "description": "",
+    "deprecated": false,
+    "value": {
+     "kind": "list",
+     "words": "a list",
+     "item": {
+      "kind": "ref",
+      "ref": "#/$defs/line",
+      "words": "line"
+     },
+     "range": {
+      "min": 1,
+      "max": null,
+      "unit": " entries"
+     }
+    },
+    "rules": {
+     "type": "array",
+     "items": {
+      "$ref": "#/$defs/line"
+     },
+     "minItems": 1
+    }
+   },
+   {
+    "name": {
+     "kind": "fixed",
+     "text": "giftMessage"
+    },
+    "needed": {
+     "kind": "never"
+    },
+    "description": "",
+    "deprecated": false,
+    "value": {
+     "kind": "value",
+     "words": "text",
+     "range": {
+      "unit": " characters",
+      "max": 200
+     }
+    },
+    "rules": {
+     "type": "string",
+     "maxLength": 200
+    }
+   }
+  ],
+  "closed": true,
+  "picks": null,
+  "rules": {
+   "type": "object",
+   "additionalProperties": false,
+   "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "title": "Order",
+   "description": "A single order placed by a customer."
+  },
+  "value": {
+   "kind": "group",
+   "words": "a group of fields",
+   "rows": [
+    {
+     "name": {
+      "kind": "fixed",
+      "text": "id"
+     },
+     "needed": {
+      "kind": "always"
+     },
+     "description": "How this order is referred to everywhere else.",
+     "deprecated": false,
+     "value": {
+      "kind": "value",
+      "words": "text",
+      "patternWords": "made of letters, numbers, dashes"
+     },
+     "rules": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "How this order is referred to everywhere else."
+     }
+    },
+    {
+     "name": {
+      "kind": "fixed",
+      "text": "status"
+     },
+     "needed": {
+      "kind": "never"
+     },
+     "description": "",
+     "deprecated": false,
+     "value": {
+      "default": "draft",
+      "kind": "fixed",
+      "fixed": [
+       "draft",
+       "placed",
+       "shipped"
+      ],
+      "words": "one of these"
+     },
+     "rules": {
+      "default": "draft",
+      "enum": [
+       "draft",
+       "placed",
+       "shipped"
+      ]
+     }
+    },
+    {
+     "name": {
+      "kind": "fixed",
+      "text": "items"
+     },
+     "needed": {
+      "kind": "always"
+     },
+     "description": "",
+     "deprecated": false,
+     "value": {
+      "kind": "list",
+      "words": "a list",
+      "item": {
+       "kind": "ref",
+       "ref": "#/$defs/line",
+       "words": "line"
+      },
+      "range": {
+       "min": 1,
+       "max": null,
+       "unit": " entries"
+      }
+     },
+     "rules": {
+      "type": "array",
+      "items": {
+       "$ref": "#/$defs/line"
+      },
+      "minItems": 1
+     }
+    },
+    {
+     "name": {
+      "kind": "fixed",
+      "text": "giftMessage"
+     },
+     "needed": {
+      "kind": "never"
+     },
+     "description": "",
+     "deprecated": false,
+     "value": {
+      "kind": "value",
+      "words": "text",
+      "range": {
+       "unit": " characters",
+       "max": 200
+      }
+     },
+     "rules": {
+      "type": "string",
+      "maxLength": 200
+     }
+    }
+   ],
+   "closed": true
+  }
+ },
+ "shapes": [
+  {
+   "id": "#/$defs/line",
+   "name": "line",
+   "group": null,
+   "description": "",
+   "usedBy": 1,
+   "isList": false,
+   "closed": false,
+   "picks": null,
+   "rows": [
+    {
+     "name": {
+      "kind": "fixed",
+      "text": "sku"
+     },
+     "needed": {
+      "kind": "always"
+     },
+     "description": "",
+     "deprecated": false,
+     "value": {
+      "kind": "value",
+      "words": "text"
+     },
+     "rules": {
+      "type": "string"
+     }
+    },
+    {
+     "name": {
+      "kind": "fixed",
+      "text": "quantity"
+     },
+     "needed": {
+      "kind": "always"
+     },
+     "description": "",
+     "deprecated": false,
+     "value": {
+      "kind": "value",
+      "words": "a whole number",
+      "range": {
+       "unit": "",
+       "min": 1,
+       "max": 99
+      }
+     },
+     "rules": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99
+     }
+    }
+   ],
+   "rules": {
+    "type": "object"
+   },
+   "value": {
+    "kind": "group",
+    "words": "a group of fields",
+    "rows": [
+     {
+      "name": {
+       "kind": "fixed",
+       "text": "sku"
+      },
+      "needed": {
+       "kind": "always"
+      },
+      "description": "",
+      "deprecated": false,
+      "value": {
+       "kind": "value",
+       "words": "text"
+      },
+      "rules": {
+       "type": "string"
+      }
+     },
+     {
+      "name": {
+       "kind": "fixed",
+       "text": "quantity"
+      },
+      "needed": {
+       "kind": "always"
+      },
+      "description": "",
+      "deprecated": false,
+      "value": {
+       "kind": "value",
+       "words": "a whole number",
+       "range": {
+        "unit": "",
+        "min": 1,
+        "max": 99
+       }
+      },
+      "rules": {
+       "type": "integer",
+       "minimum": 1,
+       "maximum": 99
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "containers": {},
+ "dropped": []
+}

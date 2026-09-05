@@ -1,0 +1,2513 @@
+<!doctype html><meta charset="utf-8"><title>gitlab-ci</title>
+<style>
+:root { --line:#DDDDD6; --ink:#1a1a1a; --muted:#6b6b64; --accent:#0F49C0; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:"IBM Plex Sans","Segoe UI",sans-serif; background:#F7F7F5; color:var(--ink); padding:2rem 1.2rem; line-height:1.45; }
+.page { max-width:1180px; margin:0 auto; }
+h1 { font-size:1.5rem; font-weight:600; }
+h2 { font-size:1rem; font-weight:600; margin:0 0 .15rem; }
+h3 { font-size:.9rem; font-weight:600; margin:0 0 .3rem; }
+h4 { font-size:.86rem; font-weight:600; margin:0 0 .15rem; font-family:"IBM Plex Mono",monospace; }
+.subtitle { color:#555; margin:.3rem 0 1rem; max-width:70ch; }
+.snote { color:var(--muted); font-size:.79rem; margin-bottom:.35rem; max-width:78ch; }
+section { margin:1.6rem 0; }
+.defblock { margin:1rem 0; padding-left:.7rem; border-left:3px solid #D9D9CF; }
+.shapeblock { margin:.9rem 0 1.1rem; padding-left:.6rem; border-left:2px solid #E4E4DC; }
+.shapeblock:target { border-left-color:var(--accent); background:#F3F7FD; }
+table.doc { width:100%; border-collapse:collapse; background:#FFF; border:1px solid var(--line); font-size:.82rem; table-layout:fixed; }
+table.doc th { background:#EFEFE9; text-align:left; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:#6b6b64; padding:.4rem .65rem; border-bottom:1px solid var(--line); }
+table.doc td { padding:.34rem .65rem; border-bottom:1px solid #F0F0EA; vertical-align:top; word-wrap:break-word; overflow-wrap:anywhere; }
+table.doc tr:hover > td { background:#F3F7FD; }
+table.doc.sub { border:1px solid #E4E4DC; margin:0; }
+.nm { font-weight:600; }
+.nm.ghost { font-style:italic; font-weight:400; color:#7a7a70; }
+.nm.cond { font-weight:600; color:#8a5A00; }
+.ty { color:var(--accent); display:block; }
+a.ty.link { text-decoration:underline; text-underline-offset:2px; }
+.extlink { font-size:.72rem; color:#0B5FA5; word-break:break-all; max-width:100%; display:inline-block; }
+.de { color:#333; }
+.notes { margin-top:.2rem; }
+.notes span { display:block; font-size:.73rem; color:#7a7a70; }
+.rq { font-size:.77rem; }
+.rq.req { color:#A31515; font-weight:600; }
+.rq.opt { color:#8a8a80; }
+.rq.cond { color:#8a5A00; font-weight:600; }
+.bar { display:flex; align-items:center; gap:.4rem; margin-top:.3rem; font-size:.7rem; color:#5a5a52; }
+.bend { font-family:"IBM Plex Mono",monospace; white-space:nowrap; }
+.btrack { flex:1; min-width:38px; height:9px; border-radius:3px; border:1px solid #C9C9C0;
+  background:repeating-linear-gradient(90deg,#F2F2EC 0,#F2F2EC 7px,#DCDCD2 7px,#DCDCD2 8px); }
+.boolctl { display:inline-flex; margin-top:.3rem; border:1px solid #C9D4E8; border-radius:5px; overflow:hidden; }
+.boolctl .bo { padding:.1rem .55rem; font-size:.73rem; background:#F4F8FE; color:#31527F; border-right:1px solid #C9D4E8; }
+.boolctl .bo:last-child { border-right:none; }
+.chips { display:flex; flex-wrap:wrap; gap:.22rem; margin-top:.3rem; max-width:100%; }
+.chip { font-size:.72rem; background:#F1F1EA; border:1px solid #DEDED4; border-radius:4px; padding:.05rem .42rem; font-family:"IBM Plex Mono",monospace; max-width:100%; overflow-wrap:anywhere; }
+.chip.def { background:#EAF3EC; border-color:#C3DFCB; color:#1F6B42; }
+.chip em { font-family:"IBM Plex Sans",sans-serif; font-style:normal; font-size:.64rem; margin-left:.3rem; color:#4d8a63; }
+a.pickchip { text-decoration:none; color:var(--accent); border-color:#C9D4E8; background:#F4F8FE; }
+a.pickchip:hover { background:#EAF1FD; text-decoration:underline; }
+details.pick > summary { cursor:pointer; font-size:.73rem; color:var(--accent); margin-top:.25rem; }
+tr.nest > td { padding:.35rem .65rem .5rem 1.5rem; background:#FBFBF7; border-bottom:1px solid #EDEDE5; }
+.nestbox > summary { cursor:pointer; font-size:.73rem; color:#6b6b64; padding:.15rem 0 .35rem; list-style:none; }
+.nestbox > summary::before { content:"▸  "; color:#9a9a90; }
+.nestbox[open] > summary::before { content:"▾  "; }
+.nestbox .cnt { color:#9a9a90; }
+tr.nest.dep > td { background:#FFFBF1; border-left:3px solid #E8C87A; }
+.depbox > summary { color:#8a5A00; font-weight:600; font-size:.76rem; }
+.depbox > summary::before { color:#C79B33; }
+details.borrow { margin:.3rem 0 .2rem; border:1px dashed #D3D8E4; border-radius:5px; background:#FBFCFE; }
+details.borrow > summary { cursor:pointer; padding:.28rem .6rem; font-size:.75rem; color:#4A5A7A; list-style:none; }
+details.borrow > summary::before { content:"▸  "; color:#8b96ad; }
+details.borrow[open] > summary::before { content:"▾  "; }
+details.borrow table.doc { border:none; }
+.ix { column-width:190px; column-gap:1.4rem; }
+.ixgroup { break-inside:avoid; margin-bottom:.9rem; }
+.ixgroup .ixh { font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:#6b6b64; margin-bottom:.25rem; }
+.ix ul { list-style:none; }
+.ix li { font-size:.78rem; line-height:1.5; }
+.ix a { color:var(--accent); text-decoration:none; }
+.ix a:hover { text-decoration:underline; }
+.ixn { font-size:.66rem; color:#a8a89e; }
+.counts { display:flex; gap:.45rem; flex-wrap:wrap; margin:.2rem 0 .6rem; }
+.counts .c { font-size:.79rem; padding:.28rem .7rem; border-radius:999px; border:1px solid; }
+.counts .c b { font-size:.94rem; margin-right:.12rem; }
+.counts .req { background:#FDEDEC; border-color:#F0C8C2; color:#A31515; }
+.counts .opt { background:#F1F1EC; border-color:#DDDDD4; color:#5f5f57; }
+.counts .cond { background:#FFF6E0; border-color:#EBD9A8; color:#8a5A00; }
+.legend { display:flex; gap:1.2rem; flex-wrap:wrap; font-size:.75rem; color:var(--muted); margin-bottom:.9rem; padding:.45rem .75rem; background:#FFF; border:1px solid var(--line); border-radius:7px; }
+.legend b { color:var(--ink); font-weight:600; }
+.forms { margin-top:.25rem; }
+.forms .form { display:block; font-size:.72rem; color:#5a5a52; padding:.06rem 0; }
+.forms .form b { font-family:"IBM Plex Mono",monospace; color:#1F6B42; font-weight:600; }
+.forms .form i { font-style:normal; color:#8a5A00; }
+.drops { font-size:.78rem; color:#7a7a70; padding-left:1.2rem; }
+</style>
+<div class="page">
+<h1>gitlab-ci</h1>
+
+<div class="counts">
+    <span class="c req"><b>7</b> you must always fill in</span>
+    <span class="c opt"><b>306</b> you can leave out</span>
+    <span class="c cond"><b>35</b> that only apply in certain cases</span>
+    
+  </div><div class="legend">
+    <span><b>A table inside a row</b> means those fields live inside that one.</span>
+    <span><b>Click a strip</b> to open what it holds.</span>
+    <span><b>Bars</b> show the lowest and highest allowed.</span>
+    <span><b>Names in blue</b> link to the shape they name.</span>
+  </div><section id="shape-"><h2>What this file holds</h2>
+    
+    
+    
+    <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">$schema</span></td>
+    <td><span class="ty">a web address</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">spec</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>spec</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><a class="ty link" href="#shape-definitions-configInputs">a configInputs</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-spec-include-item">a spec_include_item</a></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">component</span></td>
+    <td><span class="ty">a list, each one an one of these</span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 256">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">256 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">image</span></td>
+    <td><a class="ty link" href="#shape-definitions-image">an image</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">services</span></td>
+    <td><a class="ty link" href="#shape-definitions-services">a services, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">before_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-before-script">a before_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">after_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-after-script">an after_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">variables</span></td>
+    <td><a class="ty link" href="#shape-definitions-globalVariables">a globalVariables</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">cache</span></td>
+    <td><a class="ty link" href="#shape-definitions-cache">a cache</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">!reference</span></td>
+    <td><a class="ty link" href="#shape-definitions-reference">a !reference, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>default</b> <span class="cnt">14 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">after_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-after-script">an after_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">artifacts</span></td>
+    <td><a class="ty link" href="#shape-definitions-artifacts">an artifacts</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">before_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-before-script">a before_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">hooks</span></td>
+    <td><a class="ty link" href="#shape-definitions-hooks">a hooks</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">cache</span></td>
+    <td><a class="ty link" href="#shape-definitions-cache">a cache</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">image</span></td>
+    <td><a class="ty link" href="#shape-definitions-image">an image</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">interruptible</span></td>
+    <td><a class="ty link" href="#shape-definitions-interruptible">an interruptible</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">id_tokens</span></td>
+    <td><a class="ty link" href="#shape-definitions-id-tokens">an id_tokens</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">identity</span></td>
+    <td><a class="ty link" href="#shape-definitions-identity">an identity</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">retry</span></td>
+    <td><a class="ty link" href="#shape-definitions-retry">a retry</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">services</span></td>
+    <td><a class="ty link" href="#shape-definitions-services">a services, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><a class="ty link" href="#shape-definitions-tags">a tags, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">timeout</span></td>
+    <td><a class="ty link" href="#shape-definitions-timeout">a timeout</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">!reference</span></td>
+    <td><a class="ty link" href="#shape-definitions-reference">a !reference, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">stages</span></td>
+    <td><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span><span>left out means build, test, deploy</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-include-item">an include_item</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-include-item">an include_item</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">pages</span></td>
+    <td><a class="ty link" href="#shape-definitions-job">a job</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">workflow</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>workflow</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><a class="ty link" href="#shape-definitions-workflowName">a workflowName</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">auto_cancel</span></td>
+    <td><a class="ty link" href="#shape-definitions-workflowAutoCancel">a workflowAutoCancel</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">rules</span></td>
+    <td><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a list</span></div><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm ghost" title="must match ^[.]">any name in a set format</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-job-template">a job_template</a></span><span class="form">anything</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Hidden keys.</td>
+  </tr><tr>
+    <td><span class="nm ghost" >any name you choose</span></td>
+    <td><a class="ty link" href="#shape-definitions-job">a job</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></section><section><h2>All 58 shapes</h2>
+    <p class="snote">Every shape this document describes. The ones used most often come first, because everything else is built on them. Click any name to jump to its rules.</p>
+    <div class="ix"><div class="ixgroup"><div class="ixh">Shapes</div><ul><li><a href="#shape-definitions-string-file-list">string_file_list</a> <span class="ixn">used 19</span></li><li><a href="#shape-definitions-inputs">inputs</a> <span class="ixn">used 12</span></li><li><a href="#shape-definitions-includeRules">includeRules</a> <span class="ixn">used 5</span></li><li><a href="#shape-definitions-reference">!reference</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-image">image</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-services">services</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-optional-script">optional_script</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-before-script">before_script</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-after-script">after_script</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-if">if</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-changes">changes</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-exists">exists</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-parallel-matrix">parallel_matrix</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-cache">cache</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-interruptible">interruptible</a> <span class="ixn">used 3</span></li><li><a href="#shape-definitions-artifacts">artifacts</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-baseInput">baseInput</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-include-item">include_item</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-include-cache">include_cache</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-id-tokens">id_tokens</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-identity">identity</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-script">script</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-workflowAutoCancel">workflowAutoCancel</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-jobVariables">jobVariables</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-rulesVariables">rulesVariables</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-timeout">timeout</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-start-in">start_in</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-when">when</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-cache-item">cache_item</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-filter-refs">filter_refs</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-filter">filter</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-retry">retry</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-retry-max">retry_max</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-retry-errors">retry_errors</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-job">job</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-job-template">job_template</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-tags">tags</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-hooks">hooks</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-stepName">stepName</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-stepNamedStrings">stepNamedStrings</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-stepFuncReference">stepFuncReference</a> <span class="ixn">used 2</span></li><li><a href="#shape-definitions-configInputs">configInputs</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-jobInputs">jobInputs</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-spec-include-item">spec_include_item</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-dast-configuration">dast_configuration</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-secrets">secrets</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-steps">steps</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-rules">rules</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-workflowName">workflowName</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-globalVariables">globalVariables</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-rulesNeeds">rulesNeeds</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-allow-failure">allow_failure</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-rulesAllowFailure">rulesAllowFailure</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-parallel">parallel</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-step">step</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-stepNamedValues">stepNamedValues</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-stepGitReference">stepGitReference</a> <span class="ixn">used 1</span></li><li><a href="#shape-definitions-stepOciReference">stepOciReference</a> <span class="ixn">used 1</span></li></ul></div></div></section>
+<section><h2>Every shape, written out once</h2>
+<p class="snote">Each shape appears here once. Anywhere else on this page that names one, it means exactly this.</p>
+<div class="defblock">
+    
+    <div class="shapeblock" id="shape-definitions-string-file-list">
+      <h4>string_file_list</h4>
+      
+      
+      
+      <p class="snote">Used in 19 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-inputs">
+      <h4>inputs</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 12 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z0-9_-]+$">any name made of letters, numbers, underscores, dashes</span></td>
+    <td><span class="ty">one of 5 forms</span><div class="forms"><span class="form">text</span><span class="form">a number</span><span class="form">yes or no</span><span class="form">a list</span><span class="form">a group of fields</span></div><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Input parameter value that matches parameter names defined in spec:inputs of the included configuration.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-includeRules">
+      <h4>includeRules</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 5 places.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">text</span><span class="form">a list</span></div><div class="notes"><span>the value itself may be empty</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-reference">
+      <h4>!reference</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">a list, each one a text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-image">
+      <h4>image</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-services">
+      <h4>services</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-optional-script">
+      <h4>optional_script</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-before-script">
+      <h4>before_script</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-optional-script">an optional_script</a></p>
+    </div><div class="shapeblock" id="shape-definitions-after-script">
+      <h4>after_script</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><a class="ty link" href="#shape-definitions-optional-script">an optional_script</a></p>
+    </div><div class="shapeblock" id="shape-definitions-if">
+      <h4>if</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">text</span></p>
+    </div><div class="shapeblock" id="shape-definitions-changes">
+      <h4>changes</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">one of 2 forms</span><span class="form">a list</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-exists">
+      <h4>exists</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a list</span><span class="form">one of 2 forms</span><span class="form">one of 2 forms</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-parallel-matrix">
+      <h4>parallel_matrix</h4>
+      <p class="snote">Use the `needs:parallel:matrix` keyword to specify parallelized jobs needed to be completed for the job to run. [Learn More](https://docs.gitlab.com/ci/yaml/#needsparallelmatrix)</p>
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-cache">
+      <h4>cache</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-cache-item">a cache_item</a></span><span class="form">a list, each one <a class="ty link" href="#shape-definitions-cache-item">a cache_item</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-interruptible">
+      <h4>interruptible</h4>
+      
+      
+      
+      <p class="snote">Used in 3 places.</p>
+      <p class="leafval"><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-artifacts">
+      <h4>artifacts</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">paths</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">exclude</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">expose_as</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">untracked</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">when</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">on_success<em>default</em></span><span class="chip">on_failure</span><span class="chip">always</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">access</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">none</span><span class="chip">developer</span><span class="chip">maintainer</span><span class="chip def">all<em>default</em></span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">public</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">expire_in</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>left out means 30 days</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">reports</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>reports</b> <span class="cnt">24 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">accessibility</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to JSON file with accessibility report.</td>
+  </tr><tr>
+    <td><span class="nm">annotations</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to JSON file with annotations report.</td>
+  </tr><tr>
+    <td><span class="nm">api_fuzzing</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">junit</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path for file(s) that should be parsed as JUnit XML result</td>
+  </tr><tr>
+    <td><span class="nm">browser_performance</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to a single file with browser performance metric report(s).</td>
+  </tr><tr>
+    <td><span class="nm">coverage_report</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to collect coverage reports from the job.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>coverage_report</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">coverage_format</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">cobertura</span><span class="chip">jacoco</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Code coverage format used by the test framework.</td>
+  </tr><tr>
+    <td><span class="nm">path</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to the coverage report file that should be parsed.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">coverage_fuzzing</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">codequality</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with code quality report(s) (such as Code Climate).</td>
+  </tr><tr>
+    <td><span class="nm">dotenv</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files containing runtime-created variables for this job.</td>
+  </tr><tr>
+    <td><span class="nm">lsif</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files containing code intelligence (Language Server Index Format).</td>
+  </tr><tr>
+    <td><span class="nm">sast</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with SAST vulnerabilities report(s).</td>
+  </tr><tr>
+    <td><span class="nm">dependency_scanning</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with Dependency scanning vulnerabilities report(s).</td>
+  </tr><tr>
+    <td><span class="nm">container_scanning</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with Container scanning vulnerabilities report(s).</td>
+  </tr><tr>
+    <td><span class="nm">dast</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with DAST vulnerabilities report(s).</td>
+  </tr><tr>
+    <td><span class="nm">license_management</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated in 12.8: Path to file or list of files with license report(s).</td>
+  </tr><tr>
+    <td><span class="nm">license_scanning</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with license report(s).</td>
+  </tr><tr>
+    <td><span class="nm">requirements</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with requirements report(s).</td>
+  </tr><tr>
+    <td><span class="nm">secret_detection</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with secret detection report(s).</td>
+  </tr><tr>
+    <td><span class="nm">metrics</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with custom metrics report(s).</td>
+  </tr><tr>
+    <td><span class="nm">terraform</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with terraform plan(s).</td>
+  </tr><tr>
+    <td><span class="nm">cyclonedx</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">sarif</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">load_performance</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">repository_xray</span></td>
+    <td><a class="ty link" href="#shape-definitions-string-file-list">a string_file_list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Path to file or list of files with Repository X-Ray report(s).</td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-baseInput">
+      <h4>baseInput</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">array</span><span class="chip">boolean</span><span class="chip">number</span><span class="chip def">string<em>default</em></span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 1024">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">1024 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">text</span><span class="form">a number</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">regex</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-include-item">
+      <h4>include_item</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 6 forms</span><div class="forms"><span class="form">a web address</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-include-cache">
+      <h4>include_cache</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">text</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-id-tokens">
+      <h4>id_tokens</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">aud</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-identity">
+      <h4>identity</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a fixed value</span><span class="chips"><span class="chip">google_cloud</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-script">
+      <h4>script</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-workflowAutoCancel">
+      <h4>workflowAutoCancel</h4>
+      <p class="snote">Define the rules for when pipeline should be automatically cancelled.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">on_job_failure</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">none<em>default</em></span><span class="chip">all</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">on_new_commit</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">conservative</span><span class="chip">interruptible</span><span class="chip">none</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-jobVariables">
+      <h4>jobVariables</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>any name in a set format</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">value</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">expand</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-rulesVariables">
+      <h4>rulesVariables</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-timeout">
+      <h4>timeout</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-start-in">
+      <h4>start_in</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-when">
+      <h4>when</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of these</span><span class="chips"><span class="chip def">on_success<em>default</em></span><span class="chip">on_failure</span><span class="chip">always</span><span class="chip">never</span><span class="chip">manual</span><span class="chip">delayed</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-cache-item">
+      <h4>cache_item</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">key</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>key</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">files</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to 2">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">2 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">files_commits</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to 2">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">2 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">prefix</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">paths</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">policy</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span><span>left out means pull-push</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">unprotect</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">untracked</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">when</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">on_success<em>default</em></span><span class="chip">on_failure</span><span class="chip">always</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">fallback_keys</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 0 to 5">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">5 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-filter-refs">
+      <h4>filter_refs</h4>
+      <p class="snote">Filter job by different keywords that determine origin or state, or by supplying string/regex to check against branch/tag names.</p>
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">one of 9 forms</span><span class="form">text</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-filter">
+      <h4>filter</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-filter-refs">a filter_refs, and that shape is itself a list</a></span><span class="form">a group of fields</span></div><div class="notes"><span>the value itself may be empty</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-retry">
+      <h4>retry</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form"><a class="ty link" href="#shape-definitions-retry-max">a retry_max</a></span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-retry-max">
+      <h4>retry_max</h4>
+      <p class="snote">The number of times the job will be retried if it fails. Defaults to 0 and can max be retried 2 times (3 times total).</p>
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a whole number</span><span class="bar" title="from 0 to 2">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">2</span></span><div class="notes"><span>left out means 0</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-retry-errors">
+      <h4>retry_errors</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 22 forms</span><div class="forms"><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span><span class="form">a fixed value</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-job">
+      <h4>job</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr class="nest"><td colspan="4">
+      <details class="borrow"><summary>and the 39 fields every job_template carries</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">image</span></td>
+    <td><a class="ty link" href="#shape-definitions-image">an image</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">services</span></td>
+    <td><a class="ty link" href="#shape-definitions-services">a services, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">before_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-before-script">a before_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">after_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-after-script">an after_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">hooks</span></td>
+    <td><a class="ty link" href="#shape-definitions-hooks">a hooks</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">rules</span></td>
+    <td><a class="ty link" href="#shape-definitions-rules">a rules, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">variables</span></td>
+    <td><a class="ty link" href="#shape-definitions-jobVariables">a jobVariables</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">cache</span></td>
+    <td><a class="ty link" href="#shape-definitions-cache">a cache</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">id_tokens</span></td>
+    <td><a class="ty link" href="#shape-definitions-id-tokens">an id_tokens</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">identity</span></td>
+    <td><a class="ty link" href="#shape-definitions-identity">an identity</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dast_configuration</span></td>
+    <td><a class="ty link" href="#shape-definitions-dast-configuration">a dast_configuration</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><a class="ty link" href="#shape-definitions-jobInputs">a jobInputs</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">secrets</span></td>
+    <td><a class="ty link" href="#shape-definitions-secrets">a secrets</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">script</span></td>
+    <td><a class="ty link" href="#shape-definitions-script">a script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">run</span></td>
+    <td><a class="ty link" href="#shape-definitions-steps">a steps, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">stage</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Define what stage the job will run in.</td>
+  </tr><tr>
+    <td><span class="nm">only</span></td>
+    <td><a class="ty link" href="#shape-definitions-filter">a filter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Job will run *only* when these filtering options match.</td>
+  </tr><tr>
+    <td><span class="nm">extends</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of one or more jobs to inherit configuration from.</td>
+  </tr><tr>
+    <td><span class="nm">needs</span></td>
+    <td><span class="ty">a list, each entry one of 5 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form"><a class="ty link" href="#shape-definitions-reference">a !reference, and that shape is itself a list</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The list of jobs in previous stages whose sole completion is needed to start the current job.</td>
+  </tr><tr>
+    <td><span class="nm">except</span></td>
+    <td><a class="ty link" href="#shape-definitions-filter">a filter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Job will run *except* for when these filtering options match.</td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><a class="ty link" href="#shape-definitions-tags">a tags, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allow_failure</span></td>
+    <td><a class="ty link" href="#shape-definitions-allow-failure">an allow_failure</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">timeout</span></td>
+    <td><a class="ty link" href="#shape-definitions-timeout">a timeout</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">when</span></td>
+    <td><a class="ty link" href="#shape-definitions-when">a when</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">start_in</span></td>
+    <td><a class="ty link" href="#shape-definitions-start-in">a start_in</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">manual_confirmation</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a list of job names from earlier stages from which artifacts should be loaded. By default, all previous artifacts are passed. Use an empty array to skip downloading artifacts.</td>
+  </tr><tr>
+    <td><span class="nm">artifacts</span></td>
+    <td><a class="ty link" href="#shape-definitions-artifacts">an artifacts</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">environment</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to associate environment metadata with a deploy. Environment can have a name and URL attached to it, and will be displayed under /environments under the project.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>environment</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in environment</span></td>
+    <td class="de">The name of the environment, e.g. 'qa', 'staging', 'production'.</td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When set, this will expose buttons in various places for the current environment in GitLab, that will take you to the defined URL.</td>
+  </tr><tr>
+    <td><span class="nm">on_stop</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of a job to execute when the environment is about to be stopped.</td>
+  </tr><tr>
+    <td><span class="nm">action</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">start<em>default</em></span><span class="chip">prepare</span><span class="chip">stop</span><span class="chip">verify</span><span class="chip">access</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies what this job will do. 'start' (default) indicates the job will start the deployment. 'prepare'/'verify'/'access' indicates this will not affect the deployment. 'stop' indicates this will stop the deployment.</td>
+  </tr><tr>
+    <td><span class="nm">auto_stop_in</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The amount of time it should take before GitLab will automatically stop the environment. Supports a wide variety of formats, e.g. '1 week', '3 mins 4 sec', '2 hrs 20 min', '2h20min', '6 mos 1 day', '47 yrs 6 mos and 4d', '3 weeks and 2 days'.</td>
+  </tr><tr>
+    <td><span class="nm">kubernetes</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to configure the kubernetes deployment for this environment. This is currently not supported for kubernetes clusters that are managed by GitLab.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>kubernetes</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">agent</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies the GitLab Agent for Kubernetes. The format is `path/to/agent/project:agent-name`.</td>
+  </tr><tr>
+    <td><span class="nm">namespace</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated. Use `dashboard.namespace` instead. The kubernetes namespace where this environment's dashboard should be deployed to.</td>
+  </tr><tr>
+    <td><span class="nm">flux_resource_path</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated. Use `dashboard.flux_resource_path` instead. The Flux resource path to associate with this environment. This must be the full resource path. For example, 'helm.toolkit.fluxcd.io/v2/namespaces/gitlab-agent/helmreleases/gitlab-agent'.</td>
+  </tr><tr>
+    <td><span class="nm">managed_resources</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to configure the managed resources for this environment.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>managed_resources</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">enabled</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indicates whether the managed resources are enabled for this environment.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">dashboard</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to configure the dashboard for this environment.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>dashboard</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">namespace</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The kubernetes namespace where the dashboard for this environment should be deployed to.</td>
+  </tr><tr>
+    <td><span class="nm">flux_resource_path</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The Flux resource path to associate with this environment. This must be the full resource path. For example, 'helm.toolkit.fluxcd.io/v2/namespaces/gitlab-agent/helmreleases/gitlab-agent'.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">deployment_tier</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Explicitly specifies the tier of the deployment environment if non-standard environment name is used.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">release</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indicates that the job creates a Release.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>release</b> <span class="cnt">8 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">tag_name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">The tag_name must be specified. It can refer to an existing Git tag or can be specified by the user.</td>
+  </tr><tr>
+    <td><span class="nm">tag_message</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Message to use if creating a new annotated tag.</td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">Specifies the longer description of the Release.</td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The Release name. If omitted, it is populated with the value of release: tag_name.</td>
+  </tr><tr>
+    <td><span class="nm">ref</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If the release: tag_name doesn’t exist yet, the release is created from ref. ref can be a commit SHA, another tag name, or a branch name.</td>
+  </tr><tr>
+    <td><span class="nm">milestones</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The title of each milestone the release is associated with.</td>
+  </tr><tr>
+    <td><span class="nm">released_at</span></td>
+    <td><span class="ty">a date and time</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The date and time when the release is ready. Defaults to the current date and time if not defined. Should be enclosed in quotes and expressed in ISO 8601 format.</td>
+  </tr><tr>
+    <td><span class="nm">assets</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>assets</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">links</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">Include asset links in the release.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of links</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">The name of the link.</td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">The URL to download a file.</td>
+  </tr><tr>
+    <td><span class="nm">filepath</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The redirect link to the url.</td>
+  </tr><tr>
+    <td><span class="nm">link_type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">runbook</span><span class="chip">package</span><span class="chip">image</span><span class="chip">other</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The content kind of what users can download via url.</td>
+  </tr></table></details></td></tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">coverage</span></td>
+    <td><span class="ty">a search pattern</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Must be a regular expression, optionally but recommended to be quoted, and must be surrounded with '/'. Example: '/Code coverage: \d+\.\d+/'</td>
+  </tr><tr>
+    <td><span class="nm">retry</span></td>
+    <td><a class="ty link" href="#shape-definitions-retry">a retry</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">parallel</span></td>
+    <td><a class="ty link" href="#shape-definitions-parallel">a parallel</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">interruptible</span></td>
+    <td><a class="ty link" href="#shape-definitions-interruptible">an interruptible</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">resource_group</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Limit job concurrency. Can be used to ensure that the Runner will not run certain jobs simultaneously.</td>
+  </tr><tr>
+    <td><span class="nm">trigger</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">text</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>trigger</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">project</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in trigger</span></td>
+    <td class="de">Path to the project, e.g. `group/project`, or `group/sub-group/project`.</td>
+  </tr><tr>
+    <td><span class="nm">branch</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The branch name that a downstream pipeline will use</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>branch</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">project</span></td><td></td><td><span class="rq cond">Yes, once you fill in branch</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">strategy</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">depend</span><span class="chip">mirror</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can mirror or depend on the pipeline status from the triggered pipeline to the source bridge job by using strategy: `depend` or `mirror`</td>
+  </tr><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><a class="ty link" href="#shape-definitions-inputs">an inputs</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">forward</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify what to forward to the downstream pipeline.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>forward</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">yaml_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables defined in the trigger job are passed to downstream pipelines.</td>
+  </tr><tr>
+    <td><span class="nm">pipeline_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables added for manual pipeline runs and scheduled pipelines are passed to downstream pipelines.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>trigger</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a web address</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">strategy</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">depend</span><span class="chip">mirror</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can mirror or depend on the pipeline status from the triggered pipeline to the source bridge job by using strategy: `depend` or `mirror`</td>
+  </tr><tr>
+    <td><span class="nm">forward</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify what to forward to the downstream pipeline.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>forward</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">yaml_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables defined in the trigger job are passed to downstream pipelines.</td>
+  </tr><tr>
+    <td><span class="nm">pipeline_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables added for manual pipeline runs and scheduled pipelines are passed to downstream pipelines.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">inherit</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>inherit</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">variables</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">publish</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated. Use `pages.publish` instead. A path to a directory that contains the files to be published with Pages.</td>
+  </tr><tr>
+    <td><span class="nm">pages</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>pages</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">path_prefix</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">expire_in</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">publish</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-job-template">
+      <h4>job_template</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">image</span></td>
+    <td><a class="ty link" href="#shape-definitions-image">an image</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">services</span></td>
+    <td><a class="ty link" href="#shape-definitions-services">a services, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">before_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-before-script">a before_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">after_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-after-script">an after_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">hooks</span></td>
+    <td><a class="ty link" href="#shape-definitions-hooks">a hooks</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">rules</span></td>
+    <td><a class="ty link" href="#shape-definitions-rules">a rules, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">variables</span></td>
+    <td><a class="ty link" href="#shape-definitions-jobVariables">a jobVariables</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">cache</span></td>
+    <td><a class="ty link" href="#shape-definitions-cache">a cache</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">id_tokens</span></td>
+    <td><a class="ty link" href="#shape-definitions-id-tokens">an id_tokens</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">identity</span></td>
+    <td><a class="ty link" href="#shape-definitions-identity">an identity</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dast_configuration</span></td>
+    <td><a class="ty link" href="#shape-definitions-dast-configuration">a dast_configuration</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><a class="ty link" href="#shape-definitions-jobInputs">a jobInputs</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">secrets</span></td>
+    <td><a class="ty link" href="#shape-definitions-secrets">a secrets</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">script</span></td>
+    <td><a class="ty link" href="#shape-definitions-script">a script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">run</span></td>
+    <td><a class="ty link" href="#shape-definitions-steps">a steps, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">stage</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Define what stage the job will run in.</td>
+  </tr><tr>
+    <td><span class="nm">only</span></td>
+    <td><a class="ty link" href="#shape-definitions-filter">a filter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Job will run *only* when these filtering options match.</td>
+  </tr><tr>
+    <td><span class="nm">extends</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of one or more jobs to inherit configuration from.</td>
+  </tr><tr>
+    <td><span class="nm">needs</span></td>
+    <td><span class="ty">a list, each entry one of 5 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form"><a class="ty link" href="#shape-definitions-reference">a !reference, and that shape is itself a list</a></span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The list of jobs in previous stages whose sole completion is needed to start the current job.</td>
+  </tr><tr>
+    <td><span class="nm">except</span></td>
+    <td><a class="ty link" href="#shape-definitions-filter">a filter</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Job will run *except* for when these filtering options match.</td>
+  </tr><tr>
+    <td><span class="nm">tags</span></td>
+    <td><a class="ty link" href="#shape-definitions-tags">a tags, and that shape is itself a list</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">allow_failure</span></td>
+    <td><a class="ty link" href="#shape-definitions-allow-failure">an allow_failure</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">timeout</span></td>
+    <td><a class="ty link" href="#shape-definitions-timeout">a timeout</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">when</span></td>
+    <td><a class="ty link" href="#shape-definitions-when">a when</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">start_in</span></td>
+    <td><a class="ty link" href="#shape-definitions-start-in">a start_in</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">manual_confirmation</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dependencies</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify a list of job names from earlier stages from which artifacts should be loaded. By default, all previous artifacts are passed. Use an empty array to skip downloading artifacts.</td>
+  </tr><tr>
+    <td><span class="nm">artifacts</span></td>
+    <td><a class="ty link" href="#shape-definitions-artifacts">an artifacts</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">environment</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to associate environment metadata with a deploy. Environment can have a name and URL attached to it, and will be displayed under /environments under the project.</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>environment</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in environment</span></td>
+    <td class="de">The name of the environment, e.g. 'qa', 'staging', 'production'.</td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">a web address</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">When set, this will expose buttons in various places for the current environment in GitLab, that will take you to the defined URL.</td>
+  </tr><tr>
+    <td><span class="nm">on_stop</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of a job to execute when the environment is about to be stopped.</td>
+  </tr><tr>
+    <td><span class="nm">action</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip def">start<em>default</em></span><span class="chip">prepare</span><span class="chip">stop</span><span class="chip">verify</span><span class="chip">access</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies what this job will do. 'start' (default) indicates the job will start the deployment. 'prepare'/'verify'/'access' indicates this will not affect the deployment. 'stop' indicates this will stop the deployment.</td>
+  </tr><tr>
+    <td><span class="nm">auto_stop_in</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The amount of time it should take before GitLab will automatically stop the environment. Supports a wide variety of formats, e.g. '1 week', '3 mins 4 sec', '2 hrs 20 min', '2h20min', '6 mos 1 day', '47 yrs 6 mos and 4d', '3 weeks and 2 days'.</td>
+  </tr><tr>
+    <td><span class="nm">kubernetes</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to configure the kubernetes deployment for this environment. This is currently not supported for kubernetes clusters that are managed by GitLab.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>kubernetes</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">agent</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies the GitLab Agent for Kubernetes. The format is `path/to/agent/project:agent-name`.</td>
+  </tr><tr>
+    <td><span class="nm">namespace</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated. Use `dashboard.namespace` instead. The kubernetes namespace where this environment's dashboard should be deployed to.</td>
+  </tr><tr>
+    <td><span class="nm">flux_resource_path</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated. Use `dashboard.flux_resource_path` instead. The Flux resource path to associate with this environment. This must be the full resource path. For example, 'helm.toolkit.fluxcd.io/v2/namespaces/gitlab-agent/helmreleases/gitlab-agent'.</td>
+  </tr><tr>
+    <td><span class="nm">managed_resources</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to configure the managed resources for this environment.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>managed_resources</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">enabled</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indicates whether the managed resources are enabled for this environment.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">dashboard</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Used to configure the dashboard for this environment.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>dashboard</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">namespace</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The kubernetes namespace where the dashboard for this environment should be deployed to.</td>
+  </tr><tr>
+    <td><span class="nm">flux_resource_path</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The Flux resource path to associate with this environment. This must be the full resource path. For example, 'helm.toolkit.fluxcd.io/v2/namespaces/gitlab-agent/helmreleases/gitlab-agent'.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">deployment_tier</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Explicitly specifies the tier of the deployment environment if non-standard environment name is used.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">release</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Indicates that the job creates a Release.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>release</b> <span class="cnt">8 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">tag_name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">The tag_name must be specified. It can refer to an existing Git tag or can be specified by the user.</td>
+  </tr><tr>
+    <td><span class="nm">tag_message</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Message to use if creating a new annotated tag.</td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">Specifies the longer description of the Release.</td>
+  </tr><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The Release name. If omitted, it is populated with the value of release: tag_name.</td>
+  </tr><tr>
+    <td><span class="nm">ref</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">If the release: tag_name doesn’t exist yet, the release is created from ref. ref can be a commit SHA, another tag name, or a branch name.</td>
+  </tr><tr>
+    <td><span class="nm">milestones</span></td>
+    <td><span class="ty">a list, each one a text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The title of each milestone the release is associated with.</td>
+  </tr><tr>
+    <td><span class="nm">released_at</span></td>
+    <td><span class="ty">a date and time</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The date and time when the release is ready. Defaults to the current date and time if not defined. Should be enclosed in quotes and expressed in ISO 8601 format.</td>
+  </tr><tr>
+    <td><span class="nm">assets</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>assets</b> <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">links</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">Include asset links in the release.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of links</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">The name of the link.</td>
+  </tr><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of characters</span></span></td>
+    <td><span class="rq cond">Yes, once you fill in release</span></td>
+    <td class="de">The URL to download a file.</td>
+  </tr><tr>
+    <td><span class="nm">filepath</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The redirect link to the url.</td>
+  </tr><tr>
+    <td><span class="nm">link_type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">runbook</span><span class="chip">package</span><span class="chip">image</span><span class="chip">other</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The content kind of what users can download via url.</td>
+  </tr></table></details></td></tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">coverage</span></td>
+    <td><span class="ty">a search pattern</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Must be a regular expression, optionally but recommended to be quoted, and must be surrounded with '/'. Example: '/Code coverage: \d+\.\d+/'</td>
+  </tr><tr>
+    <td><span class="nm">retry</span></td>
+    <td><a class="ty link" href="#shape-definitions-retry">a retry</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">parallel</span></td>
+    <td><a class="ty link" href="#shape-definitions-parallel">a parallel</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">interruptible</span></td>
+    <td><a class="ty link" href="#shape-definitions-interruptible">an interruptible</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">resource_group</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Limit job concurrency. Can be used to ensure that the Runner will not run certain jobs simultaneously.</td>
+  </tr><tr>
+    <td><span class="nm">trigger</span></td>
+    <td><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">text</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>trigger</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">project</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in trigger</span></td>
+    <td class="de">Path to the project, e.g. `group/project`, or `group/sub-group/project`.</td>
+  </tr><tr>
+    <td><span class="nm">branch</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The branch name that a downstream pipeline will use</td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>branch</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">project</span></td><td></td><td><span class="rq cond">Yes, once you fill in branch</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">strategy</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">depend</span><span class="chip">mirror</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can mirror or depend on the pipeline status from the triggered pipeline to the source bridge job by using strategy: `depend` or `mirror`</td>
+  </tr><tr>
+    <td><span class="nm">inputs</span></td>
+    <td><a class="ty link" href="#shape-definitions-inputs">an inputs</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">forward</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify what to forward to the downstream pipeline.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>forward</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">yaml_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables defined in the trigger job are passed to downstream pipelines.</td>
+  </tr><tr>
+    <td><span class="nm">pipeline_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables added for manual pipeline runs and scheduled pipelines are passed to downstream pipelines.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>trigger</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">include</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a web address</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">strategy</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">depend</span><span class="chip">mirror</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">You can mirror or depend on the pipeline status from the triggered pipeline to the source bridge job by using strategy: `depend` or `mirror`</td>
+  </tr><tr>
+    <td><span class="nm">forward</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specify what to forward to the downstream pipeline.</td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>forward</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">yaml_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables defined in the trigger job are passed to downstream pipelines.</td>
+  </tr><tr>
+    <td><span class="nm">pipeline_variables</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Variables added for manual pipeline runs and scheduled pipelines are passed to downstream pipelines.</td>
+  </tr></table></details></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">inherit</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>inherit</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">variables</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a list</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">publish</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Deprecated. Use `pages.publish` instead. A path to a directory that contains the files to be published with Pages.</td>
+  </tr><tr>
+    <td><span class="nm">pages</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>pages</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">path_prefix</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">expire_in</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">publish</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-tags">
+      <h4>tags</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a list</span></div><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-hooks">
+      <h4>hooks</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">pre_get_sources_script</span></td>
+    <td><a class="ty link" href="#shape-definitions-optional-script">an optional_script</a></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-stepName">
+      <h4>stepName</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">text</span><div class="notes"><span>in an exact set format, shown in the description</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-stepNamedStrings">
+      <h4>stepNamedStrings</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 2 places.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z_][a-zA-Z0-9_]*$">any name in a set format</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-stepFuncReference">
+      <h4>stepFuncReference</h4>
+      
+      
+      
+      <p class="snote">Used in 2 places.</p>
+      <p class="leafval"><span class="ty">one of 3 forms</span><div class="forms"><span class="form">text</span><span class="form"><a class="ty link" href="#shape-definitions-stepGitReference">a stepGitReference</a></span><span class="form"><a class="ty link" href="#shape-definitions-stepOciReference">a stepOciReference</a></span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-configInputs">
+      <h4>configInputs</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a group of fields</span></div><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 1 of <b>any name in a set format</b> <span class="cnt">11 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr class="nest"><td colspan="4">
+      <details class="borrow"><summary>and the 11 fields every baseInput carries</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">array</span><span class="chip">boolean</span><span class="chip">number</span><span class="chip def">string<em>default</em></span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 1024">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">1024 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">text</span><span class="form">a number</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">regex</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">rules</span></td>
+    <td><span class="ty">a list, each one a group of fields</span><div class="notes"><span>nothing else may be added to an entry</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>each entry of rules</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">if</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">text</span><span class="form">a number</span><span class="form">yes or no</span></div><span class="bar" title="from 0 to 50">
+    <span class="bend">0</span><span class="btrack"></span>
+    <span class="bend">50 entries</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;string&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;number&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">a number</span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;boolean&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;array&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">one of 1 forms</span><div class="forms"><span class="form">a list</span></div><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">in one case</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-jobInputs">
+      <h4>jobInputs</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">10 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr class="nest"><td colspan="4">
+      <details class="borrow"><summary>and the 10 fields every baseInput carries</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">type</span></td>
+    <td><span class="ty">one of these</span><span class="chips"><span class="chip">array</span><span class="chip">boolean</span><span class="chip">number</span><span class="chip def">string<em>default</em></span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span><span class="bar" title="from any to 1024">
+    <span class="bend">any</span><span class="btrack"></span>
+    <span class="bend">1024 characters</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">text</span><span class="form">a number</span><span class="form">yes or no</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">regex</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">anything</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm cond">when type is &quot;string&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;number&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">a number</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;boolean&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">when type is &quot;array&quot;</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">a list</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm cond">in one case</span></td>
+    <td></td>
+    <td><span class="rq cond">Only in certain cases</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>then these apply <span class="cnt">1 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">default</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table></details></td></tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-spec-include-item">
+      <h4>spec_include_item</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-dast-configuration">
+      <h4>dast_configuration</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">site_profile</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the site profile to use in the job.</td>
+  </tr><tr>
+    <td><span class="nm">scanner_profile</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the scanner profile to use in the job.</td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-secrets">
+      <h4>secrets</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="ty">one of 5 forms</span><div class="forms"><span class="form">anything</span><span class="form">anything</span><span class="form">anything</span><span class="form">anything</span><span class="form">anything</span></div><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>any name in a set format</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">vault</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>vault</b> <span class="cnt">3 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">engine</span></td>
+    <td><span class="ty">a group of fields</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>engine</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">path</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">path</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">field</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">gcp_secret_manager</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>gcp_secret_manager</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a whole number</span></div><div class="notes"><span>left out means version</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>Filling in <b>gcp_secret_manager</b> makes 1 more needed</summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><td><span class="nm">token</span></td><td></td><td><span class="rq cond">Yes, once you fill in gcp_secret_manager</span></td><td></td></tr></table></details></td></tr><tr>
+    <td><span class="nm">azure_key_vault</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>azure_key_vault</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">version</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">aws_secrets_manager</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>aws_secrets_manager</b> <span class="cnt">7 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">secret_id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de">The ARN or name of the secret to retrieve. To retrieve a secret from another account, you must use an ARN.</td>
+  </tr><tr>
+    <td><span class="nm">version_id</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The unique identifier of the version of the secret to retrieve. If you include both this parameter and VersionStage, the two parameters must refer to the same secret version. If you don't specify either a VersionStage or VersionId, Secrets Manager returns the AWSCURRENT version.</td>
+  </tr><tr>
+    <td><span class="nm">version_stage</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The staging label of the version of the secret to retrieve. If you include both this parameter and VersionStage, the two parameters must refer to the same secret version. If you don't specify either a VersionStage or VersionId, Secrets Manager returns the AWSCURRENT version.</td>
+  </tr><tr>
+    <td><span class="nm">region</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The AWS region where the secret is stored. Use this to override the region for a specific secret. Defaults to AWS_REGION variable.</td>
+  </tr><tr>
+    <td><span class="nm">role_arn</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The ARN of the IAM role to assume before retrieving the secret. Use this to override the ARN. Defaults to AWS_ROLE_ARN variable.</td>
+  </tr><tr>
+    <td><span class="nm">role_session_name</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the session to use when assuming the role. Use this to override the session name. Defaults to AWS_ROLE_SESSION_NAME variable.</td>
+  </tr><tr>
+    <td><span class="nm">field</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the field to retrieve from the secret. If not specified, the entire secret is retrieved.</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">gitlab_secrets_manager</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>gitlab_secrets_manager</b> <span class="cnt">2 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">name</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>made of letters, numbers, underscores, dashes, shown in the description</span></div></td>
+    <td><span class="rq cond">Yes, once you fill in any name in a set format</span></td>
+    <td class="de">Name of the secret. Only letters, digits, and underscores are allowed.</td>
+  </tr><tr>
+    <td><span class="nm">source</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Source of the secret. Defaults to the current project if not given. For fetching a secret from a group, provide group/&lt;full_path_of_the_group&gt;</td>
+  </tr></table></details></td></tr><tr>
+    <td><span class="nm">file</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means yes</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">token</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">Specifies the JWT variable that should be used to authenticate with the secret provider.</td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-steps">
+      <h4>steps</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a list, each one <a class="ty link" href="#shape-definitions-step">a step</a></span></p>
+    </div><div class="shapeblock" id="shape-definitions-rules">
+      <h4>rules</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 3 forms</span><div class="forms"><span class="form">a group of fields</span><span class="form">text</span><span class="form">a list</span></div><div class="notes"><span>the value itself may be empty</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-workflowName">
+      <h4>workflowName</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">text</span><span class="bar" title="from 1 to 255">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">255 characters</span></span></p>
+    </div><div class="shapeblock" id="shape-definitions-globalVariables">
+      <h4>globalVariables</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match .*">any name in a set format</span></td>
+    <td><span class="ty">one of 2 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a group of fields</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest dep"><td colspan="4">
+    <details class="nestbox depbox">
+      <summary>form 2 of <b>any name in a set format</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">value</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">options</span></td>
+    <td><span class="ty">a list, each one a text</span><span class="bar" title="from 1 to any number of">
+    <span class="bend">1</span><span class="btrack"></span>
+    <span class="bend">any number of entries</span></span><div class="notes"><span>no two entries the same</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">description</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">expand</span></td>
+    <td><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-rulesNeeds">
+      <h4>rulesNeeds</h4>
+      
+      
+      
+      <p class="snote">This one is a list. The fields below describe a single entry.</p><p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">a list, each entry one of 2 forms</span><div class="forms"><span class="form">text</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-allow-failure">
+      <h4>allow_failure</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 3 forms</span><div class="forms"><span class="form">yes or no</span><span class="form">a group of fields</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-rulesAllowFailure">
+      <h4>rulesAllowFailure</h4>
+      
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="boolctl" title="a yes or no answer"><span class="bo">yes</span><span class="bo">no</span></span><div class="notes"><span>left out means no</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-parallel">
+      <h4>parallel</h4>
+      <p class="snote">Splits up a single job into multiple that run in parallel. Provides `CI_NODE_INDEX` and `CI_NODE_TOTAL` environment variables to the jobs.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">a whole number</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-step">
+      <h4>step</h4>
+      <p class="snote">Any of these function use cases are valid.</p>
+      
+      
+      <p class="snote">Used in 1 place.</p>
+      <p class="leafval"><span class="ty">one of 2 forms</span><div class="forms"><span class="form">one of 2 forms</span><span class="form">a group of fields</span></div></p>
+    </div><div class="shapeblock" id="shape-definitions-stepNamedValues">
+      <h4>stepNamedValues</h4>
+      
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm ghost" title="must match ^[a-zA-Z_][a-zA-Z0-9_]*$">any name in a set format</span></td>
+    <td><span class="ty">a list</span><div class="notes"><span>the value itself may be empty</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table>
+    </div><div class="shapeblock" id="shape-definitions-stepGitReference">
+      <h4>stepGitReference</h4>
+      <p class="snote">GitReference is a reference to a function in a Git repository.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">git</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>git</b> <span class="cnt">4 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">url</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">dir</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">rev</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr>
+    <td><span class="nm">file</span></td>
+    <td><span class="ty">text</span></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de"></td>
+  </tr></table></details></td></tr></table>
+    </div><div class="shapeblock" id="shape-definitions-stepOciReference">
+      <h4>stepOciReference</h4>
+      <p class="snote">OCIReference is a reference to a function hosted in an OCI repository.</p>
+      
+      
+      <p class="snote">Nothing else may be added to it.</p><p class="snote">Used in 1 place.</p>
+      <table class="doc"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr><th>Field</th><th>What goes in it</th><th>Needed?</th><th>What it means</th></tr><tr>
+    <td><span class="nm">oci</span></td>
+    <td><span class="ty">a group of fields</span><div class="notes"><span>nothing else may be added here</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de"></td>
+  </tr><tr class="nest"><td colspan="4">
+    <details class="nestbox" open>
+      <summary>inside <b>oci</b> <span class="cnt">5 fields</span></summary>
+      <table class="doc sub"><colgroup><col style="width:21%"><col style="width:30%"><col style="width:22%"><col style="width:27%"></colgroup><tr>
+    <td><span class="nm">registry</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>for example registry.gitlab.com</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">The &lt;host&gt;[:&lt;port&gt;] of the container registry server.</td>
+  </tr><tr>
+    <td><span class="nm">repository</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>for example my_group/my_project/image</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">A path within the registry containing related OCI images. Typically the namespace, project, and image name.</td>
+  </tr><tr>
+    <td><span class="nm">tag</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>for example latest</span></div></td>
+    <td><span class="rq req">Yes, always</span></td>
+    <td class="de">A pointer to the image manifest hosted in the OCI repository.</td>
+  </tr><tr>
+    <td><span class="nm">dir</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>for example /my_steps/hello_world</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">A directory inside the OCI image where the function can be found.</td>
+  </tr><tr>
+    <td><span class="nm">file</span></td>
+    <td><span class="ty">text</span><div class="notes"><span>for example func.yml</span></div></td>
+    <td><span class="rq opt">No, you can leave it out</span></td>
+    <td class="de">The name of the file that defines the function, defaults to func.yml.</td>
+  </tr></table></details></td></tr></table>
+    </div>
+  </div></section>
+<section><h2>What this page does not show</h2>
+    <p class="snote">These rules are in the original and there is no honest short way to write them, so they are listed here rather than shown as something they are not.</p>
+    <ul class="drops"><li>a condition with nothing to show on either side ((unnamed))</li><li>a rule saying the value must not match a whole shape ((unnamed))</li></ul></section>
+</div>
